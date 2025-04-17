@@ -10,6 +10,8 @@
 
 我們也可以將資料庫理解為一些關聯表的集合。資料庫的內容可以包括關於產品的資訊、人員的名單、銷售的數據等。此外，它可以用來存儲圖片、PDF、Word文檔等資訊。資料庫管理系統（DBMS）是能夠提供創建、查詢和管理數據庫的軟體應用程式。
 
+*==RDBMS vs NoSQL==*
+
 |            | 關聯式資料庫(RDBMS)                                          | 非關聯式資料庫(NoSQL)                                        |
 | ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | 定義       | 關聯式資料庫是根據關聯模型來組織和管理數據的資料庫。         | 非關聯式資料庫，也稱為 NoSQL 資料庫，不需要固定的模式，且不需要事先為要存儲的數據建立欄位。 |
@@ -47,18 +49,21 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > 3. 直接左下角「開始」搜尋環境變數
 >
->     ![1](MySQL.assets/1.png)![螢幕擷取畫面 2024-04-01 174544](MySQL.assets/螢幕擷取畫面 2024-04-01 174544.png)
+>     ![搜尋環境變數](MySQL.assets/1.png)![點擊環境變數按鍵](MySQL.assets/螢幕擷取畫面 2024-04-01 174544.png)
 
 > **添加變數 ❯**
 >
 > 系統變數中找尋PATH並編輯、新增
 >
-> ![螢幕擷取畫面 2024-04-01 174741](MySQL.assets/螢幕擷取畫面 2024-04-01 174741.png#40%)![螢幕擷取畫面 2024-04-01 174927](MySQL.assets/螢幕擷取畫面 2024-04-01 174927.png#40%)
+> ![雙擊系統變數裡的Path變數](MySQL.assets/螢幕擷取畫面 2024-04-01 174741.png#40%)![新增複製的路徑](MySQL.assets/螢幕擷取畫面 2024-04-01 174927.png#40%)
 
 ## 加入my.ini至文件中無法登入再嘗試
 
 1. 創立一個任意的文字文件(.txt的副檔名)
+
 2. 輸入以下內容
+
+    *==my.ini==*
 
     ```bash
     [mysqld]
@@ -82,15 +87,15 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
     >
     > basedir、datadir 都要輸入自己解壓縮後存放檔案的位置
 
-1. 將檔名改成my.ini，放入文件中
+3. 將檔名改成my.ini，放入文件中
 
-    ![螢幕擷取畫面 2024-04-01 220941](MySQL.assets/螢幕擷取畫面 2024-04-01 220941.png)
+    ![my.ini放入安裝資料夾](MySQL.assets/螢幕擷取畫面 2024-04-01 220941.png)
 
-2. 以管理員模式在PowerShell執行`mysqld --initialize-insecure --user=mysql`
+4. 以管理員模式在PowerShell執行`mysqld --initialize-insecure --user=mysql`
 
-3. 創建MySQL服務`mysqld --install "MySql57" --defaults-file="C:\\mysql-5.7.44-winx64\\my.ini"`
+5. 創建MySQL服務`mysqld --install "MySql57" --defaults-file="C:\\mysql-5.7.44-winx64\\my.ini"`
 
-4. 啟動服務 `net start MySql57`
+6. 啟動服務 `net start MySql57`
 
 ## 使用PowerShell登入MySQL
 
@@ -119,6 +124,8 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > 1byte = 8 bits
 
+*==整數類型==*
+
 | 類型      | 大小     | 範圍(有符號)                                             | 範圍(無符號)                   |
 | --------- | -------- | -------------------------------------------------------- | ------------------------------ |
 | tinyint   | 1byte    | (-128, 127)                                              | (0, 255)                       |
@@ -139,6 +146,8 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 - 單精度浮點數float
 
+    *==單精度浮點數float==*
+
     ```sql
     float[(M,D)] [unsigned] [zerofill]
     
@@ -147,6 +156,8 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
     ```
 
 - 雙精度浮點數double
+
+    *==雙精度浮點數double==*
 
     ```sql
     double[(M,D)] [unsigned] [zerofill]
@@ -160,6 +171,8 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
     > float、double看似一樣，但是佔用的位元數不一樣，精準度也有差
 
 - 最精準浮點數decimal
+
+    *==最精準浮點數decimal==*
 
     ```sql
     decimal[(M,D)] [unsigned] [zerofill]
@@ -176,11 +189,15 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 - year (1byte)
 
+    *==year (1byte)==*
+
     ```sql
     YYYY (1901,2155)
     ```
 
 - date (3bytes)
+
+    *==date (3bytes)==*
 
     ```sql
     YYYY-MM-DD (1000-01-01, 9999-12-31)
@@ -188,11 +205,15 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 - time (3bytes)
 
+    *==time (3bytes)==*
+
     ```sql
     HH:MM:SS (-838:59:59, 838:59:59)
     ```
 
 - datetime (8bytes)
+
+    *==datetime (8bytes)==*
 
     ```sql
     YYYY-MM-DD HH:MM:SS (1000-01-01 00:00:00, 9999-12-31 23:59:59)
@@ -200,11 +221,15 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 - timestamp (4bytes)
 
+    *==timestamp (4bytes)==*
+    
     ```sql
     YYYY-MM-DD HHMMSS (1970-01-01 00:00:00, 2038-01-19 03:14:07)
     ```
 
 ## datetime與timestamp差異
+
+*==datetime vs timestamp==*
 
 | 特性     | datetime   | timestamp  |
 | -------- | ---------- | ---------- |
@@ -223,7 +248,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 >  寬度指的是字符的個數
 
-![2](MySQL.assets/2.png)
+![字符類型](MySQL.assets/2.png)
 
 可以使用`select chat_length(欄位名稱) from 資料表名稱` 查看字符個數
 
@@ -240,11 +265,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 - char(5)下存的資料:’小明(空格)(空格)(空格)’→5個字符
 - varchar(5)下存的資料:’小明(空格)’→3個字符
 
-![3](MySQL.assets/3.png) ![4](MySQL.assets/4.png)
-
-> char(5)下拿取的資料的長度==會忽略掉後面的空格==
-
-> varchar(5)下拿取的資料的長度==
+![char(5)下拿取的資料的長度會忽略掉後面的空格](MySQL.assets/3.png) ![varchar(5)下拿取的資料的長度](MySQL.assets/4.png)
 
 
 
@@ -253,16 +274,16 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > 存取的長度跟拿取資料的長度不一樣 可以設定資料庫`set sql_mode = 'pad_char_to_full_length';` 讓char現出原形
 
-![5](MySQL.assets/5.png)
+![設定sql_mode](MySQL.assets/5.png)
 
 ## 列舉類型與集合類型
 
 - 單選 enum (在給定的一個範圍內選一個值)
 - 多選 set (在給定的一個範圍內選擇一個以上的值)
 
-![6](MySQL.assets/6.png)
+![enum](MySQL.assets/6.png)
 
-![7](MySQL.assets/7.png)
+![set](MySQL.assets/7.png)
 
 > [!WARNING]
 >
@@ -1515,7 +1536,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->     
+>                 
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
