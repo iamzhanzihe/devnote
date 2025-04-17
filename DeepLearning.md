@@ -201,8 +201,9 @@
 > test_acc: 0.9812999963760376
 > test_loss: 0.06244443356990814
 > ```
+> [<kbd>01.mnist.py ![](DeepLearning.assets/download.svg)</kbd>](DeepLearning.assets/code/01.mnist.py)
 
- [01.mnist.py](DeepLearning.assets/code/01.mnist.py) 
+
 
 # 張量
 
@@ -294,7 +295,7 @@
 >   [7 8]]] 3
 > ```
 >
->  [02.tensor.py](DeepLearning.assets/code/02.tensor.py) 
+> [<kbd>02.tensor.py ![](DeepLearning.assets/download.svg)</kbd>](DeepLearning.assets/code/02.tensor.py)
 
 ## 張量切片
 
@@ -345,19 +346,17 @@
 
 深度學習模型不會一次學習整個資料集，而是將資料分成一小批來學習
 
-<aside> 💡
-
-**為什麼需要批次處理？**
-
-1. 記憶體限制
-
-當資料集非常大時（如包含數百萬張圖片），無法一次將所有資料載入到GPU或CPU的記憶體中進行處理。
-
-1. 運算效率
-
-批次處理允許並行計算，現代的GPU可以同時處理多個樣本，大幅提高訓練速度。
-
-</aside>
+> [!NOTE]
+>
+> 為什麼需要批次處理？
+>
+> 1. 記憶體限制
+>
+>     當資料集非常大時（如包含數百萬張圖片），無法一次將所有資料載入到GPU或CPU的記憶體中進行處理。
+>
+> 2. 運算效率
+>
+>     批次處理允許並行計算，現代的GPU可以同時處理多個樣本，大幅提高訓練速度。
 
 可以一次先取128張圖片
 
