@@ -1170,7 +1170,201 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 
 # 子查詢
 
+子查詢（Subquery）是嵌套在其他 SQL 查詢中的查詢。子查詢可以出現在 SELECT、INSERT、UPDATE 或 DELETE 語句中，以及在 WHERE 或 HAVING 子句中。子查詢允許創建更為複雜和動態的數據操作和條件判斷
+
+![29](MySQL.assets/29.png)
+
+## IN 關鍵字
+
+```sql
+#查詢平均年齡在25歲以上的部門名
+
+#分解動作1 -> 查詢平均年齡在25歲以上的部門ID
+select dep_id from employee 
+   group by dep_id having avg(age)>25; 
+  
+#分解動作2 -> 查詢部門名稱
+select name from department;
+
+#合併結果
+select name from department where id in
+   (select dep_id from employee 
+   group by dep_id having avg(age)>25);
+#查詢技術部門員工的姓名
+
+#分解動作1 -> 查詢技術部門的ID號
+select id from department where name='技術';
+
+#分解動作2 -> 查詢員工姓名
+select name from employee; 
+
+#合併結果
+select name from employee where dep_id in 
+   (select id from department where name='技術'); 
+#查看不足1人的部門名
+
+#分解動作1 -> 查詢有人的部門ID號 (從員工表查詢，只要是員工必會有部門)
+select distinct dep_id from employee;
+
+#分解動作2 -> 查詢部門名稱
+select name from department; 
+
+#合併結果
+select name from department where id not in (
+   select id from department where name='技術'); 
+```
+
+## 比較、運算符
+
+```sql
+#查詢大於所有人平均年齡的員工姓名與年齡
+
+#分解動作1 -> 查詢所有人的平均年齡
+select avg(age) from employee;
+
+#分解動作2 -> 查詢員工名與年齡
+select name, age from employee;
+
+#合併結果
+select name, age from employee 
+   where age > (select avg(age) from employee);
+```
+
+## EXIST 關鍵字
+
+> [!NOTE]
+>
+> `EXISTS`查詢回傳`True`、`False`值
+
+```sql
+#查詢技術部門的所有員工
+select * from employee
+	where EXISTS (select id from department where name='技術')  
+```
+
 # SELECT 多表查詢
+
+當需要從兩張或更多的表中查詢數據時，SQL 提供了不同的連接（Join）方式來實現表之間的數據合並
+
+> ###### 練習資料
+>
+> ```sql
+> #建表部門表
+> create table department(
+> id int,
+> name varchar(20) 
+> );
+> 
+> #插入數據
+> insert into department values
+> (200,'技術'),
+> (201,'人力資源'),
+> (202,'銷售'),
+> (203,'營運');
+> 
+> #查看資料
+> mysql> select * from department;
+> +------+--------------+
+> | id | name |
+> +------+--------------+
+> | 200 | 技術 |
+> | 201 | 人力資源 |
+> | 202 | 銷售 |
+> | 203 | 運營 |
+> +------+--------------+
+> ```
+>
+> ```sql
+> #建立員工表
+> create table employee(
+> id int primary key auto_increment,
+> name varchar(20),
+> sex enum('male','female') not null default 'male',
+> age int,
+> dep_id int
+> );
+> 
+> #插入數據
+> insert into employee(name,sex,age,dep_id) values
+> ('egon','male',18,200),
+> ('alex','female',48,201),
+> ('wupeiqi','male',38,201),
+> ('yuanhao','female',28,202),
+> ('liwenzhou','male',18,200),
+> ('jingliyang','female',18,204)
+> ;
+> 
+> #查看資料
+> mysql> select * from employee;
+> +----+------------+--------+------+--------+
+> | id | name | sex | age | dep_id |
+> +----+------------+--------+------+--------+
+> | 1 | egon | male | 18 | 200 |
+> | 2 | alex | female | 48 | 201 |
+> | 3 | wupeiqi | male | 38 | 201 |
+> | 4 | yuanhao | female | 28 | 202 |
+> | 5 | liwenzhou | male | 18 | 200 |
+> | 6 | jingliyang | female | 18 | 204 |
+> +----+------------+--------+------+--------+
+> ```
+
+## **INNER JOIN** 內連結
+
+內連接是最常用的連接類型，它返回兩個表中匹配條件的交集。如果行在兩個表中都有匹配，那麼這些行就會被包括在查詢結果中
+
+```sql
+SELECT * from employee 
+	INNER JOIN department on employee.dep_id=department.id;
+	
+SELECT * from employee, department on employee.dep_id=department.id;
+```
+
+![Untitled](MySQL.assets/Untitled-4895768.png)
+
+## LEFT JOIN 左連結
+
+顯示左表（**`table1`**）的所有行，以及右表（**`table2`**）中匹配的行。如果右表中沒有匹配，則結果中右表的部分將以 **`NULL`** 填充
+
+```sql
+SELECT * from employee 
+	LEFT JOIN department on employee.dep_id=department.id;
+```
+
+![Untitled (1)](MySQL.assets/Untitled (1).png)
+
+## RIGHT JOIN 右連結
+
+顯示右表（**`table1`**）的所有行，以及左表（**`table2`**）中匹配的行。如果左表中沒有匹配，則結果中左表的部分將以 **`NULL`** 填充
+
+```sql
+SELECT * from employee 
+	RIGHT JOIN department on employee.dep_id=department.id;
+```
+
+![Untitled (2)](MySQL.assets/Untitled (2).png)
+
+## 全外連結
+
+> [!NOTE]
+>
+> 使用左連結和右連結達成全外連結效果，並使用UNION去除重複記錄
+
+```sql
+SELECT * from employee 
+	RIGHT JOIN department on employee.dep_id=department.id
+	UNION
+SELECT * from employee 
+	LEFT JOIN department on employee.dep_id=department.id;
+```
+
+![Untitled (3)](MySQL.assets/Untitled (3).png)
+
+> [!NOTE]
+>
+> 1. 兩個`select`語句查詢結果的“欄位數”必須一致
+> 2. 通常，也應該讓兩個查詢語句的欄位類型具有一致性
+> 3. 可以聯合更多的查詢結果
+> 4. 用到`order by`排序時，需要加上`limit`（加上最大條數就行），需要對子句用括號括起來 
 
 # 實戰練習
 
@@ -1245,145 +1439,174 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 >
 > ![ClShot 2025-04-13 at 18.27.06@2x](MySQL.assets/ClShot 2025-04-13 at 18.27.06@2x.png)
 
-- 查出至少有一個員工的部門。顯示部門編號、部門名稱、部門位置、部門人數。
+*^tab^*
 
-    ```sql
-    /*先查部門人數*/
-    select deptnu,count(*) as total from employee group by deptnu;
-    
-    /*再做進階查詢*/
-    select dept.deptnu, dept.dname, dept.addr, b.total from dept, 
-    	(select deptnu,count(*) as total from employee group by deptnu) as b 
-    	where dept.deptnu=b.deptnu;
-    	
-    /*取別名 讓語句再更精簡*/	
-    select a.deptnu, a.dname, a.addr, b.total from dept a, 
-    	(select deptnu,count(*) total from employee group by deptnu) b 
-    	where a.deptnu=b.deptnu;
-    ```
+> **1**
+>
+> 查出至少有一個員工的部門。顯示部門編號、部門名稱、部門位置、部門人數。
+>
+> ```sql
+> /*先查部門人數*/
+> select deptnu,count(*) as total from employee group by deptnu;
+> 
+> /*再做進階查詢*/
+> select dept.deptnu, dept.dname, dept.addr, b.total from dept, 
+> 	(select deptnu,count(*) as total from employee group by deptnu) as b 
+> 	where dept.deptnu=b.deptnu;
+> 	
+> /*取別名 讓語句再更精簡*/	
+> select a.deptnu, a.dname, a.addr, b.total from dept a, 
+> 	(select deptnu,count(*) total from employee group by deptnu) b 
+> 	where a.deptnu=b.deptnu;
+> ```
+>
+> ![實戰練習1查詢結果](MySQL.assets/ClShot 2025-04-17 at 19.38.29@2x.png)
 
-    ![ClShot 2025-04-17 at 19.38.29@2x](MySQL.assets/ClShot 2025-04-17 at 19.38.29@2x.png)
+> **2**
+>
+> 列出薪水比安琪拉高的所有員工。
+>
+> ```sql
+> select * from employee 
+> 	where sal > (select sal from employee where ename = '安琪拉');
+> ```
+>
+> ![實戰練習2查詢結果](MySQL.assets/ClShot 2025-04-17 at 19.44.16@2x.png)
 
-- 列出薪水比安琪拉高的所有員工。
+> **3**
+>
+> 列出所有員工的姓名及其直接上級的姓名。
+>
+> ```sql
+> select a.ename, ifnull(b.ename,"Boss") leader from employee a 
+> 	left join employee b on a.mgr = b.empno;
+> ```
+>
+> ![實戰練習3查詢結果](MySQL.assets/ClShot 2025-04-17 at 19.40.45@2x.png)
 
-    ```sql
-    select * from employee 
-    	where sal > (select sal from employee where ename = '安琪拉');
-    ```
+> **4**
+>
+> 列出受僱日期早於直接上級的所有員工的編號、姓名、部門名稱。
+>
+> ```sql
+> select a.empno, a.ename, c.dname from employee a 
+> 	left join employee b on a.mgr = b.empno
+> 	left join dept c on a.deptnu = c.deptnu
+> 	where a.hiredate < b.hiredate;
+> ```
+>
+> ![實戰練習4查詢結果](MySQL.assets/ClShot 2025-04-17 at 19.41.10@2x.png)
 
-    ![ClShot 2025-04-17 at 19.44.16@2x](MySQL.assets/ClShot 2025-04-17 at 19.44.16@2x.png)
+> **5**
+>
+> 列出部門名稱和這些部門的員工資訊，同時列出那些沒有員工的部門。
+>
+> ```sql
+> select a.dname, b.* from dept a
+> left join employee b on a.deptnu = b.deptnu;
+> ```
+>
+> ![實戰練習5查詢結果](MySQL.assets/ClShot 2025-04-17 at 19.41.31@2x.png)
 
-- 列出所有員工的姓名及其直接上級的姓名。
+> **6**
+>
+> - 列出所有文員的姓名及其部門名稱，所在部門的總人數。
+>
+>     ```sql
+>     /*計算部門總數*/
+>     select deptnu,count(*) total from employee group by deptnu
+>     
+>     select a.ename, b.dname, a.job, c.total from employee a, dept b,
+>     	(select deptnu,count(*) total from employee group by deptnu) c
+>     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
+>     ```
+>
+> ![實戰練習6查詢結果](MySQL.assets/ClShot 2025-04-17 at 19.43.24@2x.png)
 
-    ```sql
-    select a.ename, ifnull(b.ename,"Boss") leader from employee a 
-    	left join employee b on a.mgr = b.empno;
-    ```
+> **7**
+>
+> 列出該種工作最低薪水大於15000的，及從事此工作的員工人數。
+>
+> ```sql
+> select job, count(*) from employee group by job having min(sal)>15000;
+> ```
+>
+> ![實戰練習7查詢結果](MySQL.assets/ClShot 2025-04-17 at 19.58.11@2x.png)
+>
+> > [!IMPORTANT]
+> >
+> > 
+> >
+> > ```SQL
+> > select job, count(*) from employee where sal > 15000 group by job;
+> > ```
+> >
+> > ==這個跟解答有什麼差異點==_~rd~_
+> >
+> > * WHERE 子句在分組之前篩選資料，因此只考慮符合條的行
+> > * HAVING 子句是在分組之後篩選分組，因此它可以分組的聚合結果進行篩選
 
-    ![ClShot 2025-04-17 at 19.40.45@2x](MySQL.assets/ClShot 2025-04-17 at 19.40.45@2x.png)
+> **8**
+>
+> 列出在銷售部工作的員工的姓名，假定不知道銷售部的部門編號。
+>
+> ```sql
+> /*先查詢銷售部的編號*/
+> select deptnu from dept where dname="銷售部";
+> 
+> select ename from employee where deptnu = (select deptnu from dept where dname="銷售部");
+> ```
+>
+> ![實戰練習8查詢結果](MySQL.assets/ClShot 2025-04-17 at 20.15.48@2x.png)
 
-- 列出受僱日期早於直接上級的所有員工的編號、姓名、部門名稱。
+> **9**
+>
+> 列出與諸葛亮從事相同工作的所有員工及部門名稱。
+>
+> ```sql
+> select job from employee where ename = "諸葛亮"
+> 
+> select a.ename,b.dname from employee a, dept b 
+> 	where a.job = (select job from employee where ename = "諸葛亮") and a.deptnu=b.deptnu;
+> ```
+>
+> ![實戰練習9查詢結果](MySQL.assets/ClShot 2025-04-17 at 20.27.23@2x.png)
 
-    ```sql
-    select a.empno, a.ename, c.dname from employee a 
-    	left join employee b on a.mgr = b.empno
-    	left join dept c on a.deptnu = c.deptnu
-    	where a.hiredate < b.hiredate;
-    ```
+> **10**
+>
+> 列出薪水比在部門30工作的員工的薪水還高的員工姓名和薪水、部門名稱。
+>
+> ```sql
+> /*先找出部門30最高的薪水*/
+> select max(sal) from employee where deptnu=30;
+> 
+> select a.ename, a.sal, b.dname from employee a, dept b
+> 	where a.deptnu=b.deptnu and a.sal>(select max(sal) from employee where deptnu=30);
+> ```
+>
+> ![實戰練習10查詢結果](MySQL.assets/ClShot 2025-04-17 at 20.37.58@2x.png)
 
-    ![ClShot 2025-04-17 at 19.41.10@2x](MySQL.assets/ClShot 2025-04-17 at 19.41.10@2x.png)
+> **11**
+>
+> 列出每個部門的員工數量、平均工資。
+>
+> ```sql
+> select deptnu, count(*), avg(sal) from employee group by deptnu;
+> ```
+>
+> ![實戰練習11查詢結果](MySQL.assets/ClShot 2025-04-17 at 20.42.35@2x.png)
 
-- 列出部門名稱和這些部門的員工資訊，同時列出那些沒有員工的部門。
-
-    ```sql
-    select a.dname, b.* from dept a
-    left join employee b on a.deptnu = b.deptnu;
-    ```
-
-    ![ClShot 2025-04-17 at 19.41.31@2x](MySQL.assets/ClShot 2025-04-17 at 19.41.31@2x.png)
-
-- 列出所有文員的姓名及其部門名稱，所在部門的總人數。
-
-    ```sql
-    /*計算部門總數*/
-    select deptnu,count(*) total from employee group by deptnu
-    
-    select a.ename, b.dname, a.job, c.total from employee a, dept b,
-    	(select deptnu,count(*) total from employee group by deptnu) c
-    	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
-    ```
-
-![ClShot 2025-04-17 at 19.43.24@2x](MySQL.assets/ClShot 2025-04-17 at 19.43.24@2x.png)
-
-- 列出該種工作最低薪水大於15000的，及從事此工作的員工人數。
-
-    ```sql
-    select job, count(*) from employee group by job having min(sal)>15000;
-    ```
-
-    ![ClShot 2025-04-17 at 19.58.11@2x](MySQL.assets/ClShot 2025-04-17 at 19.58.11@2x.png)
-
-    > [!IMPORTANT]
-    >
-    > ```SQL
-    > select job, count(*) from employee where sal > 15000 group by job;
-    > ```
-    > ==差異點==_~rd~_
-    >
-    > * WHERE 子句在分組之前篩選資料，因此只考慮符合條的行
-    > * HAVING 子句是在分組之後篩選分組，因此它可以分組的聚合結果進行篩選
-
-- 列出在銷售部工作的員工的姓名，假定不知道銷售部的部門編號。
-
-    ```sql
-    /*先查詢銷售部的編號*/
-    select deptnu from dept where dname="銷售部";
-    
-    select ename from employee where deptnu = (select deptnu from dept where dname="銷售部");
-    ```
-
-    ![ClShot 2025-04-17 at 20.15.48@2x](MySQL.assets/ClShot 2025-04-17 at 20.15.48@2x.png)
-
-- 列出與諸葛亮從事相同工作的所有員工及部門名稱。
-
-    ```sql
-    select job from employee where ename = "諸葛亮"
-    
-    select a.ename,b.dname from employee a, dept b 
-    	where a.job = (select job from employee where ename = "諸葛亮") and a.deptnu=b.deptnu;
-    ```
-
-    ![ClShot 2025-04-17 at 20.27.23@2x](MySQL.assets/ClShot 2025-04-17 at 20.27.23@2x.png)
-
-- 列出薪水比在部門30工作的員工的薪水還高的員工姓名和薪水、部門名稱。
-
-    ```sql
-    /*先找出部門30最高的薪水*/
-    select max(sal) from employee where deptnu=30;
-    
-    select a.ename, a.sal, b.dname from employee a, dept b
-    	where a.deptnu=b.deptnu and a.sal>(select max(sal) from employee where deptnu=30);
-    ```
-
-    ![ClShot 2025-04-17 at 20.37.58@2x](MySQL.assets/ClShot 2025-04-17 at 20.37.58@2x.png)
-
-- 列出每個部門的員工數量、平均工資。
-
-    ```sql
-    select deptnu, count(*), avg(sal) from employee group by deptnu;
-    ```
-
-    ![ClShot 2025-04-17 at 20.42.35@2x](MySQL.assets/ClShot 2025-04-17 at 20.42.35@2x.png)
-
-- 列出薪金高於公司平均薪水的所有員工資訊，所在部門名稱，上級領導，工資等級。
-
-    ```sql
-    /*先找出平均薪水*/
-    select avg(sal) from employee;
-    
-    select a.*, c.dname, b.ename, d.grade from employee a, employee b, dept c, salgrade d
-    	where a.mgr=b.empno and a.deptnu=c.deptnu 
-    	and a.sal>(select avg(sal) from employee) and a.sal between d.lowsal and d.higsal;
-    ```
-
-    ![ClShot 2025-04-17 at 20.51.10@2x](MySQL.assets/ClShot 2025-04-17 at 20.51.10@2x.png)
+> **12**
+>
+> 列出薪金高於公司平均薪水的所有員工資訊，所在部門名稱，上級領導，工資等級。
+>
+> ```sql
+> /*先找出平均薪水*/
+> select avg(sal) from employee;
+> 
+> select a.*, c.dname, b.ename, d.grade from employee a, employee b, dept c, salgrade d
+> 	where a.mgr=b.empno and a.deptnu=c.deptnu 
+> 	and a.sal>(select avg(sal) from employee) and a.sal between d.lowsal and d.higsal;
+> ```
+>
+> ![實戰練習12查詢結果](MySQL.assets/ClShot 2025-04-17 at 20.51.10@2x.png)
