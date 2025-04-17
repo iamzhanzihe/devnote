@@ -47,7 +47,7 @@
     }
     
     .form-group {
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
     
     .form-group label {
@@ -88,6 +88,58 @@
       width: 16px;
       height: 16px;
       fill: #666;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      color: #444;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: rgb(76, 167, 191);
+      box-shadow: 0 0 0 2px rgba(76, 167, 191, 0.2);
+    }
+    
+    .input-group {
+      position: relative;
+    }
+    
+    .input-prefix {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .or-divider {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      color: #777;
+      font-size: 14px;
+    }
+    
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: #ddd;
+    }
+    
+    .or-divider::before {
+      margin-right: 10px;
+    }
+    
+    .or-divider::after {
+      margin-left: 10px;
     }
     
     .btn {
@@ -133,6 +185,19 @@
         padding: 20px;
         margin: 0 15px;
       }
+
+      .input-with-prefix {
+        padding-left: 15px;
+        font-size: 14px;
+      }
+      
+      .input-prefix {
+        position: static;
+        transform: none;
+        display: block;
+        margin-bottom: 5px;
+        font-size: 13px;
+      }
     }
   </style>
 </head>
@@ -157,6 +222,15 @@
         </div>
       </div>
     </div>
+
+    <div class="or-divider">或者</div>
+
+    <div class="form-group">
+      <label for="custom-path">自定義有效路徑</label>
+      <div class="input-group">
+        <input type="text" id="custom-path" class="input-field input-with-prefix" placeholder="輸入自定義有效路徑">
+      </div>
+    </div>
     
     <button id="visit-btn" class="btn" disabled>
       <span>前往網站</span>
@@ -173,20 +247,54 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const selectElement = document.getElementById('website-select');
+      const customPathInput = document.getElementById('custom-path');
       const visitButton = document.getElementById('visit-btn');
+      const baseUrl = 'https://iamzhanzihe.github.io/devnote/';
       
-      selectElement.addEventListener('change', function() {
-        if (this.value) {
+      // 檢查是否有輸入或選擇，啟用或禁用按鈕
+      function checkEnableButton() {
+        if (selectElement.value || customPathInput.value.trim()) {
           visitButton.disabled = false;
         } else {
           visitButton.disabled = true;
         }
+      }
+      
+      // 當選擇下拉選單時，清空自定義輸入
+      selectElement.addEventListener('change', function() {
+        if (this.value) {
+          customPathInput.value = '';
+        }
+        checkEnableButton();
       });
       
+      // 當輸入自定義路徑時，重置下拉選單
+      customPathInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+          selectElement.selectedIndex = 0;
+        }
+        checkEnableButton();
+      });
+      
+      // 點擊按鈕時導航到選擇的網站或自定義路徑
       visitButton.addEventListener('click', function() {
-        const selectedValue = selectElement.value;
-        if (selectedValue) {
-          window.open(selectedValue, '_blank');
+        let targetUrl;
+        
+        if (selectElement.value) {
+          // 如果選擇了預設網站
+          targetUrl = selectElement.value;
+        } else if (customPathInput.value.trim()) {
+          // 如果輸入了自定義路徑
+          // 移除開頭的斜線，避免重複
+          let customPath = customPathInput.value.trim();
+          if (customPath.startsWith('/')) {
+            customPath = customPath.substring(1);
+          }
+          targetUrl = baseUrl + customPath;
+        }
+        
+        if (targetUrl) {
+          window.open(targetUrl, '_blank');
         }
       });
     });
