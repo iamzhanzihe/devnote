@@ -420,7 +420,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 ## 系統資料庫
 
-![19](MySQL.assets/19.png)
+![19](MySQL.assets/19.png#60%)
 
 - information_schema 虛擬資料庫，存放資料庫啟動後的一些參數，如用戶表訊息、權限訊息...…
 - performance_schema 主要用於收集資料庫服務器性能參數，處理查詢請求時發生的各種事件
@@ -1225,7 +1225,7 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 > INSERT INTO employee VALUES (1001, '小喬', '文員', 1013, '2018-12-17', 8000, 20);
 > ```
 >
-> ![ClShot 2025-04-13 at 19.36.41@2x](MySQL.assets/ClShot 2025-04-13 at 19.36.41@2x.png)
+> ![ClShot 2025-04-17 at 19.56.21@2x](MySQL.assets/ClShot 2025-04-17 at 19.56.21@2x.png)
 >
 > ```sql
 > /*創建員工薪水等級表*/
@@ -1262,6 +1262,8 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
     	where a.deptnu=b.deptnu;
     ```
 
+    ![ClShot 2025-04-17 at 19.38.29@2x](MySQL.assets/ClShot 2025-04-17 at 19.38.29@2x.png)
+
 - 列出薪水比安琪拉高的所有員工。
 
     ```sql
@@ -1269,12 +1271,16 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
     	where sal > (select sal from employee where ename = '安琪拉');
     ```
 
+    ![ClShot 2025-04-17 at 19.44.16@2x](MySQL.assets/ClShot 2025-04-17 at 19.44.16@2x.png)
+
 - 列出所有員工的姓名及其直接上級的姓名。
 
     ```sql
     select a.ename, ifnull(b.ename,"Boss") leader from employee a 
     	left join employee b on a.mgr = b.empno;
     ```
+
+    ![ClShot 2025-04-17 at 19.40.45@2x](MySQL.assets/ClShot 2025-04-17 at 19.40.45@2x.png)
 
 - 列出受僱日期早於直接上級的所有員工的編號、姓名、部門名稱。
 
@@ -1285,12 +1291,16 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
     	where a.hiredate < b.hiredate;
     ```
 
+    ![ClShot 2025-04-17 at 19.41.10@2x](MySQL.assets/ClShot 2025-04-17 at 19.41.10@2x.png)
+
 - 列出部門名稱和這些部門的員工資訊，同時列出那些沒有員工的部門。
 
     ```sql
     select a.dname, b.* from dept a
     left join employee b on a.deptnu = b.deptnu;
     ```
+
+    ![ClShot 2025-04-17 at 19.41.31@2x](MySQL.assets/ClShot 2025-04-17 at 19.41.31@2x.png)
 
 - 列出所有文員的姓名及其部門名稱，所在部門的總人數。
 
@@ -1302,3 +1312,78 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
     	(select deptnu,count(*) total from employee group by deptnu) c
     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
     ```
+
+![ClShot 2025-04-17 at 19.43.24@2x](MySQL.assets/ClShot 2025-04-17 at 19.43.24@2x.png)
+
+- 列出該種工作最低薪水大於15000的，及從事此工作的員工人數。
+
+    ```sql
+    select job, count(*) from employee group by job having min(sal)>15000;
+    ```
+
+    ![ClShot 2025-04-17 at 19.58.11@2x](MySQL.assets/ClShot 2025-04-17 at 19.58.11@2x.png)
+
+    > [!IMPORTANT]
+    >
+    > ```SQL
+    > select job, count(*) from employee where sal > 15000 group by job;
+    > ```
+    > ==差異點==_~rd~_
+    >
+    > * WHERE 子句在分組之前篩選資料，因此只考慮符合條的行
+    > * HAVING 子句是在分組之後篩選分組，因此它可以分組的聚合結果進行篩選
+
+- 列出在銷售部工作的員工的姓名，假定不知道銷售部的部門編號。
+
+    ```sql
+    /*先查詢銷售部的編號*/
+    select deptnu from dept where dname="銷售部";
+    
+    select ename from employee where deptnu = (select deptnu from dept where dname="銷售部");
+    ```
+
+    ![ClShot 2025-04-17 at 20.15.48@2x](MySQL.assets/ClShot 2025-04-17 at 20.15.48@2x.png)
+
+- 列出與諸葛亮從事相同工作的所有員工及部門名稱。
+
+    ```sql
+    select job from employee where ename = "諸葛亮"
+    
+    select a.ename,b.dname from employee a, dept b 
+    	where a.job = (select job from employee where ename = "諸葛亮") and a.deptnu=b.deptnu;
+    ```
+
+    ![ClShot 2025-04-17 at 20.27.23@2x](MySQL.assets/ClShot 2025-04-17 at 20.27.23@2x.png)
+
+- 列出薪水比在部門30工作的員工的薪水還高的員工姓名和薪水、部門名稱。
+
+    ```sql
+    /*先找出部門30最高的薪水*/
+    select max(sal) from employee where deptnu=30;
+    
+    select a.ename, a.sal, b.dname from employee a, dept b
+    	where a.deptnu=b.deptnu and a.sal>(select max(sal) from employee where deptnu=30);
+    ```
+
+    ![ClShot 2025-04-17 at 20.37.58@2x](MySQL.assets/ClShot 2025-04-17 at 20.37.58@2x.png)
+
+- 列出每個部門的員工數量、平均工資。
+
+    ```sql
+    select deptnu, count(*), avg(sal) from employee group by deptnu;
+    ```
+
+    ![ClShot 2025-04-17 at 20.42.35@2x](MySQL.assets/ClShot 2025-04-17 at 20.42.35@2x.png)
+
+- 列出薪金高於公司平均薪水的所有員工資訊，所在部門名稱，上級領導，工資等級。
+
+    ```sql
+    /*先找出平均薪水*/
+    select avg(sal) from employee;
+    
+    select a.*, c.dname, b.ename, d.grade from employee a, employee b, dept c, salgrade d
+    	where a.mgr=b.empno and a.deptnu=c.deptnu 
+    	and a.sal>(select avg(sal) from employee) and a.sal between d.lowsal and d.higsal;
+    ```
+
+    ![ClShot 2025-04-17 at 20.51.10@2x](MySQL.assets/ClShot 2025-04-17 at 20.51.10@2x.png)
