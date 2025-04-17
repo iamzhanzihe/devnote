@@ -286,30 +286,32 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 資料庫就是數據的倉庫，對應到一個資料夾，儲存著一定資料結構的資料，一個資料庫中可能包含著若干個表
 
-- 增
+*^tab^*
 
-    - `create database db1 charset utf8;`
-    - `create database if not exists db1;` 判斷資料庫是否存在，不存在才創建
+> **增**
+>
+> - `create database db1 charset utf8;`
+>- `create database if not exists db1;` 判斷資料庫是否存在，不存在才創建
 
-- 查
+> **查**
+>
+> - `show create database db1;` 查看指定資料庫
+>
+>     ![9](MySQL.assets/9.png)
+>
+> - `show databases;` 查看所有資料庫
+>
+>     ![10](MySQL.assets/10.png)
 
-    - `show create database db1;` 查看指定資料庫
+> **改**
+>
+> * `alter database db1 charset gbk;` 修改字符集
+>
+> ![11](MySQL.assets/11.png)
 
-        ![9](MySQL.assets/9.png)
-
-    - `show databases;` 查看所有資料庫
-
-        ![10](MySQL.assets/10.png)
-
-- 改
-
-    - `alter database db1 charset gbk;` 修改字符集
-
-        ![11](MySQL.assets/11.png)
-
-- 刪
-
-    - `drop database db1;`
+> **刪**
+>
+> * `drop database db1;`
 
 ## 操作文件(資料表table)
 
@@ -321,96 +323,98 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > 查看當前所在的資料庫`select database();`
 
+*^tab^*
 
+> **增**
+>
+> ```sql
+> create table student_t(
+> 	id int not null,
+> 	name char not null,
+> 	age tinyint
+> );
+> ```
 
-- 增
+> **查**
+>
+> - `show create table t1;` 查看指定資料表
+>
+>     ![12](MySQL.assets/12.png)
+>
+> - `show tables;` 查看所有資料表
+>
+>     ![13](MySQL.assets/13.png)
+>
+> - `desc t1;` 查看指定資料表結構
+>
+>     ![14](MySQL.assets/14.png)
 
-    ```sql
-    create table student_t(
-    	id int not null,
-    	name char not null,
-    	age tinyint
-    );
-    ```
+> **改**
+>
+> - `alter table t1 modify name char(6);` 修改資料項型態
+>
+>     ![螢幕擷取畫面 2024-04-02 015111](MySQL.assets/螢幕擷取畫面 2024-04-02 015111.png)
+>
+> - `alter table t1 change name NAME char(7);` 修改欄位名稱及資料型態
+>
+>     ![螢幕擷取畫面 2024-04-02 015215](MySQL.assets/螢幕擷取畫面 2024-04-02 015215.png)
 
-- 查
-
-    - `show create table t1;` 查看指定資料表
-
-        ![12](MySQL.assets/12.png)
-
-    - `show tables;` 查看所有資料表
-
-        ![13](MySQL.assets/13.png)
-
-    - `desc t1;` 查看指定資料表結構
-
-        ![14](MySQL.assets/14.png)
-
-- 改
-
-    - `alter table t1 modify name char(6);` 修改資料項型態
-
-        ![螢幕擷取畫面 2024-04-02 015111](MySQL.assets/螢幕擷取畫面 2024-04-02 015111.png)
-
-    - `alter table t1 change name NAME char(7);` 修改欄位名稱及資料型態
-
-        ![螢幕擷取畫面 2024-04-02 015215](MySQL.assets/螢幕擷取畫面 2024-04-02 015215.png)
-
-- 刪
-
-    - `drop table t1;`
+> **刪**
+>
+> * `drop table t1;`
 
 ## 操作文件內容(資料內容)
 
-- 增
+*^tab^*
 
-    - `insert into t1 values 所有字段資料;`
-    - `insert into t1(id,name) values(1,'James1'),(2,'James2'),(3,'James3');`
-    - `insert into 表名1 select * from 表名2;` (複製資料)
-    - `insert into 表名1（欄位名1，欄位名2） select 欄位名1，欄位名2 from 表名2;` (複製資料)
+> **增**
+>
+> - `insert into t1 values 所有字段資料;`
+> - `insert into t1(id,name) values(1,'James1'),(2,'James2'),(3,'James3');`
+> - `insert into 表名1 select * from 表名2;` (複製資料)
+> - `insert into 表名1（欄位名1，欄位名2） select 欄位名1，欄位名2 from 表名2;` (複製資料)
 
-- 查
+> **查**
+>
+> - `select id,name from db1.t1;` 針對指定欄位查看資料內容
+>
+> - `select * from db1.t1;` 查看所有資料內容
+>
+>     ![15](MySQL.assets/15.png)
 
-    - `select id,name from db1.t1;` 針對指定欄位查看資料內容
+> **改**
+>
+> - `update t1 set name='SB';` 修改所有name欄位的值
+>
+>     ![16](MySQL.assets/16.png)
+>
+> - `update t1 set name='Lisa' where id=2;`
+>
+>     ![17](MySQL.assets/17.png)
 
-    - `select * from db1.t1;` 查看所有資料內容
+> **刪**
+>
+> - `delete from t1 where id=2;`
+>
+> - `truncate table 表名`
+>
+>     ![18](MySQL.assets/18.png)
 
-        ![15](MySQL.assets/15.png)
-
-- 改
-
-    - `update t1 set name='SB';` 修改所有name欄位的值
-
-        ![16](MySQL.assets/16.png)
-
-    - `update t1 set name='Lisa' where id=2;`
-
-        ![17](MySQL.assets/17.png)
-
-- 刪
-
-    - `delete from t1 where id=2;`
-
-    - `truncate table 表名`
-
-        ![18](MySQL.assets/18.png)
-
-    > [!NOTE]
-    >
-    > 問在刪改資料之前，要先怎麼做？
-    >
-    > A：會對資料進行備份操作，以防萬一，可以進行資料回退
-    >
-    > `delete`、`truncate`、`drop` 這三種共同點都是刪除資料，他們的不同點是什麼?
-    >
-    > A：
-    >
-    > - `delele` 會把刪除的操作記錄給記錄起來，以便資料回退，不會釋放空間，而且不會刪除定義。
-    > - `truncate`不會記錄刪除操作，會把表佔用的空間恢復到最初，不會刪除定義
-    > - `drop`會刪除整張表，釋放表佔用的空間。
-    >
-    > 刪除速度：`drop` > `truncate` > `delete`
+> [!NOTE]
+>
+> 問在刪改資料之前，要先怎麼做？
+>
+> A：會對資料進行備份操作，以防萬一，可以進行資料回退
+>
+> `delete`、`truncate`、`drop` 這三種共同點都是刪除資料，他們的不同點是什麼?
+>
+> A：
+>
+> - `delele` 會把刪除的操作記錄給記錄起來，以便資料回退，不會釋放空間，而且不會刪除定義。
+> - `truncate`不會記錄刪除操作，會把表佔用的空間恢復到最初，不會刪除定義
+> - `drop`會刪除整張表，釋放表佔用的空間。
+>
+> 刪除速度：`drop` > `truncate` > `delete`
 
 # 資料庫操作
 
