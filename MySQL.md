@@ -1,4 +1,13 @@
+---
+​---
+title: MySQL學習筆記
+vlook-header-dup: 增;查;改;刪;練習資料
+​---
+---
+
 [TOC]
+
+###### MySQL學習筆記<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`*_~Og~_
 
 # 什麼是資料庫
 
@@ -1312,7 +1321,7 @@ SELECT * from employee
 > 3. 可以聯合更多的查詢結果
 > 4. 用到`order by`排序時，需要加上`limit`（加上最大條數就行），需要對子句用括號括起來 
 
-# 實戰練習
+# SQL實戰練習
 
 
 
@@ -1461,7 +1470,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                         
+>                                                 
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
@@ -1556,3 +1565,12 @@ SELECT * from employee
 > ```
 >
 > ![實戰練習12查詢結果](MySQL.assets/ClShot 2025-04-17 at 20.51.10@2x.png)
+
+# 權限及密碼
+
+
+
+
+
+
+
