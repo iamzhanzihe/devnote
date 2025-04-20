@@ -58,7 +58,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 > **安裝MySQL ❯**
 >
-> 版本:Community Server [<kbd>點我下載</kbd>](https://dev.mysql.com/downloads/mysql/)
+> * 下載並安裝 [*點擊下載`MySQL Community Server`V5.4以上*_~Og~_](https://dev.mysql.com/downloads/mysql/)
 >
 > ![選擇Community Server](MySQL.assets/螢幕擷取畫面 2024-04-01 220044.png)
 >
@@ -1470,7 +1470,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                 
+>                                                                     
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
@@ -1567,8 +1567,6 @@ SELECT * from employee
 > ![實戰練習12查詢結果](MySQL.assets/ClShot 2025-04-17 at 20.51.10@2x.png)
 
 # 權限及密碼
-
-
 
 
 
