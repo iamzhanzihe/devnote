@@ -25,6 +25,22 @@
 
 mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle公司旗下的一款產品，由C和C++語言編寫，可移植性高。支援在多種作業系統上安裝，以mysql作為資料庫，linux系統作為作業系統，apache或者nginx作為web伺服器，perl/php/python作為伺服器端的腳本直譯器，就可以搭建起一個免費的網站。被業界稱為LNMP或者LAMP
 
+## 存儲引擎
+
+存儲引擎是資料庫管理系統中負責管理數據和檢索的模塊也就是表的類型，不同的存儲引擎提供了不同的特性
+
+![20](MySQL.assets/20.png#80%)
+
+* 查看存儲引擎`show engines;`
+
+![21](MySQL.assets/21.png)
+
+* 指定存儲引擎`create table 資料表名稱(資料欄位 資料類型)engine=存儲引擎`
+
+> [!NOTE]
+>
+> 預設為InnoDB，因此若使用InnoDB可以不指定存儲引擎
+
 
 
 # MySQL安裝 (版本5.7.xx以上)
@@ -296,12 +312,18 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 - DDL 資料庫定義語言:創建、定義資料庫、表 CREATE、DROP、ALTER
 - DML 資料庫操縱語言:插入數據INSERT、刪出數據DELETE、更新數據UPDATE、查詢數據SELECT
 - DCL 資料庫控制語言:控制用戶權限 GRANT、REVOKE
+- `help 指令` 查詢語法
 
-## 取得幫助
+## 系統資料庫
 
-- `help 指令`
+![19](MySQL.assets/19.png#40%)
 
-## 操作資料夾(資料庫database)
+- information_schema：虛擬資料庫，存放資料庫啟動後的一些參數，如用戶表訊息、權限訊息...…
+- performance_schema：主要用於收集資料庫服務器性能參數，處理查詢請求時發生的各種事件
+- mysql：最重要的系統資料庫之一，存儲了 MySQL 伺服器的使用者帳號和權限信息
+- sys：MySQL 5.7 版本之後引入的資料庫，用於提供關於 MySQL 實例性能的信息
+
+## 資料庫操作(database)
 
 
 
@@ -312,9 +334,21 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 > **增**
 >
 > - `create database db1 charset utf8;`
->- `create database if not exists db1;` 判斷資料庫是否存在，不存在才創建
+> - `create database if not exists db1;` 判斷資料庫是否存在，不存在才創建
+>
+> > [!NOTE]
+> >
+> > 命名規則
+> >
+> > - 可以使用字母、數字、底線、@、#、$
+> > - 區分大小寫
+> > - 具有唯一性
+> > - 不能使用SQL的關鍵字
+> > - 最長128個字
 
 > **查**
+>
+> - 列出所有資料庫`show databases;`
 >
 > - `show create database db1;` 查看指定資料庫
 >
@@ -326,15 +360,15 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 > **改**
 >
-> * `alter database db1 charset gbk;` 修改字符集
+> * `alter database db1 charset gbk;` 修改指定資料庫的字符集
 >
 > ![11](MySQL.assets/11.png)
 
 > **刪**
 >
-> * `drop database db1;`
+> * 刪除資料庫`drop database db1;`
 
-## 操作文件(資料表table)
+## 資料表操作(table)
 
 每一張資料表，是由行和列組成，每記錄一條資料，資料表就增加一行，每一個欄位有著多個屬性。例如是否允許為空、長度、類型等等
 
@@ -355,14 +389,22 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 > 	age tinyint
 > );
 > ```
+>
+> > [!NOTE]
+> >
+> > 1. 在同一張資料表中，欄位名字不能相同 
+> > 2. [(長度) 約束條件]選填
 
 > **查**
 >
 > - `show create table t1;` 查看指定資料表
 >
+>     - `\G` 換行顯示
+>
+>
 >     ![12](MySQL.assets/12.png)
 >
-> - `show tables;` 查看所有資料表
+> - `show tables;` 查看當前資料庫下所有的資料表名稱
 >
 >     ![13](MySQL.assets/13.png)
 >
@@ -372,17 +414,37 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 > **改**
 >
-> - `alter table t1 modify name char(6);` 修改資料項型態
+> - 修改表名`alter table 資料表名稱 rename 新資料表名稱;`
+>
+> - 增加表欄位
+>
+>     - `alter table 資料表名稱 add 欄位名稱 數據類型 [約束條件];`
+>     - `alter table 資料表名稱 add 欄位名稱 數據類型 [約束條件] first;`
+>     - `alter table 資料表名稱 add 欄位名稱 數據類型 [約束條件] after 欄位名稱;`
+>
+> - 修改資料項型態`alter table t1 modify name char(6);` 
 >
 >     ![螢幕擷取畫面 2024-04-02 015111](MySQL.assets/螢幕擷取畫面 2024-04-02 015111.png)
 >
-> - `alter table t1 change name NAME char(7);` 修改欄位名稱及資料型態
+> - 修改欄位名稱及資料型態`alter table t1 change name NAME char(7);` 
 >
 >     ![螢幕擷取畫面 2024-04-02 015215](MySQL.assets/螢幕擷取畫面 2024-04-02 015215.png)
 
 > **刪**
 >
 > * `drop table t1;`
+> * `alter table 資料表名稱 drop 欄位名稱;`
+
+> **複製**
+>
+> * 複製資料表結構+記錄`create table 新資料表名稱 select * from 將複製的資料表名稱;`
+> * 只複製資料表結構
+>     * `create table 新資料表名稱 select * from 將複製的資料表名稱 where 1=2;`
+>     * `create table 新資料表名稱 like 將複製的資料表名稱`
+>
+> > [!NOTE]
+> >
+> > 1=2條件為False，查不到任何記錄
 
 ## 操作文件內容(資料內容)
 
@@ -436,143 +498,6 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 > - `drop`會刪除整張表，釋放表佔用的空間。
 >
 > 刪除速度：`drop` > `truncate` > `delete`
-
-# 資料庫操作
-
-## 系統資料庫
-
-![19](MySQL.assets/19.png#60%)
-
-- information_schema 虛擬資料庫，存放資料庫啟動後的一些參數，如用戶表訊息、權限訊息...…
-- performance_schema 主要用於收集資料庫服務器性能參數，處理查詢請求時發生的各種事件
-- mysql 最重要的系統資料庫之一，存儲了 MySQL 伺服器的使用者帳號和權限信息
-- sys  MySQL 5.7 版本之後引入的資料庫，用於提供關於 MySQL 實例性能的信息
-
-## 創建資料庫
-
-- 創建資料庫`create database 資料庫名稱 charset utf8`
-- 命名規則
-    - 可以使用字母、數字、底線、@、#、$
-    - 區分大小寫
-    - 具有唯一性
-    - 不能使用SQL的關鍵字
-    - 最長128個字
-
-## 資料庫相關操作
-
-- 查看資料庫
-    - 列出所有資料庫`show databases;`
-    - 查看指定資料庫`show create database 資料庫名稱;`
-    - 查看當前所在的資料庫`select database();`
-- 選擇資料庫
-    - `use 資料庫名稱`
-- 刪除資料庫
-    - `drop database 資料庫名稱;`
-- 修改資料庫
-    - 修改指定資料庫的字符集`alter database 資料庫名稱 charset utf8;`
-
-# 資料表操作
-
-## 存儲引擎
-
-存儲引擎是資料庫管理系統中負責管理數據和檢索的模塊也就是表的類型，不同的存儲引擎提供了不同的特性
-
-![20](MySQL.assets/20.png)
-
-- 查看存儲引擎`show engines;`
-
-    ![21](MySQL.assets/21.png)
-
-## 指定存儲引擎
-
-- `create table 資料表名稱(資料欄位 資料類型)engine=存儲引擎`
-
-> [!WARNING]
->
-> 預設為InnoDB，因此若使用InnoDB可以不指定存儲引擎
-
-
-
-## 創建資料表
-
-```sql
-create table 資料表名稱(
-	欄位1 類型[(長度) 約束條件],
-	欄位2 類型[(長度) 約束條件],
-	欄位3 類型[(長度) 約束條件]
-);
-```
-
-> [!warning]
->
-> 1. 在同一張資料表中，欄位名字不能相同 
-> 2. [(長度) 約束條件]選填
-
-## 查看資料表
-
-- 查看當前資料庫下所有的資料表名稱`show tables;`
-
-- 查看資料表結構`desc 資料表名稱`
-
-- 查看詳細訊息`show create table 資料表名稱`
-
-    - `\G` 換行顯示
-
-## 修改資料表
-
-1. 修改表名
-
-    ```sql
-    alter table 資料表名稱 rename 新資料表名稱;
-    ```
-
-2. 增加表欄位
-
-    ```sql
-    alter table 資料表名稱 add 欄位名稱 數據類型 [約束條件];
-    
-    alter table 資料表名稱 add 欄位名稱 數據類型 [約束條件] first;
-    
-    alter table 資料表名稱 add 欄位名稱 數據類型 [約束條件] after 欄位名稱;
-    ```
-
-3. 刪除欄位
-
-    ```sql
-    alter table 資料表名稱 drop 欄位名稱;
-    ```
-
-4. 修改欄位
-
-    ```sql
-    alter table 資料表名稱 modify 欄位名稱 數據類型 [約束條件];
-    
-    alter table 資料表名稱 change 舊欄位名稱 新欄位名稱 數據類型 [約束條件]; 
-    ```
-
-## 複製資料表
-
-1. 複製資料表結構+記錄
-
-    ```sql
-    create table 新資料表名稱 select * from 將複製的資料表名稱;
-    ```
-
-2. 只複製資料表結構
-
-    ```sql
-    create table 新資料表名稱 select * from 將複製的資料表名稱 where 1=2;
-    
-    create table 新資料表名稱 like 將複製的資料表名稱
-    ```
-
-    > [!NOTE]
-    >
-    > 1=2條件為False，查不到任何記錄
-
-## 刪除資料表
-
-- 刪除資料表 `drop table 資料表名稱`
 
 # 約束條件
 
@@ -1536,7 +1461,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                 
+>                         
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
