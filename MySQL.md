@@ -125,6 +125,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 ## 使用PowerShell登入MySQL
 
 1. 輸入 `mysql -uroot -p`
+    * 可以使用`-h`指定登入ip，默認是localhost
 2. 直接再次按下Enter就可以直接不輸入密碼登入
     - root帳號登入就是管理員的帳號，擁有最高權限
 3. 登出 `exit;` or  `quit;`
@@ -1485,7 +1486,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                             
+>                                                                                     
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
@@ -1583,7 +1584,105 @@ SELECT * from employee
 
 # 權限及密碼
 
+## 限制root用戶登入
+
+在 MySQL 中限制 root 用戶登入的 IP 是一項重要的安全措施，這些設定都放在mysql內建資料庫的user表中
+
+* **防止遠程攻擊**：限制 root 只能從特定 IP（通常是本地 127.0.0.1）登入，可以大幅降低遠程攻擊的風險。如果允許 root 從任何 IP 登入（使用%`萬用字元），則增加了被惡意攻擊的可能性。
+* **減少暴力破解風險**：限制登入 IP 可以顯著減少暴力破解密碼的嘗試，因為攻擊者必須先獲得允許連接的 IP 才能開始嘗試破解密碼。
+* **最小權限原則**：遵循資安的最小權限原則，root 用戶擁有最高權限，應該限制其使用範圍，只在必要時從安全的位置使用。
+
+*^tab^*
+
+> **建立用戶、賦予權限**
+>
+> * username：將建立的使用者名稱 
+> * host：指定該使用者在哪個主機上可以登入，如果是本地使用者可用localhost，如果想讓該使用者可以從任意遠端主機登入，可以使用萬用字元% 
+> * password：該使用者的登入密碼，密碼可以為空
+>
+> *==建立用戶並指定密碼，可以在任一台遠程主機登入==*
+>
+> ```sql
+> create user 'James'@'%' identified by '1234';
+> ```
+>
+> *==建立用戶不指定密碼，指定在163網段的機器登錄==*
+>
+> ```sql
+> create user 'James'@'163.%.%.%' identified by '';
+> ```
+>
+> 
+
+> **查看用戶及權限表**
+>
+> * 查看用戶可登入的網段
+>
+>     * `select user,host from mysql.user where user='root';`
+>
+>         ![查看用戶](MySQL.assets/ClShot 2025-04-21 at 16.32.53@2x.png)
+>
+> * 查看權限
+>
+>     * `show grants for 'James'@'%';`
+>
+>         ![James的用戶權限](MySQL.assets/ClShot 2025-04-21 at 16.31.58@2x.png)
+
+> **修改用戶權限表**
+>
+> 修改mysql資料庫裡的user表
+>
+> ```sql
+> update mysql.user set host='localhost' where user='root';
+> ```
+> 
+
+> **刪除指定用戶**
+>
+> * 刪除使用者
+>
+>     * `drop user 'James'@'%';`
+>
+>     * `delete from mysql.user where user='James';`
 
 
+> [!WARNING]
+>
+> 每次設定完都必須要刷新權限才會生效`flush privileges;`
 
+## 修改用戶密碼
 
+修改使用者密碼分三種方法
+
+1. `set password for 使用者@ip = password('密碼');`
+
+2. `mysqladmin -u使用者 -p舊密碼 password 新密碼;`
+
+    ![輸入原先密碼，再輸入新密碼](MySQL.assets/30.png)
+
+3. `update mysql.user set authentication_string=password('密碼') where user='使用者' and host='ip';`
+
+## 忘記原密碼
+
+當在連接資料庫時MySQL服務器時直接跳過權限驗證，任何用戶都可以在不需密碼的情況下直接登入
+
+*^tab^*
+
+> **services.msc查看服務**
+>
+> ![找尋MySQL服務](MySQL.assets/螢幕擷取畫面 2024-04-01 230414.png)
+>
+> 1. 使用Windows+R輸入services.msc查看服務
+> 2. 打開終端機，關閉MySQL服務`net stop mysql57`(輸入的服務名稱要相同)
+> 3. 跳過權限驗證`mysqld --console --skip-grant-tables --shared-memory` 
+>
+> > [!WARNING]
+> >
+> > 需用管理員權限開啟PowerShell或是終端機
+
+> **登入MySQL修改密碼**
+>
+> 1. 打開終端機，輸入`mysql`便可直接登入
+> 2. 修改密碼`update mysql.user set authentication_string=password('密碼') where user='使用者' and host='ip';`
+> 3. 刷新權限`flush privileges;`
+> 4. 在終端機重新啟動MySQL服務`net start MySql57`
