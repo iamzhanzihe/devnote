@@ -325,7 +325,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 ## 系統資料庫
 
-![19](MySQL.assets/19.png#40%)
+![系統資料庫](MySQL.assets/19.png#40%)
 
 - information_schema：虛擬資料庫，存放資料庫啟動後的一些參數，如用戶表訊息、權限訊息...…
 - performance_schema：主要用於收集資料庫服務器性能參數，處理查詢請求時發生的各種事件
@@ -361,17 +361,17 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > - `show create database db1;` 查看指定資料庫
 >
->     ![9](MySQL.assets/9.png)
+>     ![查看指定資料庫](MySQL.assets/9.png)
 >
 > - `show databases;` 查看所有資料庫
 >
->     ![10](MySQL.assets/10.png)
+>     ![查看所有資料庫](MySQL.assets/10.png)
 
 > **改**
 >
 > * `alter database db1 charset gbk;` 修改指定資料庫的字符集
 >
-> ![11](MySQL.assets/11.png)
+> ![修改字符集](MySQL.assets/11.png)
 
 > **刪**
 >
@@ -391,6 +391,8 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 > **增**
 >
+> *==增加資料表==*
+>
 > ```sql
 > create table student_t(
 > 	id int not null,
@@ -409,17 +411,16 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 > - `show create table t1;` 查看指定資料表
 >
 >     - `\G` 換行顯示
->
->
->     ![12](MySQL.assets/12.png)
->
-> - `show tables;` 查看當前資料庫下所有的資料表名稱
->
->     ![13](MySQL.assets/13.png)
->
-> - `desc t1;` 查看指定資料表結構
->
->     ![14](MySQL.assets/14.png)
+>    
+>        ![查看指定資料表](MySQL.assets/12.png)
+> 
+>- `show tables;` 查看當前資料庫下所有的資料表名稱
+> 
+>    ![查看當前資料庫下所有的資料表名稱](MySQL.assets/13.png)
+> 
+>- `desc t1;` 查看指定資料表結構
+> 
+>    ![查看指定資料表結構](MySQL.assets/14.png)
 
 > **改**
 >
@@ -728,14 +729,16 @@ create table t1(
 - 客戶(一):一個學生只能是客戶群當中的一個客戶
 - 學生(一):一個客戶也只會是一個學生(後有紀錄因此有外鍵)
 
+*==建立一對一資料表==*
+
 ```sql
 CREATE TABLE customer (
-	 id INT PRIMARY KEY auto_increment,
+   id INT PRIMARY KEY auto_increment,
    name VARCHAR(20),
    phone char(10) not null
 );
 CREATE TABLE student (
-	 id INT PRIMARY KEY auto_increment,
+   id INT PRIMARY KEY auto_increment,
    class_name VARCHAR(20) not null,
    customer_id unique,
    foreign key(customer_id) references customer(id)
@@ -755,23 +758,25 @@ CREATE TABLE student (
 假設現在有兩張表:
 
 - 出版社(一):一本書只會有一個出版社發行
-
 - 書籍(多):一個出版社可能會出版好幾本書
 
-    ```sql
-    CREATE TABLE Publishers (
-    	 publisher_id INT PRIMARY KEY,
-       publisher_name VARCHAR(100)
-    );
-    ```
+*==建立一對多資料表==*
 
-    ```sql
-    CREATE TABLE Books (
-    	 book_id INT PRIMARY KEY,
-    	 publisher_id INT,
-    	 FOREIGN KEY (publisher_id) REFERENCES Publishers(publisher_id)
-    );
-    ```
+```sql
+CREATE TABLE Publishers (
+    publisher_id INT PRIMARY KEY,
+    publisher_name VARCHAR(100)
+);
+
+CREATE TABLE Books (
+    book_id INT PRIMARY KEY,
+    publisher_id INT,
+    FOREIGN KEY (publisher_id) REFERENCES Publishers(publisher_id)
+);
+
+```
+
+
 
 ## 多對多
 
@@ -794,6 +799,8 @@ CREATE TABLE student (
 | 1    | 白雪公主 |
 | 2    | 三隻小豬 |
 | 3    | 大野狼   |
+
+*==建立多對多關係表==*
 
 ```sql
 CREATE TABLE author (
@@ -820,6 +827,8 @@ CREATE TABLE book (
 | 2    | 1         | 3       |
 | 3    | 2         | 2       |
 | 4    | 2         | 3       |
+
+*==多對多關係額外產生一張關連表==*
 
 ```sql
 create table AuthorBook(
@@ -1470,7 +1479,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                     
+>                                                                             
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
