@@ -1668,7 +1668,7 @@ SELECT * from employee
 
 *^tab^*
 
-> **services.msc查看服務**
+> **services.msc查看服務 ❯**
 >
 > ![找尋MySQL服務](MySQL.assets/螢幕擷取畫面 2024-04-01 230414.png)
 >
