@@ -434,11 +434,11 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > - 修改資料項型態`alter table t1 modify name char(6);` 
 >
->     ![螢幕擷取畫面 2024-04-02 015111](MySQL.assets/螢幕擷取畫面 2024-04-02 015111.png)
+>     ![修改資料項型態](MySQL.assets/螢幕擷取畫面 2024-04-02 015111.png)
 >
 > - 修改欄位名稱及資料型態`alter table t1 change name NAME char(7);` 
 >
->     ![螢幕擷取畫面 2024-04-02 015215](MySQL.assets/螢幕擷取畫面 2024-04-02 015215.png)
+>     ![修改欄位名稱及資料型態](MySQL.assets/螢幕擷取畫面 2024-04-02 015215.png)
 
 > **刪**
 >
@@ -473,17 +473,17 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > - `select * from db1.t1;` 查看所有資料內容
 >
->     ![15](MySQL.assets/15.png)
+>     ![查看資料表](MySQL.assets/15.png)
 
 > **改**
 >
 > - `update t1 set name='SB';` 修改所有name欄位的值
 >
->     ![16](MySQL.assets/16.png)
+>     ![修改所有name欄位的值](MySQL.assets/16.png)
 >
 > - `update t1 set name='Lisa' where id=2;`
 >
->     ![17](MySQL.assets/17.png)
+>     ![修改name欄位id=2的值](MySQL.assets/17.png)
 
 > **刪**
 >
@@ -491,7 +491,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > - `truncate table 表名`
 >
->     ![18](MySQL.assets/18.png)
+>     ![刪除數據](MySQL.assets/18.png)
 
 > [!NOTE]
 >
@@ -787,12 +787,16 @@ CREATE TABLE Books (
 - 作者(多):一本書可以由多個作者同時編寫
 - 書籍(多):一個作者可以同時發行多本書
 
+*==作者表==*
+
 | id   | author |
 | ---- | ------ |
 | 1    | alex   |
 | 2    | james  |
 | 3    | lisa   |
 | 4    | joe    |
+
+*==書籍表==*
 
 | id   | book     |
 | ---- | -------- |
@@ -820,6 +824,8 @@ CREATE TABLE book (
 
 
 額外增加一張表
+
+*==作者書籍表==*
 
 | id   | author_id | book_id |
 | ---- | --------- | ------- |
