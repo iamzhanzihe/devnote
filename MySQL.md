@@ -788,22 +788,24 @@ CREATE TABLE Books (
 - 作者(多):一本書可以由多個作者同時編寫
 - 書籍(多):一個作者可以同時發行多本書
 
-*==作者表==*
+---
 
-| id   | author |
-| ---- | ------ |
-| 1    | alex   |
-| 2    | james  |
-| 3    | lisa   |
-| 4    | joe    |
+- 作者表
 
-*==書籍表==*
+    | id   | author |
+    | ---- | ------ |
+    | 1    | alex   |
+    | 2    | james  |
+    | 3    | lisa   |
+    | 4    | joe    |
 
-| id   | book     |
-| ---- | -------- |
-| 1    | 白雪公主 |
-| 2    | 三隻小豬 |
-| 3    | 大野狼   |
+- 書籍表
+
+    | id   | book     |
+    | ---- | -------- |
+    | 1    | 白雪公主 |
+    | 2    | 三隻小豬 |
+    | 3    | 大野狼   |
 
 *==建立多對多關係表==*
 
@@ -1486,7 +1488,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                     
+>                                                                                         
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
