@@ -397,7 +397,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 > ```sql
 > create table student_t(
 > 	id int not null,
-> 	name char not null,
+> 	name varchar(10) not null,
 > 	age tinyint
 > );
 > ```
@@ -617,69 +617,73 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 | 2    | Wendy | 開發部門   | 研發新技術  |
 | 3    | James | 財務部門   | 控制預算    |
 
-------
+*^tab^*
 
-**拆分為兩張表**
-
-1. 先建立被關聯的表，並且保證被關聯的欄位唯一
-
-| id   | department | description |
-| ---- | ---------- | ----------- |
-| 1    | 財務部門   | 控制預算    |
-| 2    | 開發部門   | 研發新技術  |
-
-![24](MySQL.assets/24.png)
-
-```sql
-create table dep(
-   id int primary key,
-   department char(5),
-   description char(50)
-);
-```
-
-1. 在建立關聯的表
-
-| id   | name  | department_id(外鍵) |
-| ---- | ----- | ------------------- |
-| 1    | Alex  | 1                   |
-| 2    | Wendy | 2                   |
-| 3    | James | 1                   |
-
-![25](MySQL.assets/25.png)
-
-```sql
-create table emp(
-   id int primary key,
-   name char(5),
-   department_id int,
-   foreign key(department_id) references dep(id) 
-	   on delete cascade on update cascade
-);
-```
-
-> [!NOTE]
+> **拆分為兩張表**
 >
-> 當被關聯表的數據更動或移除，`on delete cascade on update cascade` 指令會自動更新資料表
+> 1. 先建立被關聯的表，並且保證被關聯的欄位唯一
+>
+>     *==dep表==*
+>
+>     | id   | department | description |
+>     | ---- | ---------- | ----------- |
+>     | 1    | 財務部門   | 控制預算    |
+>     | 2    | 開發部門   | 研發新技術  |
+>
+>     ![24](MySQL.assets/24.png)
+>
+>     ```sql
+>     create table dep(
+>        id int primary key,
+>        department char(5),
+>        description char(50)
+>     );
+>     ```
+>
+> 2. 再建立關聯的表
+>
+>     *==emp表==*
+>
+>     | id   | name  | department_id(外鍵) |
+>     | ---- | ----- | ------------------- |
+>     | 1    | Alex  | 1                   |
+>     | 2    | Wendy | 2                   |
+>     | 3    | James | 1                   |
+>
+>     ![25](MySQL.assets/25.png)
+>
+>     ```sql
+>     create table emp(
+>        id int primary key,
+>        name char(5),
+>        department_id int,
+>        foreign key(department_id) references dep(id) 
+>     	   on delete cascade on update cascade
+>     );
+>     ```
+>
+> > [!NOTE]
+> >
+> > 當被關聯表的數據更動或移除，`on delete cascade on update cascade` 指令會自動更新資料表
 
-**插入數據**
-
-1. 先將資料插入被關聯表
-
-    ```sql
-    insert into dep values
-    	(1, "財務部門", "控制預算"),
-    	(2, "開發部門", "研發新技術");
-    ```
-
-2. 在插入關聯表
-
-    ```sql
-    insert into emp values
-    	(1, 'Alex', 1),
-    	(2, 'Wendy', 2),
-    	(3, 'James', 1);
-    ```
+> **插入數據**
+>
+> 1. 先將資料插入被關聯表
+>
+>     ```sql
+>     insert into dep values
+>     	(1, "財務部門", "控制預算"),
+>     	(2, "開發部門", "研發新技術");
+>     ```
+>
+> 2. 再插入關聯表
+>
+>     ```sql
+>     insert into emp values
+>     	(1, 'Alex', 1),
+>     	(2, 'Wendy', 2),
+>     	(3, 'James', 1);
+>     ```
 
 ## auto_increment
 
@@ -728,7 +732,7 @@ create table t1(
 假設現在有兩張表:
 
 - 客戶(一):一個學生只能是客戶群當中的一個客戶
-- 學生(一):一個客戶也只會是一個學生(後有紀錄因此有外鍵)
+- 學生(一):一個客戶也只會是一個學生
 
 *==建立一對一資料表==*
 
@@ -738,19 +742,43 @@ CREATE TABLE customer (
    name VARCHAR(20),
    phone char(10) not null
 );
+
 CREATE TABLE student (
    id INT PRIMARY KEY auto_increment,
    class_name VARCHAR(20) not null,
-   customer_id unique,
+   customer_id int unique,
    foreign key(customer_id) references customer(id)
 	   on delete cascade
 	   on update cascade
 );
+
 ```
 
 > [!NOTE]
 >
-> customer_id一定要是唯一，若是重複就不是一對一關係
+> * customer_id一定要是唯一，若是重複就不是一對一關係
+> * 使用`on delete cascade on update cascade`來保證資料完整性
+
+*==資料插入一對一資料表==*
+
+```sql
+-- 插入 customer 表的四筆資料
+INSERT INTO customer (name, phone) VALUES 
+('張小明', '0912345678'),
+('李小華', '0923456789'),
+('王大雄', '0934567890'),
+('林美玲', '0945678901');
+
+-- 插入 student 表的四筆資料
+INSERT INTO student (class_name, customer_id) VALUES 
+('資訊工程系', 1),
+('電機工程系', 2),
+('企業管理系', 3),
+('外國語文系', 4);
+
+```
+
+
 
 ## 一對多
 
@@ -773,7 +801,26 @@ CREATE TABLE Books (
     book_id INT PRIMARY KEY,
     publisher_id INT,
     FOREIGN KEY (publisher_id) REFERENCES Publishers(publisher_id)
+    	on delete cascade
+		on update cascade
 );
+
+```
+
+*==資料插入一對多資料表==*
+
+```sql
+-- 插入 Publishers 表的兩筆資料
+INSERT INTO Publishers (publisher_id, publisher_name) VALUES 
+(1, '天下文化'),
+(2, '遠流出版');
+
+-- 插入 Books 表的四筆資料
+INSERT INTO Books (book_id, publisher_id) VALUES 
+(101, 1),
+(102, 1),
+(103, 2),
+(104, 2);
 
 ```
 
@@ -814,6 +861,7 @@ CREATE TABLE author (
 	 id INT PRIMARY KEY auto_increment,
    name VARCHAR(20)
 );
+
 CREATE TABLE book (
 	 id INT PRIMARY KEY auto_increment,
    name VARCHAR(20)
@@ -852,6 +900,44 @@ create table AuthorBook(
 		on update cascade
 );
 ```
+
+*==資料插入一對多資料表==*
+
+```sql
+-- 插入作者數據
+INSERT INTO author (name) VALUES 
+('村上春樹'),
+('J.K. 羅琳'),
+('金庸'),
+('李白'),
+('艾蜜莉·狄金森');
+
+-- 插入書籍數據
+INSERT INTO book (name) VALUES 
+('挪威的森林'),
+('海邊的卡夫卡'),
+('哈利波特與魔法石'),
+('哈利波特與密室'),
+('射鵰英雄傳'),
+('神鵰俠侶'),
+('靜夜思'),
+('詩選集');
+
+-- 插入作者與書籍的關聯數據
+INSERT INTO AuthorBook (author_id, book_id) VALUES 
+(1, 1),  -- 村上春樹 - 挪威的森林
+(1, 2),  -- 村上春樹 - 海邊的卡夫卡
+(2, 3),  -- J.K. 羅琳 - 哈利波特與魔法石
+(2, 4),  -- J.K. 羅琳 - 哈利波特與密室
+(3, 5),  -- 金庸 - 射鵰英雄傳
+(3, 6),  -- 金庸 - 神鵰俠侶
+(4, 7),  -- 李白 - 靜夜思
+(5, 8),  -- 艾蜜莉·狄金森 - 詩選集
+(4, 8);  -- 李白也與詩選集相關（展示多對多關係）
+
+```
+
+
 
 # SELECT 簡單查詢
 
@@ -1596,7 +1682,7 @@ SELECT * from employee
 
 *^tab^*
 
-> **建立用戶、賦予權限**
+> **建立用戶**
 >
 > * username：將建立的使用者名稱 
 > * host：指定該使用者在哪個主機上可以登入，如果是本地使用者可用localhost，如果想讓該使用者可以從任意遠端主機登入，可以使用萬用字元% 
@@ -1632,7 +1718,7 @@ SELECT * from employee
 
 > **修改用戶權限表**
 >
-> 修改mysql資料庫裡的user表
+> 修改mysql資料庫裡的user表，限定本機登入
 >
 > ```sql
 > update mysql.user set host='localhost' where user='root';
@@ -1688,3 +1774,63 @@ SELECT * from employee
 > 2. 修改密碼`update mysql.user set authentication_string=password('密碼') where user='使用者' and host='ip';`
 > 3. 刷新權限`flush privileges;`
 > 4. 在終端機重新啟動MySQL服務`net start MySql57`
+
+## 授權與回收
+
+*^tab^*
+
+> **授權**
+>
+> * `grant 權限1,權限2... on 資料庫 to '使用者'`
+> * `grant 權限1,權限2... on 資料庫 to '使用者'@'%' identified by 'password';`
+>     * `all privilege`：代表所有權限
+>     * `*.*`：代表所有資料庫的所有表
+>
+> *==建立使用者，授予查、修改權限，登錄密碼1234，任一主機登入==*
+>
+> ```sql
+> grant select,update on db1.employee to 'james'@'%' identified by '1234'
+> ```
+
+> **回收**
+>
+> * `revoke all privileges on *.* from 'james'@'%';`(還是可以登入)
+> * `revoke select,update on db1.employee from 'james'@'%';`
+> * `delete from mysql.user where user='james';`直接刪除這個用戶
+
+> [!WARNING]
+>
+> 必須要刷新權限才會生效`flush privileges;`
+
+# 事務、視圖、觸發器
+
+## 事務
+
+* 什麼是事務?
+    * 資料庫事務通常指對資料庫進行讀或寫的一個操作過程。
+    * 為資料庫操作提供了一個從失敗中恢復到正常狀態的方法，同時提供了資料庫即使在異常狀態下仍能保持一致性的方法
+    * 當多個應用程式在並行訪問資料庫時，可以在這些應用程式間提供一個隔離方法，防止彼此的操作互相干擾
+* 事務的特性（ACID）
+    * 原子性(Atomicity)：事務必須是原子工作單元，一個事務中的所有語句要就全做，否則一個都不做
+    * 一致性(Consistency)：讓資料保持邏輯上的“合理性”
+    * 隔離性(Isolation)：如果多個事務同時並行執行，彷彿每個事務各自獨立執行一樣
+    * 持久性(Durability)：一個事務執行成功，則對資料來說應該是一個明確的硬碟資料更改（而不僅僅是記憶體中的變化）。
+
+> [!WARNING]
+>
+> 要使用事務的話，表引擎要為innodb引擎
+
+* 事務的開啟：`begin;` `start transaction;`
+* 事務的提交：`commit;`
+* 事務的回滾：`rollback;`
+
+*==創建帳戶表模擬轉帳==*
+
+```sql
+create table account (
+	id tinyint(5) zerofill auto_increment primary key comment 'id編號',
+	name varchar(20) default null comment '客戶姓名',
+	money decimal(10,2) not null comment '帳戶金額',
+)engine=innodb charset=utf8;
+```
+
