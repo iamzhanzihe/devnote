@@ -38,11 +38,11 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 存儲引擎是資料庫管理系統中負責管理數據和檢索的模塊也就是表的類型，不同的存儲引擎提供了不同的特性
 
-![20](MySQL.assets/20.png#80%)
+![MySQL架構圖](MySQL.assets/20.png#80%)
 
 * 查看存儲引擎`show engines;`
 
-![21](MySQL.assets/21.png)
+![查看存儲引擎](MySQL.assets/21.png)
 
 * 指定存儲引擎`create table 資料表名稱(資料欄位 資料類型)engine=存儲引擎`
 
@@ -70,7 +70,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > 1. 找出MySQL安裝目錄(建議安裝解壓縮於C槽)
 >
-> 2. 開啟資料夾後複製文件目錄 例如 *==C:\Program Files\MySQL\MySQL Server 5.7\bin==*
+> 2. 開啟資料夾後複製文件目錄 例如 *==C:\Program Files\MySQL\MySQL Server 8.4\bin==*
 >
 > 3. 直接左下角「開始」搜尋環境變數
 >
@@ -516,13 +516,11 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 設置欄位是否可以為空值，若是not null未填入值則使用default值
 
-![螢幕擷取畫面 2024-04-05 174956](MySQL.assets/螢幕擷取畫面 2024-04-05 174956.png)
-
-原始沒有特別設定的欄位格式
-
-![22](MySQL.assets/22.png)
+![原始沒有特別設定的欄位格式](MySQL.assets/螢幕擷取畫面 2024-04-05 174956.png)
 
 在gender中設定為not null，default為male
+
+*==gender中設定為not null並且指定預設值==*
 
 ```sql
  create table t1(
@@ -532,6 +530,8 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
  );
 ```
 
+![指定預設值](MySQL.assets/22.png)
+
 ## unique key
 
 設置欄位資料是唯一值
@@ -540,9 +540,11 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
     單個欄位的值不能與其他的重複
 
-    ![螢幕擷取畫面 2024-04-05 180332](MySQL.assets/螢幕擷取畫面 2024-04-05 180332.png)
+    ![unique key](MySQL.assets/螢幕擷取畫面 2024-04-05 180332.png)
 
     - 方法1:
+
+        *==方法1:欄位內約束==*
 
         ```sql
         create table t1(
@@ -554,6 +556,8 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
     - 方法2
 
+        *==方法2:欄位外約束==*
+        
         ```sql
         create table t1(
         	 id int,
@@ -567,14 +571,15 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
     多個欄位的值不能與其他的重複，舉例:(IP, Port)兩個欄位不能與其他重複否則網路會發生衝突
 
-    ![螢幕擷取畫面 2024-04-05 181319](MySQL.assets/螢幕擷取畫面 2024-04-05 181319.png)
+    ![聯合唯一](MySQL.assets/螢幕擷取畫面 2024-04-05 181319.png)
 
+    *==多個欄位的值不能與其他重複==*
+    
     ```sql
     create table t1(
     	 id int unique,
     	 ip char(15),
     	 port int,
-    	 unique(id),
     	 unique(ip,port)
     );
     ```
@@ -585,7 +590,9 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 - 單一主鍵
 
-    ![螢幕擷取畫面 2024-04-05 190046](MySQL.assets/螢幕擷取畫面 2024-04-05 190046.png)
+    ![單一主鍵](MySQL.assets/螢幕擷取畫面 2024-04-05 190046.png)
+
+    *==單一主鍵==*
 
     ```sql
     create table t1(
@@ -597,8 +604,10 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 - 複合主鍵
 
-    ![23](MySQL.assets/23.png)
+    ![複合主鍵](MySQL.assets/23.png)
 
+    *==複合主鍵==*
+    
     ```sql
     create table t1(
     	 ip char(15),
@@ -610,6 +619,8 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 ## foreign key
 
 當所有資訊同時存在一張表時，會有重複儲存的問題，想要進行修改需要整個資料表進行更動，表中財務部門重複儲存，若是財務部門有進行更動，需要多次修改有關於財務部門的所有欄位
+
+*==財物部門表==*
 
 | id   | name  | department | description |
 | ---- | ----- | ---------- | ----------- |
@@ -630,7 +641,9 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >     | 1    | 財務部門   | 控制預算    |
 >     | 2    | 開發部門   | 研發新技術  |
 >
->     ![24](MySQL.assets/24.png)
+>     ![dep表](MySQL.assets/24.png)
+>
+>     *==建立dep表==*
 >
 >     ```sql
 >     create table dep(
@@ -650,8 +663,10 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >     | 2    | Wendy | 2                   |
 >     | 3    | James | 1                   |
 >
->     ![25](MySQL.assets/25.png)
+>     ![emp表](MySQL.assets/25.png)
 >
+>     *==建立emp表==*
+>     
 >     ```sql
 >     create table emp(
 >        id int primary key,
@@ -666,9 +681,11 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 > >
 > > 當被關聯表的數據更動或移除，`on delete cascade on update cascade` 指令會自動更新資料表
 
-> **插入數據**
+> **插入資料**
 >
 > 1. 先將資料插入被關聯表
+>
+>     *==資料插入被關聯表==*
 >
 >     ```sql
 >     insert into dep values
@@ -677,6 +694,8 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >     ```
 >
 > 2. 再插入關聯表
+>
+>     *==資料插入關連表==*
 >
 >     ```sql
 >     insert into emp values
@@ -689,7 +708,9 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 自動增加固定的數值，且欄位必須是一個鍵，例如:ID
 
-![螢幕擷取畫面 2024-04-05 224232](MySQL.assets/螢幕擷取畫面 2024-04-05 224232.png)
+![auto_increment](MySQL.assets/螢幕擷取畫面 2024-04-05 224232.png)
+
+*==auto_increment約束==*
 
 ```sql
 create table t1(
@@ -702,7 +723,7 @@ create table t1(
 >
 > 設定起始值還有變化量 `show variables like 'auto_inc%';`  %是通配符
 >
-> ![26](MySQL.assets/26.png)
+> ![設定起始值還有變化量](MySQL.assets/26.png)
 >
 > auto_increment_increment 變化量
 >
@@ -1574,7 +1595,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                         
+>                                                                                             
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;

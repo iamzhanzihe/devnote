@@ -49,16 +49,12 @@
 >     
 >     ![ClShot 2025-04-23 at 19.04.38@2x](DeepLearning.assets/ClShot 2025-04-23 at 19.04.38@2x.png)
 >
-> 
->
-> 
->
 > ![深度學習表示法](DeepLearning.assets/ClShot 2025-04-06 at 22.12.24@2x.png#60%)
 >
 > - 特點：
->     - 自動特徵提取
+>    - 自動特徵提取
 >     - 多層次的抽象理解
->     - 需要大量數據和計算資源
+>    - 需要大量數據和計算資源
 > - 常見架構：
 >     - 卷積神經網絡(CNN)：適用於圖像處理
 >     - 循環神經網絡(RNN)：適用於序列數據
@@ -79,6 +75,7 @@
 
 ---
 
+
 - 得分 ❯
 
     可以從圖中觀察到，貓咪圖片得分只有3.2，在電腦中他可能會覺得這張圖片分類為汽車
@@ -92,6 +89,15 @@
     需要一個衡量的準則，因此會用損失函數來評估預測的好壞，再更新權重參數w，並且反覆執行
 
     ![損失函數流程圖](DeepLearning.assets/ClShot 2025-04-06 at 22.22.14@2x.png)
+
+> **層裡的計算過程**
+>
+> ![ClShot 2025-04-27 at 22.43.21@2x](DeepLearning.assets/ClShot 2025-04-27 at 22.43.21@2x.png#60%)
+>
+> * 輸入信號：圖中的 $x_0,x_1,x_2$ 代表輸入到神經元的信號
+> * 權重：$w_0,w_1,w_2$是對應每個輸入信號的權重
+> * 進行數學運算，並加上偏置項 b：$\sum_{i} w_i x_i + b$
+> * 激活函數：函數 $f$ 進行非線性轉換
 
 ## 反向傳播
 
@@ -126,9 +132,13 @@
 
 # TensorFlow 2版本
 
+## 什麼是TensorFlow
+
 
 
 [*點擊查看`TensorFlow 2`*_~Og~_](https://www.tensorflow.org/?hl=zh-tw)
+
+TensorFlow是一個免費的、開源的Python機器學習框架，主要由Google開發，不僅可以在CPU上，也可以在GPU上更有效的運行，它不僅僅是函式庫，更是一個完整的平台
 
 | 特性           | TensorFlow 1.x                     | ==TensorFlow 2.x==                    | 說明                                                         |
 | -------------- | ---------------------------------- | ------------------------------------- | ------------------------------------------------------------ |
@@ -142,6 +152,12 @@
 | **RNN API**    | 多種 API (BasicRNN, LSTM 等)       | ==統一的 RNN API==                    | TF2.x 統一了循環神經網路相關 API                             |
 | **優化器 API** | 多種不同風格的優化器               | ==統一的優化器 API==                  | TF2.x 統一了優化器相關 API                                   |
 | **調試能力**   | 困難 (需要 TensorBoard 或特殊技巧) | ==簡單 (可使用標準 Python 調試工具)== | TF2.x 的 Eager 模式讓調試變得更加直觀                        |
+
+## Keras是什麼
+
+Keras是Python的深度學習API，建立在TensorFlow之上，提供簡易方法來定義及訓練模型。最初的Keras是建立在Theano之上，為了研究領域而開發，目的是快速的進行深度學習實驗
+
+![ClShot 2025-04-27 at 23.19.10@2x](DeepLearning.assets/ClShot 2025-04-27 at 23.19.10@2x.png)
 
 ## 安裝
 
@@ -160,7 +176,124 @@
     print(tf.__version__)  # 查看tensorflow版本
     ```
 
-    
+
+## TensorFlow常用函數
+
+###### 常數張量
+
+*==創建完全由1或0組成的張量==*
+
+```python
+import tensorflow as tf
+
+x = tf.ones(shape=(2,2)) # 建立二維方陣
+print(x)
+y= tf.zeros(shape=(2,2))
+print(y)
+
+
+#輸出結果
+tf.Tensor(
+[[1. 1.]
+ [1. 1.]], shape=(2, 2), dtype=float32)
+tf.Tensor(
+[[0. 0.]
+ [0. 0.]], shape=(2, 2), dtype=float32)
+```
+
+*==創建亂數組成的張量==*
+
+```python
+import tensorflow as tf
+
+x = tf.random.normal(shape=(2, 3), mean=0, stddev=1) # 隨機生成2x3的常態分佈數據
+print(x)
+y = tf.random.uniform(shape=(2, 3), minval=0, maxval=1) # 隨機生成2x3的均勻分佈數據
+print(y)
+
+#輸出結果
+tf.Tensor(
+[[-0.29641834  0.70232576 -0.251771  ]
+ [ 1.5556875  -0.76118827 -0.00863561]], shape=(2, 3), dtype=float32)
+tf.Tensor(
+[[0.87424576 0.42215276 0.00685513]
+ [0.4790336  0.07232153 0.9215518 ]], shape=(2, 3), dtype=float32)
+```
+
+> [!NOTE]
+>
+> 張量的值為常數，無法指派新的值
+
+###### Variable物件
+
+訓練模型時，我們需要不斷更新狀態，如果張量無法接受指派，此時就要用到`tf.Variable`
+
+*==創建Variable物件==*
+
+```python
+import tensorflow as tf
+
+v = tf.Variable(tf.random.normal(shape=(2, 3)))
+print(v)
+
+#輸出結果
+<tf.Variable 'Variable:0' shape=(2, 3) dtype=float32, numpy=
+array([[-1.2961088 , -0.9874013 ,  1.5744468 ],
+       [ 1.1805073 ,  0.25410223,  2.2683144 ]], dtype=float32)>
+```
+
+*==為Variable物件指派值==*
+
+```python
+v.assign(tf.ones((2, 3)))
+print(v)
+
+v[0,0].assign(3)
+print(v)
+
+#輸出結果
+<tf.Variable 'Variable:0' shape=(2, 3) dtype=float32, numpy=
+array([[1., 1., 1.],
+       [1., 1., 1.]], dtype=float32)>
+<tf.Variable 'Variable:0' shape=(2, 3) dtype=float32, numpy=
+array([[3., 1., 1.],
+       [1., 1., 1.]], dtype=float32)>
+```
+
+###### 數學運算
+
+*==一些基本數學操作==*
+
+```python
+import tensorflow as tf
+
+a = tf.ones((2, 2))
+b = tf.square(a)  # 平方
+c = tf.sqrt(a)  # 開根號
+d = b + c  # 相加
+e = tf.matmul(a, b) # 矩陣相乘
+print(a, b, c, d, e, sep="\n")
+
+#輸出結果
+tf.Tensor(
+[[1. 1.]
+ [1. 1.]], shape=(2, 2), dtype=float32)
+tf.Tensor(
+[[1. 1.]
+ [1. 1.]], shape=(2, 2), dtype=float32)
+tf.Tensor(
+[[1. 1.]
+ [1. 1.]], shape=(2, 2), dtype=float32)
+tf.Tensor(
+[[2. 2.]
+ [2. 2.]], shape=(2, 2), dtype=float32)
+tf.Tensor(
+[[2. 2.]
+ [2. 2.]], shape=(2, 2), dtype=float32)
+
+```
+
+
 
 # 建立第一個神經網路
 
@@ -168,7 +301,7 @@
 
 使用MNIST資料集，辨識手寫數字的灰階圖片，機器學習領域的經典資料集
 
-- 大小：28像素*28像素*1通道
+- 大小：(28\*28\*1) 28像素*28像素*1通道
 - 60000張訓練圖片
 - 10000張測試圖片
 
@@ -499,3 +632,6 @@ output = relu(dot(w, input) + b)
 > [!NOTE]
 >
 > 在Numpy的運算當中，每個元素都是各自獨立的計算，這種運算非常適合大規模平行處理，也就是向量化執行
+
+# 回歸問題預測
+
