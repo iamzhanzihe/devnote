@@ -982,7 +982,7 @@ INSERT INTO AuthorBook (author_id, book_id) VALUES
 > 
 > ```
 >
-> ![ClShot 2025-04-13 at 18.26.17@2x](MySQL.assets/ClShot 2025-04-13 at 18.26.17@2x.png)
+> ![部門表](MySQL.assets/ClShot 2025-04-13 at 18.26.17@2x.png)
 >
 > ```sql
 > /*某個公司的員工表*/
@@ -1013,7 +1013,7 @@ INSERT INTO AuthorBook (author_id, book_id) VALUES
 > INSERT INTO employee VALUES (1001, '小喬', '文員', 1013, '2018-12-17', 8000, 20);
 > ```
 >
-> ![ClShot 2025-04-13 at 19.36.41@2x](MySQL.assets/ClShot 2025-04-13 at 19.36.41@2x.png)
+> ![員工表](MySQL.assets/ClShot 2025-04-13 at 19.36.41@2x.png)
 >
 > ```sql
 > /*創建員工薪水等級表*/
@@ -1031,11 +1031,11 @@ INSERT INTO AuthorBook (author_id, book_id) VALUES
 > INSERT INTO salgrade VALUES (5, 30010, 99990);
 > ```
 >
-> ![ClShot 2025-04-13 at 18.27.06@2x](MySQL.assets/ClShot 2025-04-13 at 18.27.06@2x.png)
+> ![薪水等級表](MySQL.assets/ClShot 2025-04-13 at 18.27.06@2x.png)
 
 ## 關鍵字的執行順序
 
-![27](MySQL.assets/27.png)
+![select查詢順序](MySQL.assets/27.png)
 
 ## 簡單查詢
 
@@ -1595,7 +1595,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                             
+>                                                                                                 
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
