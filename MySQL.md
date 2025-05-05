@@ -1047,6 +1047,8 @@ INSERT INTO AuthorBook (author_id, book_id) VALUES
 | 2    | Wendy | 25800  | 開發部門   | 研發新技術  |
 | 3    | James | 31400  | 財務部門   | 控制預算    |
 
+*==select簡單查詢==*
+
 ```sql
 #查詢特定欄位
 SELECT id,name,department,discription FROM employee;
@@ -1061,7 +1063,7 @@ SELECT * FROM employee;
 >
 > 若是有重複資料可以使用`SELECT DISTINCT salary FROM employee;`
 
-## 四則運算查詢
+*==select運算查詢==*
 
 ```sql
 SELECT name, salary*12 FROM employee;
@@ -1071,25 +1073,23 @@ SELECT name, salary*12 AS Annual_salary FROM employee;
 SELECT name, salary*12 Annual_salary FROM employee;
 ```
 
-## 正則表達式查詢
+
+
+*==正則表達式查詢==*
 
 ```sql
 SELECT * FROM employee regexp '^ex';
 ```
 
-## 定義顯示格式
+*==定義顯示格式==*
 
-- 使用 `concat()`
+```sql
+#使用 concat()
+SELECT CONCAT('姓名:',name,'年薪:',salary*12) Annual_salary FROM employee;
 
-    ```sql
-    SELECT CONCAT('姓名:',name,'年薪:',salary*12) Annual_salary FROM employee;
-    ```
-
-- 使用 `concat_ws()` 設定每個欄位間的分隔符號
-
-    ```sql
-    SELECT CONCAT_WS(':',name,salary*12) Annual_salary FROM employee;
-    ```
+#使用 concat_ws()，設定每個欄位間的分隔符號
+SELECT CONCAT_WS(':',name,salary*12) Annual_salary FROM employee;
+```
 
 ## Where約束
 
@@ -1159,7 +1159,7 @@ SELECT * FROM employee regexp '^ex';
 >
 > 分組之後只能使用分組的資料欄位及聚合結果
 
-- 聚合函數 使用時需考慮執行順序，進行分組(group by)後才能使用聚合函數
+- 聚合函數使用時需考慮執行順序，進行分組(group by)後才能使用聚合函數
 
     - max()
     - min()
@@ -1194,7 +1194,7 @@ SELECT * FROM employee regexp '^ex';
 
 > [!NOTE]
 >
-> 執行順序 where → group by → having having在分組後進行
+> 執行順序 `where` → `group by` → `having` 
 
 
 
@@ -1595,7 +1595,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                                 
+>                                                                                                     
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
