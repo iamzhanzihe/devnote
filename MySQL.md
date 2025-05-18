@@ -1250,6 +1250,68 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 
 # 子查詢
 
+> ###### 練習資料
+>
+> ```sql
+> #建表部門表
+> create table department(
+> id int,
+> name varchar(20) 
+> );
+> 
+> #插入數據
+> insert into department values
+> (200,'技術'),
+> (201,'人力資源'),
+> (202,'銷售'),
+> (203,'營運');
+> 
+> #查看資料
+> mysql> select * from department;
+> +------+--------------+
+> | id | name |
+> +------+--------------+
+> | 200 | 技術 |
+> | 201 | 人力資源 |
+> | 202 | 銷售 |
+> | 203 | 運營 |
+> +------+--------------+
+> ```
+>
+> ```sql
+> #建立員工表
+> create table employee(
+> id int primary key auto_increment,
+> name varchar(20),
+> sex enum('male','female') not null default 'male',
+> age int,
+> dep_id int
+> );
+> 
+> #插入數據
+> insert into employee(name,sex,age,dep_id) values
+> ('egon','male',18,200),
+> ('alex','female',48,201),
+> ('wupeiqi','male',38,201),
+> ('yuanhao','female',28,202),
+> ('liwenzhou','male',18,200),
+> ('jingliyang','female',18,204)
+> ;
+> 
+> #查看資料
+> mysql> select * from employee;
+> +----+------------+--------+------+--------+
+> | id | name | sex | age | dep_id |
+> +----+------------+--------+------+--------+
+> | 1 | egon | male | 18 | 200 |
+> | 2 | alex | female | 48 | 201 |
+> | 3 | wupeiqi | male | 38 | 201 |
+> | 4 | yuanhao | female | 28 | 202 |
+> | 5 | liwenzhou | male | 18 | 200 |
+> | 6 | jingliyang | female | 18 | 204 |
+> +----+------------+--------+------+--------+
+> ```
+
 子查詢（Subquery）是嵌套在其他 SQL 查詢中的查詢。子查詢可以出現在 SELECT、INSERT、UPDATE 或 DELETE 語句中，以及在 WHERE 或 HAVING 子句中。子查詢允許創建更為複雜和動態的數據操作和條件判斷
 
 ![29](MySQL.assets/29.png)
@@ -1595,7 +1657,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                                     
+>                                                                                                             
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
