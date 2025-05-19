@@ -1255,122 +1255,117 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 > ```sql
 > #建表部門表
 > create table department(
-> id int,
-> name varchar(20) 
+> 	id int,
+> 	name varchar(20) 
 > );
 > 
 > #插入數據
 > insert into department values
-> (200,'技術'),
-> (201,'人力資源'),
-> (202,'銷售'),
-> (203,'營運');
+> 	(200,'技術'),
+> 	(201,'人力資源'),
+> 	(202,'銷售'),
+> 	(203,'營運');
 > 
-> #查看資料
-> mysql> select * from department;
-> +------+--------------+
-> | id | name |
-> +------+--------------+
-> | 200 | 技術 |
-> | 201 | 人力資源 |
-> | 202 | 銷售 |
-> | 203 | 運營 |
-> +------+--------------+
 > ```
->
+> 
+> ![查看department資料表](MySQL.assets/ClShot 2025-05-19 at 15.40.39@2x.png)
+> 
 > ```sql
 > #建立員工表
 > create table employee(
-> id int primary key auto_increment,
-> name varchar(20),
-> sex enum('male','female') not null default 'male',
-> age int,
-> dep_id int
+> 	id int primary key auto_increment,
+> 	name varchar(20),
+> 	sex enum('male','female') not null default 'male',
+> 	age int,
+> 	dep_id int
 > );
-> 
+>
 > #插入數據
 > insert into employee(name,sex,age,dep_id) values
-> ('egon','male',18,200),
-> ('alex','female',48,201),
-> ('wupeiqi','male',38,201),
-> ('yuanhao','female',28,202),
-> ('liwenzhou','male',18,200),
-> ('jingliyang','female',18,204)
-> ;
+> 	('egon','male',18,200),
+> 	('alex','female',48,201),
+> 	('wupeiqi','male',38,201),
+> 	('yuanhao','female',28,202),
+> 	('liwenzhou','male',18,200),
+> 	('jingliyang','female',18,204);
 > 
-> #查看資料
-> mysql> select * from employee;
-> +----+------------+--------+------+--------+
-> | id | name | sex | age | dep_id |
-> +----+------------+--------+------+--------+
-> | 1 | egon | male | 18 | 200 |
-> | 2 | alex | female | 48 | 201 |
-> | 3 | wupeiqi | male | 38 | 201 |
-> | 4 | yuanhao | female | 28 | 202 |
-> | 5 | liwenzhou | male | 18 | 200 |
-> | 6 | jingliyang | female | 18 | 204 |
-> +----+------------+--------+------+--------+
 > ```
+> 
+>![ClShot 2025-05-19 at 15.42.43@2x](MySQL.assets/ClShot 2025-05-19 at 15.42.43@2x.png)
 
 子查詢（Subquery）是嵌套在其他 SQL 查詢中的查詢。子查詢可以出現在 SELECT、INSERT、UPDATE 或 DELETE 語句中，以及在 WHERE 或 HAVING 子句中。子查詢允許創建更為複雜和動態的數據操作和條件判斷
 
-![29](MySQL.assets/29.png)
+![department資料表及employee表](MySQL.assets/29.png)
 
 ## IN 關鍵字
 
-```sql
-#查詢平均年齡在25歲以上的部門名
+*^tab^*
 
-#分解動作1 -> 查詢平均年齡在25歲以上的部門ID
-select dep_id from employee 
-   group by dep_id having avg(age)>25; 
-  
-#分解動作2 -> 查詢部門名稱
-select name from department;
+> **練習1**
+>
+> ###### 查詢平均年齡在25歲以上的部門名
+>
+> ```mysql
+> #分解動作1 -> 查詢平均年齡在25歲以上的部門ID
+> select dep_id from employee 
+>    group by dep_id having avg(age)>25; 
+>   
+> #分解動作2 -> 查詢部門名稱
+> select name from department;
+> 
+> #合併結果
+> select name from department where id in
+>    (select dep_id from employee 
+>    group by dep_id having avg(age)>25);
+> ```
 
-#合併結果
-select name from department where id in
-   (select dep_id from employee 
-   group by dep_id having avg(age)>25);
-#查詢技術部門員工的姓名
+> **練習2**
+>
+> ###### 查詢技術部門員工的姓名
+>
+> ```mysql
+> #分解動作1 -> 查詢技術部門的ID號
+> select id from department where name='技術';
+> 
+> #分解動作2 -> 查詢員工姓名
+> select name from employee; 
+> 
+> #合併結果
+> select name from employee where dep_id in 
+>    (select id from department where name='技術');
+> ```
 
-#分解動作1 -> 查詢技術部門的ID號
-select id from department where name='技術';
-
-#分解動作2 -> 查詢員工姓名
-select name from employee; 
-
-#合併結果
-select name from employee where dep_id in 
-   (select id from department where name='技術'); 
-#查看不足1人的部門名
-
-#分解動作1 -> 查詢有人的部門ID號 (從員工表查詢，只要是員工必會有部門)
-select distinct dep_id from employee;
-
-#分解動作2 -> 查詢部門名稱
-select name from department; 
-
-#合併結果
-select name from department where id not in (
-   select id from department where name='技術'); 
-```
+> **練習3**
+>
+> ###### 查看不足1人的部門名
+>
+> ```mysql
+> #分解動作1 -> 查詢有人的部門ID號 (從員工表查詢，只要是員工必會有部門)
+> select distinct dep_id from employee;
+> 
+> #分解動作2 -> 查詢部門名稱
+> select name from department; 
+> 
+> #合併結果
+> select name from department where id not in (
+>    select id from department where name='技術'); 
+> ```
 
 ## 比較、運算符
 
-```sql
-#查詢大於所有人平均年齡的員工姓名與年齡
-
-#分解動作1 -> 查詢所有人的平均年齡
-select avg(age) from employee;
-
-#分解動作2 -> 查詢員工名與年齡
-select name, age from employee;
-
-#合併結果
-select name, age from employee 
-   where age > (select avg(age) from employee);
-```
+> **查詢大於所有人平均年齡的員工姓名與年齡**
+>
+> ```mysql
+> #分解動作1 -> 查詢所有人的平均年齡
+> select avg(age) from employee;
+> 
+> #分解動作2 -> 查詢員工名與年齡
+> select name, age from employee;
+> 
+> #合併結果
+> select name, age from employee 
+>    where age > (select avg(age) from employee);
+> ```
 
 ## EXIST 關鍵字
 
@@ -1657,7 +1652,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                                             
+>                                                                                                                         
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
