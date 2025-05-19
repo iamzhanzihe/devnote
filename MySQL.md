@@ -1310,15 +1310,16 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 > ```mysql
 > #分解動作1 -> 查詢平均年齡在25歲以上的部門ID
 > select dep_id from employee 
->    group by dep_id having avg(age)>25; 
->   
+> group by dep_id having avg(age)>25; 
+> 
 > #分解動作2 -> 查詢部門名稱
 > select name from department;
 > 
 > #合併結果
-> select name from department where id in
->    (select dep_id from employee 
->    group by dep_id having avg(age)>25);
+> select name from department where id in(
+>     select dep_id from employee 
+> 	group by dep_id having avg(age)>25
+> );
 > ```
 
 > **練習2**
@@ -1333,8 +1334,9 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 > select name from employee; 
 > 
 > #合併結果
-> select name from employee where dep_id in 
->    (select id from department where name='技術');
+> select name from employee where dep_id in (
+>     select id from department where name='技術'
+> );
 > ```
 
 > **練習3**
@@ -1350,7 +1352,8 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 > 
 > #合併結果
 > select name from department where id not in (
->    select id from department where name='技術'); 
+> 	select distinct dep_id from employee
+> ); 
 > ```
 
 ## 比較、運算符
@@ -1458,7 +1461,7 @@ SELECT * from employee
 SELECT * from employee, department on employee.dep_id=department.id;
 ```
 
-![Untitled](MySQL.assets/Untitled-4895768.png)
+![INNER JOIN查詢](MySQL.assets/Untitled-4895768.png)
 
 ## LEFT JOIN 左連結
 
@@ -1469,7 +1472,7 @@ SELECT * from employee
 	LEFT JOIN department on employee.dep_id=department.id;
 ```
 
-![Untitled (1)](MySQL.assets/Untitled (1).png)
+![LEFT JOIN查詢](MySQL.assets/Untitled (1).png)
 
 ## RIGHT JOIN 右連結
 
@@ -1480,7 +1483,7 @@ SELECT * from employee
 	RIGHT JOIN department on employee.dep_id=department.id;
 ```
 
-![Untitled (2)](MySQL.assets/Untitled (2).png)
+![RIGHT JOIN查詢](MySQL.assets/Untitled (2).png)
 
 ## 全外連結
 
@@ -1496,7 +1499,7 @@ SELECT * from employee
 	LEFT JOIN department on employee.dep_id=department.id;
 ```
 
-![Untitled (3)](MySQL.assets/Untitled (3).png)
+![全外連結查詢](MySQL.assets/Untitled (3).png)
 
 > [!NOTE]
 >
