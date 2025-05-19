@@ -1252,8 +1252,9 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 
 > ###### 練習資料
 >
+> *==建立department表==*
+>
 > ```sql
-> #建表部門表
 > create table department(
 > 	id int,
 > 	name varchar(20) 
@@ -1267,11 +1268,12 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 > 	(203,'營運');
 > 
 > ```
-> 
+>
 > ![查看department資料表](MySQL.assets/ClShot 2025-05-19 at 15.40.39@2x.png)
-> 
+>
+> *==建立employee表==*
+>
 > ```sql
-> #建立員工表
 > create table employee(
 > 	id int primary key auto_increment,
 > 	name varchar(20),
@@ -1279,7 +1281,7 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 > 	age int,
 > 	dep_id int
 > );
->
+> 
 > #插入數據
 > insert into employee(name,sex,age,dep_id) values
 > 	('egon','male',18,200),
@@ -1290,8 +1292,8 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 > 	('jingliyang','female',18,204);
 > 
 > ```
-> 
->![ClShot 2025-05-19 at 15.42.43@2x](MySQL.assets/ClShot 2025-05-19 at 15.42.43@2x.png)
+>
+> ![查看employee資料表](MySQL.assets/ClShot 2025-05-19 at 15.42.43@2x.png)
 
 子查詢（Subquery）是嵌套在其他 SQL 查詢中的查詢。子查詢可以出現在 SELECT、INSERT、UPDATE 或 DELETE 語句中，以及在 WHERE 或 HAVING 子句中。子查詢允許創建更為複雜和動態的數據操作和條件判斷
 
