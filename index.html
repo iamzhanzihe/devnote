@@ -14,20 +14,33 @@
     }
     
     body {
-      background-color: rgb(226, 241, 244);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      position: relative; 
+      overflow: hidden; 
+    }
+
+    #dynamicBackground {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; 
+      background: radial-gradient(circle at center, rgba(50, 50, 50, 0.5) 0%, rgba(5, 5, 5, 1) 60%);
     }
     
     .container {
       width: 100%;
       max-width: 400px;
       padding: 30px;
-      background-color: white;
+      background-color: rgba(255, 255, 255, 0.95); 
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      position: relative; 
+      z-index: 1;
     }
     
     .header {
@@ -180,6 +193,64 @@
       color: #777;
     }
     
+    /* 添加底部資訊列樣式 */
+    .bottom-info-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    
+    .info-container {
+      background-color: transparent;
+      border-radius: 6px;
+      padding: 6px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .info-item {
+      display: flex;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 12px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      white-space: nowrap;
+      letter-spacing: 0.2px;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    }
+    
+    .info-item svg {
+      margin-right: 5px;
+      width: 14px;
+      height: 14px;
+      fill: rgba(255, 255, 255, 0.7);
+      opacity: 0.9;
+    }
+    
+    .dot-separator {
+      width: 3px;
+      height: 3px;
+      background-color: rgba(255, 255, 255, 0.45);
+      border-radius: 50%;
+    }
+    
+    .info-link {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.75);
+      transition: color 0.2s ease;
+    }
+    
+    .info-link:hover {
+      color: rgba(255, 255, 255, 1);
+    }
+    
     @media (max-width: 480px) {
       .container {
         padding: 20px;
@@ -187,7 +258,7 @@
       }
 
       .input-with-prefix {
-        padding-left: 15px;
+        padding-left: 15px; 
         font-size: 14px;
       }
       
@@ -202,6 +273,8 @@
   </style>
 </head>
 <body>
+  <canvas id="dynamicBackground"></canvas>
+
   <div class="container">
     <div class="header">
       <h1>網站導航</h1>
@@ -240,18 +313,65 @@
     </button>
     
     <div class="footer">
-      2025 By JamesZhan 網站導航 | 快速的筆記網站跳轉
+      <!-- 移除原始頁腳文字 -->
+    </div>
+  </div>
+  
+  <!-- 底部資訊欄 -->
+  <div class="bottom-info-bar">
+    <div class="info-container">
+      <!-- 需求 macOS -->
+      <div class="info-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+          <path d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm0-1A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm-.8-3.5h1.5V7.8H7.2v3.8zm0-5.2h1.5V5H7.2v1.3z"/>
+        </svg>
+        版本：2025/05/21
+      </div>
+      
+      <!-- 分隔點 -->
+      <div class="dot-separator"></div>
+      
+      <!-- 通過 Homebrew 安裝 - 修改為原始頁腳文字 -->
+      <div class="info-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+          <path d="M14 3H2c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zm0 9H2V4h12v8z"/>
+          <path d="M7 7h6v2H7z"/>
+        </svg>
+        <span> JamesZhan 網站導航 </span>
+      </div>
+      
+      <!-- 分隔點 -->
+      <div class="dot-separator"></div>
+      
+      <!-- 版本號 -->
+      <div class="info-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+          <path d="M8 14.25l-4.65-4.65a3.39 3.39 0 0 1 0-4.8 3.39 3.39 0 0 1 4.8 0 3.2 3.2 0 0 1 4.6.2 3.2 3.2 0 0 1-.2 4.6L8 14.25z"/>
+        </svg>
+        快速的筆記網站跳轉
+      </div>
+      
+      <!-- 分隔點 -->
+      <div class="dot-separator"></div>
+      
+      <!-- 繁體中文 -->
+      <div class="info-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="rgba(255, 255, 255, 0.7)" style="opacity: 0.9;">
+          <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"></path>
+        </svg>
+        繁體中文
+      </div>
     </div>
   </div>
   
   <script>
+    // Original script for website navigation
     document.addEventListener('DOMContentLoaded', function() {
       const selectElement = document.getElementById('website-select');
       const customPathInput = document.getElementById('custom-path');
       const visitButton = document.getElementById('visit-btn');
       const baseUrl = 'https://iamzhanzihe.github.io/devnote/';
       
-      // 檢查是否有輸入或選擇，啟用或禁用按鈕
       function checkEnableButton() {
         if (selectElement.value || customPathInput.value.trim()) {
           visitButton.disabled = false;
@@ -260,7 +380,6 @@
         }
       }
       
-      // 當選擇下拉選單時，清空自定義輸入
       selectElement.addEventListener('change', function() {
         if (this.value) {
           customPathInput.value = '';
@@ -268,7 +387,6 @@
         checkEnableButton();
       });
       
-      // 當輸入自定義路徑時，重置下拉選單
       customPathInput.addEventListener('input', function() {
         if (this.value.trim()) {
           selectElement.selectedIndex = 0;
@@ -276,16 +394,12 @@
         checkEnableButton();
       });
       
-      // 點擊按鈕時導航到選擇的網站或自定義路徑
       visitButton.addEventListener('click', function() {
         let targetUrl;
         
         if (selectElement.value) {
-          // 如果選擇了預設網站
           targetUrl = selectElement.value;
         } else if (customPathInput.value.trim()) {
-          // 如果輸入了自定義路徑
-          // 移除開頭的斜線，避免重複
           let customPath = customPathInput.value.trim();
           if (customPath.startsWith('/')) {
             customPath = customPath.substring(1);
@@ -297,6 +411,305 @@
           window.open(targetUrl, '_blank');
         }
       });
+    });
+
+    // Script for dynamic background with scrolling grid and cell highlight
+    document.addEventListener('DOMContentLoaded', function() {
+      const canvas = document.getElementById('dynamicBackground');
+      const ctx = canvas.getContext('2d');
+
+      let width, height;
+      const gridSize = 20; // 網格大小
+      let gridOffsetY = 0;
+      const scrollSpeed = 0.2; // 降低滾動速度，從0.5減至0.2
+
+      // Mouse tracking variables
+      let mouseX = null;
+      let mouseY = null;
+      let currentCellX = -1;
+      let currentCellY = -1;
+
+      // Track mouse position - 改進滑鼠追踪
+      document.addEventListener('mousemove', function(event) {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = event.clientX - rect.left;
+        mouseY = event.clientY - rect.top;
+        
+        // 重新計算鼠標所在的網格位置
+        currentCellX = Math.floor(mouseX / gridSize);
+        currentCellY = Math.floor((mouseY + gridOffsetY % gridSize) / gridSize);
+      });
+
+      document.addEventListener('mouseout', function() {
+        mouseX = null;
+        mouseY = null;
+        currentCellX = -1;
+        currentCellY = -1;
+      });
+
+      function resizeCanvas() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+
+      function drawGrid() {
+        ctx.clearRect(0, 0, width, height);
+        
+        // 畫一個完全黑色背景
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, width, height);
+        
+        // 中心點和基本參數
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const maxRadius = Math.max(width, height) * 0.25;
+        const cornerRadius = Math.max(width, height) * 0.8;
+        const edgeWidth = Math.min(width, height) * 0.08;
+        
+        // 繪製中心亮區漸變
+        drawRadialGradient(
+          centerX, centerY, 0, 
+          centerX, centerY, maxRadius,
+          [
+            { stop: 0, color: 'rgba(100, 100, 100, 0.95)' },
+            { stop: 0.2, color: 'rgba(80, 80, 80, 0.8)' },
+            { stop: 0.4, color: 'rgba(60, 60, 60, 0.6)' },
+            { stop: 0.6, color: 'rgba(40, 40, 40, 0.4)' },
+            { stop: 0.8, color: 'rgba(20, 20, 20, 0.2)' },
+            { stop: 1, color: 'rgba(0, 0, 0, 0)' }
+          ]
+        );
+        
+        // 增加暗角效果
+        drawRadialGradient(
+          centerX, centerY, maxRadius * 0.2,
+          centerX, centerY, Math.max(width, height) * 0.8,
+          [
+            { stop: 0, color: 'rgba(0, 0, 0, 0)' },
+            { stop: 0.2, color: 'rgba(0, 0, 0, 0.3)' },
+            { stop: 0.4, color: 'rgba(0, 0, 0, 0.5)' },
+            { stop: 0.7, color: 'rgba(0, 0, 0, 0.7)' },
+            { stop: 0.9, color: 'rgba(0, 0, 0, 0.85)' },
+            { stop: 1, color: 'rgba(0, 0, 0, 0.95)' }
+          ]
+        );
+        
+        // 繪製四邊暗化
+        // 左邊
+        drawLinearGradient(0, 0, width * 0.9, 0, createEdgeGradientStops('horizontal'));
+        // 右邊
+        drawLinearGradient(width, 0, width * 0.1, 0, createEdgeGradientStops('horizontal'));
+        // 上邊
+        drawLinearGradient(0, 0, 0, height * 0.9, createEdgeGradientStops('vertical'));
+        // 下邊
+        drawLinearGradient(0, height, 0, height * 0.1, createEdgeGradientStops('vertical'));
+        
+        // 四個角落暗化
+        // 左上角
+        drawCornerGradient(0, 0, cornerRadius, 0, 0, width * 0.8, height * 0.8);
+        // 右上角
+        drawCornerGradient(width, 0, cornerRadius, width * 0.2, 0, width * 0.8, height * 0.8);
+        // 左下角
+        drawCornerGradient(0, height, cornerRadius, 0, height * 0.2, width * 0.8, height * 0.8);
+        // 右下角
+        drawCornerGradient(width, height, cornerRadius, width * 0.2, height * 0.2, width * 0.8, height * 0.8);
+        
+        // 邊框效果
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.98)';
+        // 左邊框
+        ctx.fillRect(0, 0, edgeWidth, height);
+        // 右邊框
+        ctx.fillRect(width - edgeWidth, 0, edgeWidth, height);
+        // 上邊框
+        ctx.fillRect(0, 0, width, edgeWidth);
+        // 下邊框
+        ctx.fillRect(0, height - edgeWidth, width, edgeWidth);
+        
+        // 畫網格線
+        drawGridLines();
+        
+        // 繪製滑鼠懸停效果
+        drawMouseHoverEffect();
+        
+        // 輔助函數: 創建邊緣漸變的色標
+        function createEdgeGradientStops(direction) {
+          return [
+            { stop: 0, color: 'rgba(0, 0, 0, 0.99)' },
+            { stop: 0.2, color: 'rgba(0, 0, 0, 0.95)' },
+            { stop: 0.5, color: 'rgba(0, 0, 0, 0.85)' },
+            { stop: 0.8, color: 'rgba(0, 0, 0, 0.6)' },
+            { stop: 1, color: 'rgba(0, 0, 0, 0)' }
+          ];
+        }
+        
+        // 輔助函數: 繪製徑向漸變
+        function drawRadialGradient(x0, y0, r0, x1, y1, r1, colorStops) {
+          const gradient = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
+          colorStops.forEach(stop => gradient.addColorStop(stop.stop, stop.color));
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, width, height);
+        }
+        
+        // 輔助函數: 繪製線性漸變
+        function drawLinearGradient(x0, y0, x1, y1, colorStops) {
+          const gradient = ctx.createLinearGradient(x0, y0, x1, y1);
+          colorStops.forEach(stop => gradient.addColorStop(stop.stop, stop.color));
+          ctx.fillStyle = gradient;
+          
+          // 根據方向決定填充區域
+          if (x0 === x1 || x0 === 0 && x1 === 0) { // 垂直漸變
+            if (y0 < y1) { // 上到下
+              ctx.fillRect(0, 0, width, height * 0.9);
+            } else { // 下到上
+              ctx.fillRect(0, height * 0.1, width, height * 0.9);
+            }
+          } else { // 水平漸變
+            if (x0 < x1) { // 左到右
+              ctx.fillRect(0, 0, width * 0.9, height);
+            } else { // 右到左
+              ctx.fillRect(width * 0.1, 0, width * 0.9, height);
+            }
+          }
+        }
+        
+        // 輔助函數: 繪製角落漸變
+        function drawCornerGradient(x, y, radius, rectX, rectY, rectWidth, rectHeight) {
+          const cornerGradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+          cornerGradient.addColorStop(0, 'rgba(0, 0, 0, 0.95)');
+          cornerGradient.addColorStop(0.3, 'rgba(0, 0, 0, 0.85)');
+          cornerGradient.addColorStop(0.7, 'rgba(0, 0, 0, 0.5)');
+          cornerGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = cornerGradient;
+          ctx.fillRect(rectX, rectY, rectWidth, rectHeight);
+        }
+        
+        // 輔助函數: 繪製網格線
+        function drawGridLines() {
+          // 垂直線
+          for (let x = 0; x <= width; x += gridSize) {
+            const opacity = calculateGridLineOpacity(x, centerX, 'vertical');
+            drawLine(x, 0, x, height, opacity);
+          }
+          
+          // 水平線，帶滾動效果
+          const visualOffsetY = gridOffsetY % gridSize;
+          const startY = -visualOffsetY;
+          for (let y = startY; y <= height; y += gridSize) {
+            const opacity = calculateGridLineOpacity(y, centerY, 'horizontal');
+            drawLine(0, y, width, y, opacity);
+          }
+        }
+        
+        // 計算網格線的不透明度
+        function calculateGridLineOpacity(pos, center, direction) {
+          // 計算到邊界的最小距離
+          let distToEdge;
+          if (direction === 'vertical') {
+            const distToLeft = pos;
+            const distToRight = width - pos;
+            distToEdge = Math.min(distToLeft, distToRight) / (width * 0.5);
+          } else {
+            const distToTop = pos;
+            const distToBottom = height - pos;
+            distToEdge = Math.min(distToTop, distToBottom) / (height * 0.5);
+          }
+          
+          // 計算與中心的距離
+          const distToCenterX = Math.abs((direction === 'vertical' ? pos : width/2) - centerX) / (width * 0.5);
+          const distToCenterY = Math.abs((direction === 'horizontal' ? pos : height/2) - centerY) / (height * 0.5);
+          const distToCenter = Math.sqrt(Math.pow(distToCenterX, 2) + Math.pow(distToCenterY, 2));
+          
+          // 結合邊界距離和中心距離計算透明度
+          const edgeOpacity = Math.min(distToEdge * 3.5, 1);
+          const centerOpacity = (1 - Math.pow(distToCenter, 2) * 0.8) * 0.7;
+          
+          return Math.min(0.4 * edgeOpacity * centerOpacity, 0.4);
+        }
+        
+        // 繪製線條
+        function drawLine(x1, y1, x2, y2, opacity) {
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+          ctx.lineWidth = 0.4;
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+        }
+        
+        // 繪製滑鼠懸停效果
+        function drawMouseHoverEffect() {
+          if (mouseX === null || mouseY === null) return;
+          
+          const cellVisualX = currentCellX * gridSize;
+          const cellVisualY = (currentCellY * gridSize) - (gridOffsetY % gridSize);
+          
+          // 計算不透明度因子
+          const opacityFactor = calculateHoverOpacityFactor();
+          
+          // 懸停格子填充
+          ctx.fillStyle = `rgba(76, 167, 191, ${0.6 * opacityFactor})`;
+          ctx.fillRect(cellVisualX, cellVisualY, gridSize, gridSize);
+          
+          // 邊框效果
+          ctx.strokeStyle = `rgba(76, 167, 191, ${1 * opacityFactor})`;
+          ctx.lineWidth = 2;
+          ctx.strokeRect(cellVisualX, cellVisualY, gridSize, gridSize);
+          
+          // 漣漪效果
+          ctx.strokeStyle = `rgba(76, 167, 191, ${0.7 * opacityFactor})`;
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(cellVisualX - 4, cellVisualY - 4, gridSize + 8, gridSize + 8);
+          
+          // 第二層漣漪
+          if (opacityFactor > 0.3) {
+            ctx.strokeStyle = `rgba(76, 167, 191, ${0.4 * opacityFactor})`;
+            ctx.lineWidth = 1;
+            ctx.strokeRect(cellVisualX - 8, cellVisualY - 8, gridSize + 16, gridSize + 16);
+          }
+        }
+        
+        // 計算懸停效果的不透明度因子
+        function calculateHoverOpacityFactor() {
+          // 計算到邊界的最小距離比例
+          const distToLeft = mouseX;
+          const distToRight = width - mouseX;
+          const distToTop = mouseY;
+          const distToBottom = height - mouseY;
+          
+          const distToEdgeX = Math.min(distToLeft, distToRight) / (width * 0.5);
+          const distToEdgeY = Math.min(distToTop, distToBottom) / (height * 0.5);
+          const distToEdge = Math.min(distToEdgeX, distToEdgeY);
+          
+          // 計算滑鼠位置到中心的距離
+          const distToCenterX = Math.abs(mouseX - centerX) / (width * 0.5);
+          const distToCenterY = Math.abs(mouseY - centerY) / (height * 0.5);
+          const distanceToCenter = Math.sqrt(distToCenterX * distToCenterX + distToCenterY * distToCenterY);
+          
+          // 邊緣與中心因子
+          const edgeFactor = Math.min(distToEdge * 2.5, 1);
+          const centerFactor = 1 - Math.pow(Math.min(distanceToCenter, 1), 2) * 0.8;
+          
+          return Math.min(edgeFactor * centerFactor, 1);
+        }
+      }
+
+      function animate() {
+        // Update grid offset for scrolling effect
+        gridOffsetY += scrollSpeed;
+        
+        // Draw the grid
+        drawGrid();
+        
+        // Continue animation loop
+        requestAnimationFrame(animate);
+      }
+
+      // 確保canvas有正確大小
+      window.addEventListener('resize', resizeCanvas);
+      
+      // 初始化畫布
+      resizeCanvas();
+      animate();
     });
   </script>
 </body>
