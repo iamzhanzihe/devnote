@@ -1,8 +1,9 @@
 ---
-​---
 title: MySQL學習筆記
 vlook-header-dup: 增;查;改;刪;練習資料
-​---
+vlook-doc-lib:
+- [快速的筆記網站跳轉](index.html?target=_self "可以快速挑轉到想要的網頁")
+- [MySQL資料庫★基礎](MySQL.html?target=_self "MySQL資料庫★基礎")
 ---
 
 [TOC]
@@ -1657,7 +1658,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                                                         
+>                                                                                                                                 
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
