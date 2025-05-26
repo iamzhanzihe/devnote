@@ -9,7 +9,7 @@ vlook-doc-lib:
 
 [TOC]
 
-###### MySQL學習筆記<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`*_~Og~_
+###### MySQL學習筆記<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`*_~Og~_*版本日期`2025年5月26日`*_~Gn~_
 
 # 什麼是資料庫
 
@@ -1659,7 +1659,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                                                                                 
+>                                                                                                                                                         
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
