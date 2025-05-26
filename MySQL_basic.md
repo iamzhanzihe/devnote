@@ -51,11 +51,11 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 存儲引擎是資料庫管理系統中負責管理數據和檢索的模塊也就是表的類型，不同的存儲引擎提供了不同的特性
 
-![MySQL架構圖](mysql_basic.assets/20.png#80%)
+![MySQL架構圖](MySQL_basic.assets/20.png#80%)
 
 * 查看存儲引擎`show engines;`
 
-![查看存儲引擎](mysql_basic.assets/21.png)
+![查看存儲引擎](MySQL_basic.assets/21.png)
 
 * 指定存儲引擎`create table 資料表名稱(資料欄位 資料類型)engine=存儲引擎`
 
@@ -73,9 +73,9 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > * 下載並安裝 [*點擊下載`MySQL Community Server`V5.4以上*_~Og~_](https://dev.mysql.com/downloads/mysql/)
 >
-> ![選擇Community Server](mysql_basic.assets/螢幕擷取畫面 2024-04-01 220044.png)
+> ![選擇Community Server](MySQL_basic.assets/螢幕擷取畫面 2024-04-01 220044.png)
 >
-> ![按照對應的版本選擇下載檔案](mysql_basic.assets/ClShot 2025-04-14 at 10.30.00@2x.png)
+> ![按照對應的版本選擇下載檔案](MySQL_basic.assets/ClShot 2025-04-14 at 10.30.00@2x.png)
 
 > **開啟環境變數設定頁 ❯**
 >
@@ -87,13 +87,13 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > 3. 直接左下角「開始」搜尋環境變數
 >
->     ![搜尋環境變數](mysql_basic.assets/1.png)![點擊環境變數按鍵](mysql_basic.assets/螢幕擷取畫面 2024-04-01 174544.png)
+>     ![搜尋環境變數](MySQL_basic.assets/1.png)![點擊環境變數按鍵](MySQL_basic.assets/螢幕擷取畫面 2024-04-01 174544.png)
 
 > **添加變數 ❯**
 >
 > 系統變數中找尋PATH並編輯、新增
 >
-> ![雙擊系統變數裡的Path變數](mysql_basic.assets/螢幕擷取畫面 2024-04-01 174741.png#40%)![新增複製的路徑](mysql_basic.assets/螢幕擷取畫面 2024-04-01 174927.png#40%)
+> ![雙擊系統變數裡的Path變數](MySQL_basic.assets/螢幕擷取畫面 2024-04-01 174741.png#40%)![新增複製的路徑](MySQL_basic.assets/螢幕擷取畫面 2024-04-01 174927.png#40%)
 
 ## 加入my.ini至文件中無法登入再嘗試
 
@@ -127,7 +127,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 3. 將檔名改成my.ini，放入文件中
 
-    ![my.ini放入安裝資料夾](mysql_basic.assets/螢幕擷取畫面 2024-04-01 220941.png)
+    ![my.ini放入安裝資料夾](MySQL_basic.assets/螢幕擷取畫面 2024-04-01 220941.png)
 
 4. 以管理員模式在PowerShell執行`mysqld --initialize-insecure --user=mysql`
 
@@ -287,7 +287,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 >  寬度指的是字符的個數
 
-![字符類型](mysql_basic.assets/2.png)
+![字符類型](MySQL_basic.assets/2.png)
 
 可以使用`select chat_length(欄位名稱) from 資料表名稱` 查看字符個數
 
@@ -306,7 +306,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 > ![char(5)下拿取的資料的長度會忽略掉後面的空格](MySQL_basic.assets/3-8239895.png)
 
-> ![varchar(5)下拿取的資料的長度](mysql_basic.assets/4.png)
+> ![varchar(5)下拿取的資料的長度](MySQL_basic.assets/4.png)
 
  
 
@@ -317,16 +317,16 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > 存取的長度跟拿取資料的長度不一樣 可以設定資料庫`set sql_mode = 'pad_char_to_full_length';` 讓char現出原形
 
-![設定sql_mode](mysql_basic.assets/5.png)
+![設定sql_mode](MySQL_basic.assets/5.png)
 
 ## 列舉類型與集合類型
 
 - 單選 enum (在給定的一個範圍內選一個值)
 - 多選 set (在給定的一個範圍內選擇一個以上的值)
 
-![enum](mysql_basic.assets/6.png)
+![enum](MySQL_basic.assets/6.png)
 
-![set](mysql_basic.assets/7.png)
+![set](MySQL_basic.assets/7.png)
 
 > [!WARNING]
 >
@@ -349,7 +349,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 ## 系統資料庫
 
-![系統資料庫](mysql_basic.assets/19.png#40%)
+![系統資料庫](MySQL_basic.assets/19.png#40%)
 
 - information_schema：虛擬資料庫，存放資料庫啟動後的一些參數，如用戶表訊息、權限訊息...…
 - performance_schema：主要用於收集資料庫服務器性能參數，處理查詢請求時發生的各種事件
@@ -397,17 +397,17 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > - `show create database db1;` 查看指定資料庫
 >
->     ![查看指定資料庫](mysql_basic.assets/9.png)
+>     ![查看指定資料庫](MySQL_basic.assets/9.png)
 >
 > - `show databases;` 查看所有資料庫
 >
->     ![查看所有資料庫](mysql_basic.assets/10.png)
+>     ![查看所有資料庫](MySQL_basic.assets/10.png)
 
 > **改**
 >
 > * `alter database db1 charset gbk;` 修改指定資料庫的字符集
 >
-> ![修改字符集](mysql_basic.assets/11.png)
+> ![修改字符集](MySQL_basic.assets/11.png)
 
 > **刪**
 >
@@ -463,15 +463,15 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 >     - `\G` 換行顯示
 >    
->        ![查看指定資料表](mysql_basic.assets/12.png)
+>        ![查看指定資料表](MySQL_basic.assets/12.png)
 > 
 >- `show tables;` 查看當前資料庫下所有的資料表名稱
 > 
->    ![查看當前資料庫下所有的資料表名稱](mysql_basic.assets/13.png)
+>    ![查看當前資料庫下所有的資料表名稱](MySQL_basic.assets/13.png)
 > 
 >- `desc t1;` 查看指定資料表結構
 > 
->    ![查看指定資料表結構](mysql_basic.assets/14.png)
+>    ![查看指定資料表結構](MySQL_basic.assets/14.png)
 
 > **改**
 >
@@ -485,11 +485,11 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > - 修改資料項型態`alter table t1 modify name char(6);` 
 >
->     ![修改資料項型態](mysql_basic.assets/螢幕擷取畫面 2024-04-02 015111.png)
+>     ![修改資料項型態](MySQL_basic.assets/螢幕擷取畫面 2024-04-02 015111.png)
 >
 > - 修改欄位名稱及資料型態`alter table t1 change name NAME char(7);` 
 >
->     ![修改欄位名稱及資料型態](mysql_basic.assets/螢幕擷取畫面 2024-04-02 015215.png)
+>     ![修改欄位名稱及資料型態](MySQL_basic.assets/螢幕擷取畫面 2024-04-02 015215.png)
 
 > **刪**
 >
@@ -525,17 +525,17 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > - `select * from db1.t1;` 查看所有資料內容
 >
->     ![查看資料表](mysql_basic.assets/15.png)
+>     ![查看資料表](MySQL_basic.assets/15.png)
 
 > **改**
 >
 > - `update t1 set name='SB';` 修改所有name欄位的值
 >
->     ![修改所有name欄位的值](mysql_basic.assets/16.png)
+>     ![修改所有name欄位的值](MySQL_basic.assets/16.png)
 >
 > - `update t1 set name='Lisa' where id=2;`
 >
->     ![修改name欄位id=2的值](mysql_basic.assets/17.png)
+>     ![修改name欄位id=2的值](MySQL_basic.assets/17.png)
 
 > **刪**
 >
@@ -543,7 +543,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > - `truncate table 表名`
 >
->     ![刪除數據](mysql_basic.assets/18.png)
+>     ![刪除數據](MySQL_basic.assets/18.png)
 
 > [!NOTE]
 >
@@ -567,7 +567,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 設置欄位是否可以為空值，若是not null未填入值則使用default值
 
-![原始沒有特別設定的欄位格式](mysql_basic.assets/螢幕擷取畫面 2024-04-05 174956.png)
+![原始沒有特別設定的欄位格式](MySQL_basic.assets/螢幕擷取畫面 2024-04-05 174956.png)
 
 在gender中設定為not null，default為male
 
@@ -581,7 +581,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
  );
 ```
 
-![指定預設值](mysql_basic.assets/22.png)
+![指定預設值](MySQL_basic.assets/22.png)
 
 ## unique key
 
@@ -591,7 +591,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
     單個欄位的值不能與其他的重複
 
-    ![unique key](mysql_basic.assets/螢幕擷取畫面 2024-04-05 180332.png)
+    ![unique key](MySQL_basic.assets/螢幕擷取畫面 2024-04-05 180332.png)
 
     - 方法1:
 
@@ -622,7 +622,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
     多個欄位的值不能與其他的重複，舉例:(IP, Port)兩個欄位不能與其他重複否則網路會發生衝突
 
-    ![聯合唯一](mysql_basic.assets/螢幕擷取畫面 2024-04-05 181319.png)
+    ![聯合唯一](MySQL_basic.assets/螢幕擷取畫面 2024-04-05 181319.png)
 
     *==多個欄位的值不能與其他重複==*
     
@@ -641,7 +641,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 - 單一主鍵
 
-    ![單一主鍵](mysql_basic.assets/螢幕擷取畫面 2024-04-05 190046.png)
+    ![單一主鍵](MySQL_basic.assets/螢幕擷取畫面 2024-04-05 190046.png)
 
     *==單一主鍵==*
 
@@ -655,7 +655,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 - 複合主鍵
 
-    ![複合主鍵](mysql_basic.assets/23.png)
+    ![複合主鍵](MySQL_basic.assets/23.png)
 
     *==複合主鍵==*
     
@@ -692,7 +692,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >     | 1    | 財務部門   | 控制預算    |
 >     | 2    | 開發部門   | 研發新技術  |
 >
->     ![dep表](mysql_basic.assets/24.png)
+>     ![dep表](MySQL_basic.assets/24.png)
 >
 >     *==建立dep表==*
 >
@@ -714,7 +714,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >     | 2    | Wendy | 2                   |
 >     | 3    | James | 1                   |
 >
->     ![emp表](mysql_basic.assets/25.png)
+>     ![emp表](MySQL_basic.assets/25.png)
 >
 >     *==建立emp表==*
 >     
@@ -759,7 +759,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 自動增加固定的數值，且欄位必須是一個鍵，例如:ID
 
-![auto_increment](mysql_basic.assets/螢幕擷取畫面 2024-04-05 224232.png)
+![auto_increment](MySQL_basic.assets/螢幕擷取畫面 2024-04-05 224232.png)
 
 *==auto_increment約束==*
 
@@ -774,7 +774,7 @@ create table t1(
 >
 > 設定起始值還有變化量 `show variables like 'auto_inc%';`  %是通配符
 >
-> ![設定起始值還有變化量](mysql_basic.assets/26.png)
+> ![設定起始值還有變化量](MySQL_basic.assets/26.png)
 >
 > auto_increment_increment 變化量
 >
@@ -1033,7 +1033,7 @@ INSERT INTO AuthorBook (author_id, book_id) VALUES
 > 
 > ```
 >
-> ![部門表](mysql_basic.assets/ClShot 2025-04-13 at 18.26.17@2x.png)
+> ![部門表](MySQL_basic.assets/ClShot 2025-04-13 at 18.26.17@2x.png)
 >
 > ```sql
 > /*某個公司的員工表*/
@@ -1064,7 +1064,7 @@ INSERT INTO AuthorBook (author_id, book_id) VALUES
 > INSERT INTO employee VALUES (1001, '小喬', '文員', 1013, '2018-12-17', 8000, 20);
 > ```
 >
-> ![員工表](mysql_basic.assets/ClShot 2025-04-13 at 19.36.41@2x.png)
+> ![員工表](MySQL_basic.assets/ClShot 2025-04-13 at 19.36.41@2x.png)
 >
 > ```sql
 > /*創建員工薪水等級表*/
@@ -1082,11 +1082,11 @@ INSERT INTO AuthorBook (author_id, book_id) VALUES
 > INSERT INTO salgrade VALUES (5, 30010, 99990);
 > ```
 >
-> ![薪水等級表](mysql_basic.assets/ClShot 2025-04-13 at 18.27.06@2x.png)
+> ![薪水等級表](MySQL_basic.assets/ClShot 2025-04-13 at 18.27.06@2x.png)
 
 ## 關鍵字的執行順序
 
-![select查詢順序](mysql_basic.assets/27.png)
+![select查詢順序](MySQL_basic.assets/27.png)
 
 ## 簡單查詢
 
@@ -1320,7 +1320,7 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 > 
 > ```
 >
-> ![查看department資料表](mysql_basic.assets/ClShot 2025-05-19 at 15.40.39@2x.png)
+> ![查看department資料表](MySQL_basic.assets/ClShot 2025-05-19 at 15.40.39@2x.png)
 >
 > *==建立employee表==*
 >
@@ -1344,11 +1344,11 @@ SELECT * FROM employee ORDER BY salary DESC LIMIT 10,5;
 > 
 > ```
 >
-> ![查看employee資料表](mysql_basic.assets/ClShot 2025-05-19 at 15.42.43@2x.png)
+> ![查看employee資料表](MySQL_basic.assets/ClShot 2025-05-19 at 15.42.43@2x.png)
 
 子查詢（Subquery）是嵌套在其他 SQL 查詢中的查詢。子查詢可以出現在 SELECT、INSERT、UPDATE 或 DELETE 語句中，以及在 WHERE 或 HAVING 子句中。子查詢允許創建更為複雜和動態的數據操作和條件判斷
 
-![department資料表及employee表](mysql_basic.assets/29.png)
+![department資料表及employee表](MySQL_basic.assets/29.png)
 
 ## IN 關鍵字
 
@@ -1512,7 +1512,7 @@ SELECT * from employee
 SELECT * from employee, department on employee.dep_id=department.id;
 ```
 
-![INNER JOIN查詢](mysql_basic.assets/Untitled-4895768.png)
+![INNER JOIN查詢](MySQL_basic.assets/Untitled-4895768.png)
 
 ## LEFT JOIN 左連結
 
@@ -1523,7 +1523,7 @@ SELECT * from employee
 	LEFT JOIN department on employee.dep_id=department.id;
 ```
 
-![LEFT JOIN查詢](mysql_basic.assets/Untitled (1).png)
+![LEFT JOIN查詢](MySQL_basic.assets/Untitled (1).png)
 
 ## RIGHT JOIN 右連結
 
@@ -1534,7 +1534,7 @@ SELECT * from employee
 	RIGHT JOIN department on employee.dep_id=department.id;
 ```
 
-![RIGHT JOIN查詢](mysql_basic.assets/Untitled (2).png)
+![RIGHT JOIN查詢](MySQL_basic.assets/Untitled (2).png)
 
 ## 全外連結
 
@@ -1550,7 +1550,7 @@ SELECT * from employee
 	LEFT JOIN department on employee.dep_id=department.id;
 ```
 
-![全外連結查詢](mysql_basic.assets/Untitled (3).png)
+![全外連結查詢](MySQL_basic.assets/Untitled (3).png)
 
 > [!NOTE]
 >
@@ -1581,7 +1581,7 @@ SELECT * from employee
 > 
 > ```
 >
-> ![ClShot 2025-04-13 at 18.26.17@2x](mysql_basic.assets/ClShot 2025-04-13 at 18.26.17@2x.png)
+> ![ClShot 2025-04-13 at 18.26.17@2x](MySQL_basic.assets/ClShot 2025-04-13 at 18.26.17@2x.png)
 >
 > ```sql
 > /*某個公司的員工表*/
@@ -1612,7 +1612,7 @@ SELECT * from employee
 > INSERT INTO employee VALUES (1001, '小喬', '文員', 1013, '2018-12-17', 8000, 20);
 > ```
 >
-> ![ClShot 2025-04-17 at 19.56.21@2x](mysql_basic.assets/ClShot 2025-04-17 at 19.56.21@2x.png)
+> ![ClShot 2025-04-17 at 19.56.21@2x](MySQL_basic.assets/ClShot 2025-04-17 at 19.56.21@2x.png)
 >
 > ```sql
 > /*創建員工薪水等級表*/
@@ -1630,7 +1630,7 @@ SELECT * from employee
 > INSERT INTO salgrade VALUES (5, 30010, 99990);
 > ```
 >
-> ![ClShot 2025-04-13 at 18.27.06@2x](mysql_basic.assets/ClShot 2025-04-13 at 18.27.06@2x.png)
+> ![ClShot 2025-04-13 at 18.27.06@2x](MySQL_basic.assets/ClShot 2025-04-13 at 18.27.06@2x.png)
 
 *^tab^*
 
@@ -1653,7 +1653,7 @@ SELECT * from employee
 > 	where a.deptnu=b.deptnu;
 > ```
 >
-> ![實戰練習1查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 19.38.29@2x.png)
+> ![實戰練習1查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 19.38.29@2x.png)
 
 > **2**
 >
@@ -1664,7 +1664,7 @@ SELECT * from employee
 > 	where sal > (select sal from employee where ename = '安琪拉');
 > ```
 >
-> ![實戰練習2查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 19.44.16@2x.png)
+> ![實戰練習2查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 19.44.16@2x.png)
 
 > **3**
 >
@@ -1675,7 +1675,7 @@ SELECT * from employee
 > 	left join employee b on a.mgr = b.empno;
 > ```
 >
-> ![實戰練習3查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 19.40.45@2x.png)
+> ![實戰練習3查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 19.40.45@2x.png)
 
 > **4**
 >
@@ -1688,7 +1688,7 @@ SELECT * from employee
 > 	where a.hiredate < b.hiredate;
 > ```
 >
-> ![實戰練習4查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 19.41.10@2x.png)
+> ![實戰練習4查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 19.41.10@2x.png)
 
 > **5**
 >
@@ -1699,7 +1699,7 @@ SELECT * from employee
 > left join employee b on a.deptnu = b.deptnu;
 > ```
 >
-> ![實戰練習5查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 19.41.31@2x.png)
+> ![實戰練習5查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 19.41.31@2x.png)
 
 > **6**
 >
@@ -1714,7 +1714,7 @@ SELECT * from employee
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
 >     ```
 >
-> ![實戰練習6查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 19.43.24@2x.png)
+> ![實戰練習6查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 19.43.24@2x.png)
 
 > **7**
 >
@@ -1724,7 +1724,7 @@ SELECT * from employee
 > select job, count(*) from employee group by job having min(sal)>15000;
 > ```
 >
-> ![實戰練習7查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 19.58.11@2x.png)
+> ![實戰練習7查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 19.58.11@2x.png)
 >
 > > [!IMPORTANT]
 > >
@@ -1750,7 +1750,7 @@ SELECT * from employee
 > select ename from employee where deptnu = (select deptnu from dept where dname="銷售部");
 > ```
 >
-> ![實戰練習8查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 20.15.48@2x.png)
+> ![實戰練習8查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 20.15.48@2x.png)
 
 > **9**
 >
@@ -1763,7 +1763,7 @@ SELECT * from employee
 > 	where a.job = (select job from employee where ename = "諸葛亮") and a.deptnu=b.deptnu;
 > ```
 >
-> ![實戰練習9查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 20.27.23@2x.png)
+> ![實戰練習9查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 20.27.23@2x.png)
 
 > **10**
 >
@@ -1777,7 +1777,7 @@ SELECT * from employee
 > 	where a.deptnu=b.deptnu and a.sal>(select max(sal) from employee where deptnu=30);
 > ```
 >
-> ![實戰練習10查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 20.37.58@2x.png)
+> ![實戰練習10查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 20.37.58@2x.png)
 
 > **11**
 >
@@ -1787,7 +1787,7 @@ SELECT * from employee
 > select deptnu, count(*), avg(sal) from employee group by deptnu;
 > ```
 >
-> ![實戰練習11查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 20.42.35@2x.png)
+> ![實戰練習11查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 20.42.35@2x.png)
 
 > **12**
 >
@@ -1802,7 +1802,7 @@ SELECT * from employee
 > 	and a.sal>(select avg(sal) from employee) and a.sal between d.lowsal and d.higsal;
 > ```
 >
-> ![實戰練習12查詢結果](mysql_basic.assets/ClShot 2025-04-17 at 20.51.10@2x.png)
+> ![實戰練習12查詢結果](MySQL_basic.assets/ClShot 2025-04-17 at 20.51.10@2x.png)
 
 # 權限及密碼
 
@@ -1842,13 +1842,13 @@ SELECT * from employee
 >
 >     * `select user,host from mysql.user where user='root';`
 >
->         ![查看用戶](mysql_basic.assets/ClShot 2025-04-21 at 16.32.53@2x.png)
+>         ![查看用戶](MySQL_basic.assets/ClShot 2025-04-21 at 16.32.53@2x.png)
 >
 > * 查看權限
 >
 >     * `show grants for 'James'@'%';`
 >
->         ![James的用戶權限](mysql_basic.assets/ClShot 2025-04-21 at 16.31.58@2x.png)
+>         ![James的用戶權限](MySQL_basic.assets/ClShot 2025-04-21 at 16.31.58@2x.png)
 
 > **修改用戶權限表**
 >
@@ -1880,7 +1880,7 @@ SELECT * from employee
 
 2. `mysqladmin -u使用者 -p舊密碼 password 新密碼;`
 
-    ![輸入原先密碼，再輸入新密碼](mysql_basic.assets/30.png)
+    ![輸入原先密碼，再輸入新密碼](MySQL_basic.assets/30.png)
 
 3. `update mysql.user set authentication_string=password('密碼') where user='使用者' and host='ip';`
 
@@ -1892,7 +1892,7 @@ SELECT * from employee
 
 > **services.msc查看服務 ❯**
 >
-> ![找尋MySQL服務](mysql_basic.assets/螢幕擷取畫面 2024-04-01 230414.png)
+> ![找尋MySQL服務](MySQL_basic.assets/螢幕擷取畫面 2024-04-01 230414.png)
 >
 > 1. 使用Windows+R輸入services.msc查看服務
 > 2. 打開終端機，關閉MySQL服務`net stop mysql57`(輸入的服務名稱要相同)
