@@ -255,6 +255,16 @@
       .container {
         padding: 20px;
         margin: 0 15px;
+        max-width: 100%; /* 確保容器不會超出螢幕寬度 */
+        width: calc(100% - 30px); /* 確保容器寬度計算正確 */
+      }
+
+      .header h1 {
+        font-size: 24px; /* 減小標題字體大小 */
+      }
+      
+      .header p {
+        font-size: 14px; /* 減小副標題字體大小 */
       }
 
       .input-with-prefix {
@@ -268,6 +278,44 @@
         display: block;
         margin-bottom: 5px;
         font-size: 13px;
+      }
+      
+      .form-group label {
+        font-size: 14px; /* 減小標籤字體大小 */
+      }
+      
+      .select-box, .input-field {
+        font-size: 14px; /* 減小輸入框字體大小 */
+        padding: 10px 12px; /* 調整輸入框內邊距 */
+      }
+      
+      .btn {
+        padding: 12px; /* 調整按鈕內邊距 */
+        font-size: 14px; /* 減小按鈕字體大小 */
+      }
+      
+      /* 修復底部資訊欄在移動端的溢出問題 */
+      .bottom-info-bar {
+        overflow-x: auto; /* 允許水平滾動 */
+        padding: 0 10px;
+        bottom: 10px; /* 調整底部距離 */
+      }
+      
+      .info-container {
+        flex-wrap: wrap; /* 允許內容換行 */
+        justify-content: center;
+        padding: 4px 10px; /* 調整內邊距 */
+      }
+      
+      .info-item {
+        margin: 3px 5px;
+        font-size: 11px; /* 縮小文字 */
+        white-space: normal; /* 允許文字換行 */
+        max-width: 150px; /* 限制最大寬度 */
+      }
+      
+      .dot-separator {
+        margin: 0 3px; /* 調整分隔點間距 */
       }
     }
   </style>
@@ -287,6 +335,7 @@
         <select id="website-select" class="select-box">
           <option value="" disabled selected>請選擇一個網站</option>
           <option value="https://iamzhanzihe.github.io/devnote/MySQL_basic.html">MySQL</option>
+          <option value="https://iamzhanzihe.github.io/devnote/web_dev.html">網頁開發</option>
         </select>
         <div class="select-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -325,7 +374,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
           <path d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm0-1A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm-.8-3.5h1.5V7.8H7.2v3.8zm0-5.2h1.5V5H7.2v1.3z"/>
         </svg>
-        版本：2025/05/21
+        版本：2025/05/26
       </div>
       
       <!-- 分隔點 -->
@@ -623,14 +672,14 @@
           const edgeOpacity = Math.min(distToEdge * 3.5, 1);
           const centerOpacity = (1 - Math.pow(distToCenter, 2) * 0.8) * 0.7;
           
-          return Math.min(0.4 * edgeOpacity * centerOpacity, 0.4);
+          return Math.min(0.6 * edgeOpacity * centerOpacity, 0.6);
         }
         
         // 繪製線條
         function drawLine(x1, y1, x2, y2, opacity) {
           ctx.beginPath();
           ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
-          ctx.lineWidth = 0.4;
+          ctx.lineWidth = 0.8; // 將線條寬度從0.4增加到0.8
           ctx.moveTo(x1, y1);
           ctx.lineTo(x2, y2);
           ctx.stroke();
