@@ -5,6 +5,7 @@ vlook-doc-lib:
 - [快速的筆記網站跳轉](index.html?target=_self "可以快速挑轉到想要的網頁")
 - [MySQL資料庫★基礎](MySQL_basic.html?target=_self "MySQL資料庫★基礎")
 - [MySQL資料庫★進階](MySQL_advanced.html?target=_self "MySQL資料庫★進階")
+- [MySQL資料庫★營運](MySQL_ops.html?target=_self "MySQL資料庫★營運")
 ---
 
 [TOC]
@@ -23,14 +24,24 @@ vlook-doc-lib:
 
 *==RDBMS vs NoSQL==*
 
-|            | 關聯式資料庫(RDBMS)                                          | 非關聯式資料庫(NoSQL)                                        |
-| ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 定義       | 關聯式資料庫是根據關聯模型來組織和管理數據的資料庫。         | 非關聯式資料庫，也稱為 NoSQL 資料庫，不需要固定的模式，且不需要事先為要存儲的數據建立欄位。 |
-| 數據結構   | 數據是以表格的形式來存儲的，每個表格都有自己的欄位（例如名字、地址等）和紀錄（即行）。 | 數據可以以多種方式來存儲，例如鍵值對、文件或者寬列等。       |
-| 靈活性     | 較低，嚴格遵循結構化模式                                     | 較高，可以輕鬆調整結構或添加新的屬性                         |
-| 查詢語言   | 使用結構化查詢語言（SQL）進行數據查詢。                      | 根據不同的資料庫，可能使用各種不同的查詢語言。               |
-| 擴展性     | 垂直擴展，即通過增加單個伺服器的性能（例如增加更多的 CPU 或 RAM）來擴展。 | 水平擴展，即通過增加更多的伺服器來擴展。                     |
-| 常見資料庫 | MySQL、oracle、db2                                           | mongodb、redis、memcache                                     |
+|            |                   ==關聯式資料庫(RDBMS)==                    |                    非關聯式資料庫(NoSQL)                     |
+| :--------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|    定義    |    ==關聯式資料庫是根據關聯模型來組織和管理數據的資料庫==    | 非關聯式資料庫，也稱為 NoSQL 資料庫，不需要固定的模式，且不需要事先為要存儲的數據建立欄位。 |
+|  數據結構  | ==數據是以表格的形式來存儲的，每個表格都有自己的欄位（例如名字、地址等）和紀錄（即行）== |    數據可以以多種方式來存儲，例如鍵值對、文件或者寬列等。    |
+|   靈活性   |                 ==較低，嚴格遵循結構化模式==                 |             較高，可以輕鬆調整結構或添加新的屬性             |
+|  查詢語言  |          ==使用結構化查詢語言（SQL）進行數據查詢==           |        根據不同的資料庫，可能使用各種不同的查詢語言。        |
+|   擴展性   | ==垂直擴展，即通過增加單個伺服器的性能（例如增加更多的 CPU 或 RAM）來擴展== |           水平擴展，即通過增加更多的伺服器來擴展。           |
+| 常見資料庫 |                    ==MySQL、oracle、db2==                    |                   mongodb、redis、memcache                   |
+
+*==DB vs DBMS vs SQL==*
+
+|                |                             概念                             |               簡稱                |
+| :------------: | :----------------------------------------------------------: | :-------------------------------: |
+|     資料庫     |            儲存資料的倉庫，資料是有組織的進行儲存            |          DataBase（DB）           |
+| 資料庫管理系統 |                  操縱和管理資料庫的大型軟體                  | DataBase Management System (DBMS) |
+|      SQL       | 操作關係型資料庫的程式語言，定義了一套操作關係型資料庫統一標準 |  Structured Query Language (SQL)  |
+
+![ClShot 2025-05-26 at 13.48.04@2x](MySQL_basic.assets/ClShot 2025-05-26 at 13.48.04@2x.png)
 
 ## 什麼是MySQL?
 
@@ -286,14 +297,18 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 >
 > varchar比char多一個byte是因為在資料最前面還會多存儲一個寬度的資料
 
-------
-
 以下分別為char(5)、varchar(5)做出測試，個別都存入’小明(空格)’→3個字符
 
 - char(5)下存的資料:’小明(空格)(空格)(空格)’→5個字符
 - varchar(5)下存的資料:’小明(空格)’→3個字符
 
-![char(5)下拿取的資料的長度會忽略掉後面的空格](mysql_basic.assets/3.png) ![varchar(5)下拿取的資料的長度](mysql_basic.assets/4.png)
+---
+
+> ![char(5)下拿取的資料的長度會忽略掉後面的空格](MySQL_basic.assets/3-8239895.png)
+
+> ![varchar(5)下拿取的資料的長度](mysql_basic.assets/4.png)
+
+ 
 
 
 
@@ -321,10 +336,16 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 ## 資料庫語言種類
 
+全稱 Structured  Query Language，結構化查詢語言。操作關係型資料庫的程式語言，定義了一套操作關係型資料庫統一標準
+
 - DDL 資料庫定義語言:創建、定義資料庫、表 CREATE、DROP、ALTER
 - DML 資料庫操縱語言:插入數據INSERT、刪出數據DELETE、更新數據UPDATE、查詢數據SELECT
 - DCL 資料庫控制語言:控制用戶權限 GRANT、REVOKE
 - `help 指令` 查詢語法
+
+> [!NOTE]
+>
+> 隨著資料庫應用的發展，有些專家認為應該將 `SELECT` 語句獨立出來 ->  DQL (Data Query Language) - 資料查詢語言
 
 ## 系統資料庫
 
@@ -345,6 +366,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 > **增**
 >
+> - `create database [ if not exists ] 資料庫名 [ default charset 字元集 ] [ collate 排序規則 ] ;`
 > - `create database db1 charset utf8;`
 > - `create database if not exists db1;` 判斷資料庫是否存在，不存在才創建
 >
@@ -357,10 +379,21 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 > > - 具有唯一性
 > > - 不能使用SQL的關鍵字
 > > - 最長128個字
+>
+> > [!CAUTION]
+> >
+> > 在同一個資料庫伺服器中，不能建立兩個名稱相同的資料庫，否則將會報錯。
+> >
+> > 可以通過`if not exists`參數來解決這個問題
+> >
+> > * 資料庫不存在：建立該資料庫
+> > * 資料庫存在：不建立該資料庫
+> >
+> > ![ClShot 2025-05-26 at 13.59.17@2x](MySQL_basic.assets/ClShot 2025-05-26 at 13.59.17@2x.png)
 
 > **查**
 >
-> - 列出所有資料庫`show databases;`
+> - `show databases;`列出所有資料庫
 >
 > - `show create database db1;` 查看指定資料庫
 >
@@ -378,7 +411,10 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 > **刪**
 >
-> * 刪除資料庫`drop database db1;`
+> * `drop database [ if exists ] 資料庫名 ;`刪除資料庫
+> * `drop database db1;`
+>
+> ![ClShot 2025-05-26 at 14.02.59@2x](MySQL_basic.assets/ClShot 2025-05-26 at 14.02.59@2x.png)
 
 ## 資料表操作(table)
 
@@ -393,6 +429,18 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 *^tab^*
 
 > **增**
+>
+> *==建立表結構==*
+>
+> ```sql
+> CREATE TABLE  表名(
+> 	欄位1  欄位1類型 [ COMMENT  欄位1註釋 ], 
+>     欄位2  欄位2類型 [COMMENT  欄位2註釋 ], 
+>     欄位3  欄位3類型 [COMMENT  欄位3註釋 ],
+> 	......
+> 	欄位n  欄位n類型 [COMMENT  欄位n註釋 ] 
+> ) [ COMMENT  表註釋 ] ;
+> ```
 >
 > *==增加資料表==*
 >
@@ -445,6 +493,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 > **刪**
 >
+> * `DROP  TABLE [ IF  EXISTS ]  表名;` 刪除資料表
 > * `drop table t1;`
 > * `alter table 資料表名稱 drop 欄位名稱;`
 
@@ -1659,7 +1708,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                                                                                         
+>                                                                                                                                                                 
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
