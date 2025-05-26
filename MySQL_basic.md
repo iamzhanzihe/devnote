@@ -635,7 +635,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
     );
     ```
 
-## primary key
+## primary key主鍵
 
 主鍵是不為空且唯一的資料欄位
 
@@ -667,7 +667,7 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
     );
     ```
 
-## foreign key
+## foreign key外鍵
 
 當所有資訊同時存在一張表時，會有重複儲存的問題，想要進行修改需要整個資料表進行更動，表中財務部門重複儲存，若是財務部門有進行更動，需要多次修改有關於財務部門的所有欄位
 
@@ -678,6 +678,8 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 | 1    | Alex  | 財務部門   | 控制預算    |
 | 2    | Wendy | 開發部門   | 研發新技術  |
 | 3    | James | 財務部門   | 控制預算    |
+
+
 
 *^tab^*
 
@@ -791,7 +793,142 @@ create table t1(
 > 若是有設置auto_increment，直接使用delete指令清空表中的記錄，auto_increment的當前數值並不會被刪除 
 > 需使用`truncate 資料表名稱` 才會重設計數器
 
+# 函數
 
+**函數**是指一個可以直接被另一個SQL語句呼叫的方法或程式碼。 這一個方法或程式碼在MySQL中已經先被定義，我們要做的就是在合適的場景呼叫對應的函數完成對應的業務需求即可。
+
+---
+
+> **常見應用1**
+>
+> 在公司的人力系統中，經常會提供這樣一個功能，每一個員工登錄上來之後都能夠看到當前員工入職的天數。 而在資料庫中，儲存的都是入職日期，如 2000-11-12，那如何快速計算出天數呢？
+>
+> ![ClShot 2025-05-26 at 15.35.14@2x](MySQL_basic.assets/ClShot 2025-05-26 at 15.35.14@2x.png#60%)
+
+> **常見應用2**
+>
+> 在做報表這類的業務需求中,我們要展示出學員的分數等級分佈。而在資料庫中，儲存的是學生的分數值，如98, 75, 60, ……，如何快速判定分數的等級呢？
+>
+> ![ClShot 2025-05-26 at 15.35.38@2x](MySQL_basic.assets/ClShot 2025-05-26 at 15.35.38@2x.png#60%)
+
+##  字串函數
+
+|           函數           |                         功能                          |
+| :----------------------: | :---------------------------------------------------: |
+|   CONCAT(S1,S2,...Sn)    |       字串拼接，將S1，S2，... Sn拼接成一個字串        |
+|        LOWER(str)        |                 將字串str全部轉為小寫                 |
+|        UPPER(str)        |                 將字串str全部轉為大寫                 |
+|     LPAD(str,n,pad)      | 左填充，用字串pad對str的左邊進行填充，達到n個字串長度 |
+|     RPAD(str,n,pad)      | 右填充，用字串pad對str的右邊進行填充，達到n個字串長度 |
+|        TRIM(str)         |           去掉字串**頭部**和**尾部**的空格            |
+| SUBSTRING(str,start,len) |      返回從字串str從start位置起的len個長度的字串      |
+
+*^tab^*
+
+*==CONCAT==*
+
+```sql
+# concat : 字串拼接
+
+select concat('Hello' , ' MySQL');
+```
+
+*==LOWER==*
+
+```sql
+# lower : 全部轉小寫
+
+select lower('Hello');
+```
+
+*==UPPER==*
+
+```sql
+# upper : 全部轉大寫
+
+select upper('Hello');
+```
+
+*==LPAD==*
+
+```sql
+# lpad : 左填充
+
+select lpad('01', 5, '-');
+```
+
+*==RPAD==*
+
+```sql
+# rpad : 右填充
+
+select rpad('01', 5, '-');
+```
+
+*==TRIM==*
+
+```sql
+# trim : 去除空格
+
+select trim(' Hello  MySQL ');
+```
+
+*==SUBSTRING==*
+
+```sql
+#  substring : 擷取子字串
+
+select substring('Hello MySQL',1,5);
+```
+
+> **練習**
+>
+> > ###### 練習資料
+> >
+> > ```sql
+> > -- 建立員工資料表
+> > CREATE TABLE employees (
+> >     id INT PRIMARY KEY AUTO_INCREMENT,
+> >     workno CHAR(10) UNIQUE NOT NULL,
+> >     name VARCHAR(50) NOT NULL,
+> >     gender ENUM('男', '女') NOT NULL,
+> >     age INT NOT NULL,
+> >     idcard VARCHAR(18),
+> >     workaddress VARCHAR(100) NOT NULL,
+> >     entrydate DATE NOT NULL
+> > );
+> > 
+> > -- 插入員工資料
+> > INSERT INTO employees (workno, name, gender, age, idcard, workaddress, entrydate) VALUES
+> > (1001, '王小明', '男', 28, 'A123456789', '台北市', '2020-03-15'),
+> > (1002, '李美玲', '女', 32, 'B234567890', '新北市', '2019-07-22'),
+> > (1003, '陳志強', '男', 29, 'C345678901', '桃園市', '2021-01-10'),
+> > (1004, '林雅婷', '女', 26, 'D456789012', '台中市', '2022-05-08'),
+> > (1005, '張家豪', '男', 35, 'E567890123', '台南市', '2018-11-30'),
+> > (1006, '黃淑芬', '女', 31, 'F678901234', '高雄市', '2020-09-14'),
+> > (1007, '劉建國', '男', 42, 'G789012345', '基隆市', '2017-04-25'),
+> > (1008, '吳佩君', '女', 27, 'H890123456', '新竹市', '2021-08-17'),
+> > (1009, '蔡明宏', '男', 33, 'I901234567', '彰化縣', '2019-12-03'),
+> > (1010, '鄭雅萍', '女', 30, 'J012345678', '雲林縣', '2020-06-28'),
+> > (1011, '楊志偉', '男', 38, 'K123456780', '嘉義市', '2018-02-14'),
+> > (1012, '許美惠', '女', 25, 'L234567891', '屏東縣', '2022-10-05'),
+> > (1013, '謝俊傑', '男', 34, 'M345678902', '宜蘭縣', '2019-03-20'),
+> > (1014, '周麗華', '女', 29, 'N456789013', '花蓮縣', '2021-07-12'),
+> > (1015, '洪志明', '男', 36, 'O567890124', '台東縣', '2018-09-08');
+> > 
+> > ```
+>
+> 由於業務需求變更，企業員工的編號workno統一為5位數，目前不足5位數的全部在前面補0。比如：1號員工的工號應該為00001。
+>
+> ![ClShot 2025-05-26 at 16.38.28@2x](MySQL_basic.assets/ClShot 2025-05-26 at 16.38.28@2x-8249505.png)
+>
+> *==使用lapd左填充==*
+>
+> ```sql
+> update emp set workno = lpad(workno, 5, '0');
+> ```
+>
+> ![ClShot 2025-05-26 at 16.50.33@2x](MySQL_basic.assets/ClShot 2025-05-26 at 16.50.33@2x-8249473.png)
 
 
 
@@ -1084,7 +1221,7 @@ INSERT INTO AuthorBook (author_id, book_id) VALUES
 >
 > ![薪水等級表](MySQL_basic.assets/ClShot 2025-04-13 at 18.27.06@2x.png)
 
-## 關鍵字的執行順序
+## 關鍵字的執行順序(非編寫順序)
 
 ![select查詢順序](MySQL_basic.assets/27.png)
 
@@ -1632,6 +1769,8 @@ SELECT * from employee
 >
 > ![ClShot 2025-04-13 at 18.27.06@2x](MySQL_basic.assets/ClShot 2025-04-13 at 18.27.06@2x.png)
 
+
+
 *^tab^*
 
 > **1**
@@ -1708,7 +1847,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                                                                                                 
+>                                                                                                                                                                                             
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
@@ -1809,6 +1948,8 @@ SELECT * from employee
 ## 限制root用戶登入
 
 在 MySQL 中限制 root 用戶登入的 IP 是一項重要的安全措施，這些設定都放在mysql內建資料庫的user表中
+
+![ClShot 2025-05-26 at 14.36.40@2x](MySQL_basic.assets/ClShot 2025-05-26 at 14.36.40@2x.png#80%)
 
 * **防止遠程攻擊**：限制 root 只能從特定 IP（通常是本地 127.0.0.1）登入，可以大幅降低遠程攻擊的風險。如果允許 root 從任何 IP 登入（使用%`萬用字元），則增加了被惡意攻擊的可能性。
 * **減少暴力破解風險**：限制登入 IP 可以顯著減少暴力破解密碼的嘗試，因為攻擊者必須先獲得允許連接的 IP 才能開始嘗試破解密碼。
@@ -1935,4 +2076,36 @@ SELECT * from employee
 > [!WARNING]
 >
 > 必須要刷新權限才會生效`flush privileges;`
+
+# 事務
+
+## 事務
+
+* 什麼是事務?
+    * 資料庫事務通常指對資料庫進行讀或寫的一個操作過程。
+    * 為資料庫操作提供了一個從失敗中恢復到正常狀態的方法，同時提供了資料庫即使在異常狀態下仍能保持一致性的方法
+    * 當多個應用程式在並行訪問資料庫時，可以在這些應用程式間提供一個隔離方法，防止彼此的操作互相干擾
+* 事務的特性（ACID）
+    * 原子性(Atomicity)：事務必須是原子工作單元，一個事務中的所有語句要就全做，否則一個都不做
+    * 一致性(Consistency)：讓資料保持邏輯上的“合理性”
+    * 隔離性(Isolation)：如果多個事務同時並行執行，彷彿每個事務各自獨立執行一樣
+    * 持久性(Durability)：一個事務執行成功，則對資料來說應該是一個明確的硬碟資料更改（而不僅僅是記憶體中的變化）。
+
+> [!WARNING]
+>
+> 要使用事務的話，表引擎要為innodb引擎
+
+* 事務的開啟：`begin;` `start transaction;`
+* 事務的提交：`commit;`
+* 事務的回滾：`rollback;`
+
+*==創建帳戶表模擬轉帳==*
+
+```sql
+create table account (
+	id tinyint(5) zerofill auto_increment primary key comment 'id編號',
+	name varchar(20) default null comment '客戶姓名',
+	money decimal(10,2) not null comment '帳戶金額',
+)engine=innodb charset=utf8;
+```
 
