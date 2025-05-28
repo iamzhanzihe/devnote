@@ -6,11 +6,13 @@ vlook-doc-lib:
 - [MySQL資料庫★基礎](MySQL_basic.html?target=_self "MySQL資料庫★基礎")
 - [MySQL資料庫★進階](MySQL_advanced.html?target=_self "MySQL資料庫★進階")
 - [MySQL資料庫★營運](MySQL_ops.html?target=_self "MySQL資料庫★營運")
+
 ---
+
+###### ~VLOOK™~ *[<kbd>![](icon/vlook-hollow-dark.svg?fill=text) VLOOK ![](icon/icon-more.svg?fill=text)</kbd>](https://github.com/MadMaxChow/VLOOK)*<br>MySQL學習筆記-基礎篇<br>──<br><u>簡介</u><br>*本篇筆記是使用[<kbd>![](icon/Typora.svg?fill=text) Typora</kbd>](https://typora.io/)及[<kbd>![](icon/markdown.svg?fill=text) Markdown</kbd>](https://markdown.tw/)<br>結合GitHub開源模版撰寫而成並導出成HTML*<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`* *版本日期`2025年5月28日`*
 
 [TOC]
 
-###### MySQL學習筆記<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`*_~Og~_*版本日期`2025年5月26日`*_~Gn~_
 
 # 什麼是資料庫
 
@@ -1847,7 +1849,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                                                                                                                             
+>                                                                                                                                                                                                                         
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
@@ -2109,3 +2111,4 @@ create table account (
 )engine=innodb charset=utf8;
 ```
 
+# The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>
