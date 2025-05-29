@@ -932,9 +932,28 @@ select substring('Hello MySQL',1,5);
 >
 > ![ClShot 2025-05-26 at 16.50.33@2x](MySQL_basic.assets/ClShot 2025-05-26 at 16.50.33@2x-8249473.png)
 
+## 數值函數
+
+|    函數    |                功能                |
+| :--------: | :--------------------------------: |
+|  CEIL(x)   |              向上取整              |
+|  FLOOR(x)  |              向下取整              |
+|  MOD(x,y)  |      返回$\frac{x}{y}$的餘數       |
+|   RAND()   |         返回0~1內的隨機數          |
+| ROUND(x,y) | 求參數x的四捨五入的值，保留y位小數 |
+
+*^tab^*
+
+*==ceil==*
+
+```sql
+```
 
 
-# 表之間的關係
+
+
+
+#  表之間的關係
 
 ## 一對一
 
@@ -1849,7 +1868,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                                                                                                                                                         
+>                                                                                                                                                                                                                             
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
