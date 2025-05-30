@@ -9,7 +9,7 @@ vlook-doc-lib:
 
 ---
 
-###### ~VLOOK™~ *[<kbd>![](icon/vlook-hollow-dark.svg?fill=text) VLOOK ![](icon/icon-more.svg?fill=text)</kbd>](https://github.com/MadMaxChow/VLOOK)*<br>MySQL學習筆記-基礎篇<br>──<br><u>簡介</u><br>*本篇筆記是使用[<kbd>![](icon/Typora.svg?fill=text) Typora</kbd>](https://typora.io/)及[<kbd>![](icon/markdown.svg?fill=text) Markdown</kbd>](https://markdown.tw/)<br>結合GitHub開源模版撰寫而成並導出成HTML*<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`* *版本日期`2025年5月28日`*
+###### ~VLOOK™~ *[<kbd>![](icon/vlook-hollow-dark.svg?fill=text) VLOOK ![](icon/icon-more.svg?fill=text)</kbd>](https://github.com/MadMaxChow/VLOOK)*<br>MySQL學習筆記-基礎篇<br>──<br><u>簡介</u><br>*本篇筆記是使用[<kbd>![](icon/Typora.svg?fill=text) Typora</kbd>](https://typora.io/)及[<kbd>![](icon/markdown.svg?fill=text) Markdown</kbd>](https://markdown.tw/)<br>結合GitHub開源模版撰寫而成並導出成HTML*<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`* *版本日期`2025年5月30日`*
 
 [TOC]
 
@@ -565,6 +565,19 @@ mysql是一個開放原始碼的關聯式資料庫管理系統，現在是oracle
 
 # 約束條件
 
+概念：約束是作用於表中資料欄位上的規則，用於限制儲存在表中的資料，保證資料庫中資料的正確、有效性和完整性
+
+|   約束   |                           描述                           |   關鍵字    |
+| :------: | :------------------------------------------------------: | :---------: |
+| 非空約束 |                限制該欄位的資料不能為null                |  NOT NULL   |
+| 唯一約束 |          保證該欄位的所有資料都是唯一、不重複的          |   UNIQUE    |
+| 主鍵約束 |         主鍵是一行資料的唯一標識，要求非空且唯一         | PRIMARY KEY |
+| 默認約束 |      保存資料時，如果未指定該欄位的值，則採用預設值      |   DEFAULT   |
+| 檢查結果 |                 保證欄位值滿足某一個條件                 |    CHECK    |
+| 外鍵約束 | 用來讓兩張表的資料之間建立連接，保證資料的一致性和完整性 | FOREIGN KEY |
+
+
+
 ## not null 與 default
 
 設置欄位是否可以為空值，若是not null未填入值則使用default值
@@ -947,11 +960,212 @@ select substring('Hello MySQL',1,5);
 *==ceil==*
 
 ```sql
+select ceil(1.1);
 ```
 
+*==floor==*
 
+```sql
+select floor(1.9);
+```
 
+*==mod==*
 
+```sql
+select mod(7,4);
+```
+
+*==rand==*
+
+```sql
+select rand();
+```
+
+*==round==*
+
+```sql
+select round(2.344,2);
+```
+
+> **練習**
+>
+> 通過資料庫的函數，生成一個六位數的隨機驗證碼。
+>
+> 思路：***獲取隨機數可以通過`rand()`函數，但是獲取出來的隨機數是在0-1之間的，所以可以在其基礎上乘以1000000，然後捨棄小數部分，如果長度不足6位，補0***
+>
+> ```sql
+> select lpad(round(rand()*1000000 , 0), 6, '0');
+> ```
+
+## 日期函數
+
+|                函數                |                       功能                        |
+| :--------------------------------: | :-----------------------------------------------: |
+|             CURDATE()              |                   返回當前日期                    |
+|             CURTIME()              |                   返回當前時間                    |
+|               NOW()                |                返回當前日期和時間                 |
+|             YEAR(date)             |                獲取指定date的年份                 |
+|            MONTH(date)             |                獲取指定date的月份                 |
+|             DAY(date)              |                獲取指定date的日期                 |
+| DATE_ADD(date, INTERVAL expr type) | 返回一個日期/時間值加上一個時間間隔expr後的時間值 |
+|       DATEDIFF(date1,date2)        |   返回起始時間date1 和 結束時間date2之間的天數    |
+
+*^tab^*
+
+*==curdate==*
+
+```sql
+select curdate();
+```
+
+*==curtime==*
+
+```sql
+select curtime();
+```
+
+*==now==*
+
+```sql
+select now();
+```
+
+*==YEAR , MONTH , DAY==*
+
+```sql
+select YEAR(now());
+select MONTH(now());
+select DAY(now());
+```
+
+*==date_add==*
+
+```sql
+select date_add(now(), INTERVAL 70 MONTH);
+select date_add(now(), INTERVAL 70 YEAR);
+```
+
+*==datediff==*
+
+```sql
+select datediff('2021-10-01', '2021-12-01');
+```
+
+> **練習**
+>
+> > ######  練習資料
+> >
+> > ```sql
+> > -- 建立員工資料表
+> > CREATE TABLE employees (
+> >  id INT PRIMARY KEY AUTO_INCREMENT,
+> >  workno CHAR(10) UNIQUE NOT NULL,
+> >  name VARCHAR(50) NOT NULL,
+> >  gender ENUM('男', '女') NOT NULL,
+> >  age INT NOT NULL,
+> >  idcard VARCHAR(18),
+> >  workaddress VARCHAR(100) NOT NULL,
+> >  entrydate DATE NOT NULL
+> > );
+> > 
+> > -- 插入員工資料
+> > INSERT INTO employees (workno, name, gender, age, idcard, workaddress, entrydate) VALUES
+> > (1001, '王小明', '男', 28, 'A123456789', '台北市', '2020-03-15'),
+> > (1002, '李美玲', '女', 32, 'B234567890', '新北市', '2019-07-22'),
+> > (1003, '陳志強', '男', 29, 'C345678901', '桃園市', '2021-01-10'),
+> > (1004, '林雅婷', '女', 26, 'D456789012', '台中市', '2022-05-08'),
+> > (1005, '張家豪', '男', 35, 'E567890123', '台南市', '2018-11-30'),
+> > (1006, '黃淑芬', '女', 31, 'F678901234', '高雄市', '2020-09-14'),
+> > (1007, '劉建國', '男', 42, 'G789012345', '基隆市', '2017-04-25'),
+> > (1008, '吳佩君', '女', 27, 'H890123456', '新竹市', '2021-08-17'),
+> > (1009, '蔡明宏', '男', 33, 'I901234567', '彰化縣', '2019-12-03'),
+> > (1010, '鄭雅萍', '女', 30, 'J012345678', '雲林縣', '2020-06-28'),
+> > (1011, '楊志偉', '男', 38, 'K123456780', '嘉義市', '2018-02-14'),
+> > (1012, '許美惠', '女', 25, 'L234567891', '屏東縣', '2022-10-05'),
+> > (1013, '謝俊傑', '男', 34, 'M345678902', '宜蘭縣', '2019-03-20'),
+> > (1014, '周麗華', '女', 29, 'N456789013', '花蓮縣', '2021-07-12'),
+> > (1015, '洪志明', '男', 36, 'O567890124', '台東縣', '2018-09-08');
+> > 
+> > ```
+> >
+> > 
+>
+> 查詢所有員工的入職天數，並根據入職天數倒序排序
+>
+> 思路：***入職天數，就是通過當前日期 - 入職日期，所以需要使用datediff函數來完成***
+>
+> ```sql
+> select name, datediff(curdate(), entrydate) as 'entrydays' from emp order by entrydays desc;
+> ```
+
+## 流程函數
+
+|                             函數                             |                           功能                            |
+| :----------------------------------------------------------: | :-------------------------------------------------------: |
+|                      IF(value , t , f)                       |            如果value為true，則返回t，否則返回f            |
+|                   IFNULL(value1 , value2)                    |       如果value1不為空，返回value1，否則返回value2        |
+|   CASE WHEN [ val1 ] THEN [res1] ... ELSE [ default ] END    |    如果val1為true，返回res1，... 否則返回default預設值    |
+| CASE [ expr ] WHEN [ val1 ] THEN [res1] ... ELSE [ default ] END | 如果expr的值等於val1，返回res1，... 否則返回default預設值 |
+
+*^tab^*
+
+*==if==*
+
+```sql
+select if(true, 'Ok', 'Error');
+select if(false, 'Ok', 'Error');
+```
+
+*==ifnull==*
+
+```sql
+select ifnull('Ok','Default');
+select ifnull('','Default');
+select ifnull(null,'Default');
+```
+
+*==case when then else end==*
+
+```sql
+select
+	name,
+	( case workaddress when '台北市' then '首都' when '新北市' then '首都' else '非直峽縣市' end ) as '工作地址'
+from emp;
+```
+
+> **練習**
+>
+> 統計班級各個學生的成績，展示規則如下：
+>
+> * ≥85，展示**優秀**
+> * ≥60，展示**及格**
+> * 否則，展示**不及格**
+>
+> > ###### 練習資料
+> >
+> > ```sql
+> > create table score(
+> >     id int comment 'ID',
+> > 	name varchar(20) comment '姓名', math int comment '數學',
+> > 	english int comment '英語', chinese int comment '語文'
+> > ) comment '學員成績表';
+> > 
+> > insert into score(id, name, math, english, chinese) VALUES (1, 'Tom', 67, 88, 95 
+> > ), (2, 'Rose' , 23, 66, 90),(3, 'Jack', 56, 98, 76);
+> > 
+> > ```
+>
+> ```sql
+> select
+> 	id,
+> 	name,
+> 	(case when math >= 85 then '優秀' when math >=60 then '及格' else '不及格' end ) '數學',
+> 	(case when english >= 85 then '優秀' when english >=60 then '及格' else '不及格' end ) '英語',
+> 	(case when chinese >= 85 then '優秀' when chinese >=60 then '及格' else '不及格' end ) '語文'
+> from score;
+> ```
+>
+> 
 
 #  表之間的關係
 
@@ -1868,7 +2082,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                                                                                                                                                             
+>                                                                                                                                                                                                                                         
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;
