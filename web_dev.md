@@ -6,7 +6,7 @@ vlook-doc-lib:
 
 ---
 
-######  ~VLOOK™~ *[<kbd>![](icon/vlook-hollow-dark.svg?fill=text) VLOOK ![](icon/icon-more.svg?fill=text)</kbd>](https://github.com/MadMaxChow/VLOOK)*<br>網頁開發學習筆記<br>──<br><u>簡介</u><br>*本篇筆記是使用[<kbd>![](icon/Typora.svg?fill=Wt) Typora</kbd>](https://typora.io/)及[<kbd>![](icon/markdown.svg?fill=Bk) Markdown</kbd>](https://markdown.tw/)<br>結合GitHub開源模版撰寫而成並導出成HTML*<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`* *版本日期`2025年5月31日`*
+######  ~VLOOK™~ *[<kbd>![](icon/vlook-hollow-dark.svg) VLOOK ![](icon/icon-more.svg)</kbd>](https://github.com/MadMaxChow/VLOOK)*<br>網頁開發學習筆記<br>──<br><u>簡介</u><br>*本篇筆記是使用[<kbd>![](icon/Typora.svg) Typora</kbd>](https://typora.io/)及[<kbd>![](icon/markdown.svg) Markdown</kbd>](https://markdown.tw/)<br>結合GitHub開源模版撰寫而成並導出成HTML*<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`* *版本日期`2025年5月31日`*
 
 [TOC]
 
@@ -31,7 +31,7 @@ vlook-doc-lib:
 
 **Web標準**也稱為**網頁標準**，由一系列的標準組成，大部分由W3C（ World Wide Web Consortium，全球資訊網協會）負責制定。由三個組成部分：
 
-*[<kbd>![](icon/logo.svg?fill=text) W3C![](icon/icon-more.svg?fill=text)</kbd>](https://www.w3.org/)*
+*[<kbd>![](icon/logo.svg) W3C![](icon/icon-more.svg?fill=text)</kbd>](https://www.w3.org/)*
 
 * **HTML**：負責網頁的結構（頁面元素和內容）
 * **CSS**：負責網頁的表現（頁面元素的外觀、位置等頁面樣式，如：顏色、大小等）
