@@ -137,7 +137,9 @@ $$
     >
     > 解：這裡方向$\vec{l}$即為$\vec{PQ} = \{1,-1\}$，所以X軸到方向$\vec{l}$夾角$\varphi = -\frac{\pi}{4}.$
     >
-    > $\therefore \left.\frac{\partial z}{\partial x}\right|_{(1,0)} = \left.e^{2y}\right|_{(1,0)} = 1; \quad \left.\frac{\partial z}{\partial y}\right|_{(1,0)} = \left.2xe^{2y}\right|_{(1,0)} = 2,$
+    > $\therefore \left.\frac{\partial z}{\partial x}\right|_{(1,0)} = \left.e^{2y}\right|_{(1,0)} = 1; $
+    >
+    > $\quad \left.\frac{\partial z}{\partial y}\right|_{(1,0)} = \left.2xe^{2y}\right|_{(1,0)} = 2,$
     >
     > $\frac{\partial z}{\partial l} = \cos\left(-\frac{\pi}{4}\right) + 2\sin\left(-\frac{\pi}{4}\right) = -\frac{\sqrt{2}}{2}.$
 
@@ -167,11 +169,9 @@ $$
 >
 > 例：設 $u = xyz + z^2 + 5$，求 $\operatorname{grad} u$，並求在點 $M(0,1,-1)$ 處方向導數的最大(小)值。
 >
-> 解：$\begin{align}
-> \because \quad \frac{\partial u}{\partial x} &= yz, \quad \frac{\partial u}{\partial y} = xz, \quad \frac{\partial u}{\partial z} = xy + 2z, \\
-> \therefore \quad \left.\operatorname{grad} u\right|_{(0,1,-1)} &= \left.(yz, xz, xy+2z)\right|_{(0,1,-1)} \\
-> &= (-1, 0, -2)
-> \end{align}$
+> 解：
+>
+> ![ClShot 2025-05-31 at 21.00.58@2x](AI必備數學.assets/ClShot 2025-05-31 at 21.00.58@2x-8696514.png)
 >
 > 梯度的模，是指梯度向量的長度。在數學上，它是梯度向量各分量平方和的平方根
 >
@@ -200,10 +200,13 @@ $$
     
 * 定積分的性質
 
-    * $\int_{a}^{b}[f(x)\pm g(x)]dx=\int_{a}^{b}f(x)dx \pm \int_{a}^{b}g(x)dx.$
+    * $\int_{a}^{b}[f(x)\pm g(x)]dx=$
+        * $\int_{a}^{b}f(x)dx \pm \int_{a}^{b}g(x)dx$
     * $\int_{a}^{b}kf(x)dx = k\int_{a}^{b}f(x)dx \quad (k \text{為常數}).$
-    * $\text{假設}a < c < b \quad \int_{a}^{b}f(x)dx=\int_{a}^{c}f(x)dx+\int_{c}^{b}f(x)dx. $
-    * $\text{如果區間}[a,b]\text{上，} f(x) \geq 0, \text{則}\int_{a}^{b}f(x)dx \geq 0. \quad (a < b)$
+    * $\text{假設}a < c < b$
+        * $ \quad \int_{a}^{b}f(x)dx=\int_{a}^{c}f(x)dx+\int_{c}^{b}f(x)dx$
+    * $\text{如果區間}[a,b]\text{上} $
+        * $ \quad \int_{a}^{b}f(x)dx=\int_{a}^{c}f(x)dx+\int_{c}^{b}f(x)dx. $
     
 * 積分中值定理：如果函數$f(x)$在閉區間$[a,b]$上連續，則存在一點$ξ∈[a,b]$，使得：$\int_{a}^{b} f(x)dx = f(\xi)(b - a)$，換句話說，連續函數在一個區間上的積分等於該函數在區間內某一點的函數值乘以區間長度
 
@@ -289,8 +292,9 @@ $$
     + \frac{f^{(n+1)}(\theta x)}{(n+1)!}x^{n+1} \quad (0 < \theta < 1)
     $$
 
-    * 近似可得$f(x) \approx f(0) + f'(0)x + \frac{f''(0)}{2!}x^2 + \dots + \frac{f^{(n)}(0)}{n!}x^n$
-
+    * 近似可得
+        $f(x) \approx f(0) + f'(0)x  + \dots + \frac{f^{(n)}(0)}{n!}x^n$
+    
 * 多項式逼近
 
     * **階數越高，逼近效果越好：** 觀察四個圖可以發現，隨著多項式階數的增加，藍色的多項式曲線在越來越貼合綠色曲線
@@ -722,6 +726,118 @@ $$
 >
 >1. 乙地為雨天時甲地也為雨天的機率是$P(A|B) = \frac{P(A \cap B)}{P(B)} = \frac{12\%}{18\%} = \frac{2}{3}$
 >2. 甲地為雨天時乙地也為雨天的機率是$P(B|A) = \frac{P(A \cap B)}{P(A)} = \frac{12\%}{20\%} = \frac{3}{5}$
+
+## 獨立性
+
+**獨立性**是指兩個或多個事件之間沒有相互影響的關係。事件A的發生不會影響事件B發生的機率，反之亦然，則稱A和B是獨立的
+$$
+P(A \cap B) = P(A) \times P(B)
+$$
+
+* P(A∣B)=P(A)
+* P(B∣A)=P(B)
+
+> **多個事件獨立性**
+>
+> * 兩兩獨立：三個事件A、B、C中，任意兩個事件都是獨立的
+>     * $P(A \cap B) = P(A) \times P(B)$
+>     * $P(A \cap C) = P(A) \times P(C)$
+>     * $P(B \cap C) = P(B) \times P(C)$
+> * 相互獨立：不僅任意兩個事件獨立，三個事件同時發生的機率也等於各自機率的乘積
+>     * $P(A \cap B \cap C) = P(A) \times P(B) \times P(C)$
+>
+> > [!CAUTION]
+> >
+> > - **兩兩獨立** ≠ **相互獨立**
+> > - 相互獨立一定包含兩兩獨立
+> > - 兩兩獨立不一定是相互獨立
+
+> **舉例**
+>
+> 甲、乙兩人同時向一目標射擊，甲擊中率為0.8，乙擊中率為0.7，求目標被擊中的機率
+>
+> * 設A={甲擊中}
+> * 設B={乙擊中}
+> * 設C={目標被擊中}=$C = A \cup B$
+>
+> 因為甲乙同時射擊，其結果不影響，所以A、B獨立
+>
+> * $P(C) = P(A \cup B) = P(A) + P(B) - P(A \cap B) $
+> * $=P(A) + P(B) - P(A) \times P(B)= 0.8 + 0.7 - 0.8 \times 0.7 = 0.94$
+
+## 二維隨機變量
+
+
+
+二維隨機變量是指在同一個隨機試驗中，同時定義的兩個隨機變量的組合
+
+- **氣象觀測：** X = 溫度，Y = 濕度
+- **學生成績：** X = 數學成績，Y = 英文成績
+- **股票投資：** X = 股票A報酬率，Y = 股票B報酬率
+- **製造品質：** X = 產品長度，Y = 產品重量
+
+$$
+F(x, y) = P(X \leq x, Y \leq y) = P(\{X \leq x\} \cap \{Y \leq y\})
+$$
+
+F(x,y)表示隨機點（X,Y）在以（x,y）為頂點且位於該點左下方無窮矩形內的機率
+
+![ClShot 2025-05-31 at 21.52.23@2x](AI必備數學.assets/ClShot 2025-05-31 at 21.52.23@2x.png)
+
+邊緣分布：是指在多維隨機變量中，單獨考慮其中一個或幾個變量的分布，而不考慮其他變量的影響。對於二維隨機變量(X, Y)
+
+* X的邊緣分布：只關注 X 的分布，不管 Y 的值
+* Y的邊緣分布：只關注 Y 的分布，不管 X 的值
+
+> **離散型二維隨機變量**
+>
+> 可數的值（1,2,3...），求和 ∑
+> $$
+> P(X = x_i, Y = y_j) = p_{ij}
+> $$
+>
+> $$
+> \begin{align}
+> \quad & p_{ij} \geq 0 \\
+> \quad & \sum_{i=1}^{\infty} \sum_{j=1}^{\infty} p_{ij} = 1
+> \end{align}
+> $$
+>
+> ###### 邊緣分布
+>
+> * X的邊緣分布：$P(X = x_i) = \sum_{j} P(X = x_i, Y = y_j) $
+> * Y的邊緣分布：$P(Y = y_j) = \sum_{i} P(X = x_i, Y = y_j)$
+>
+> ###### 舉例
+>
+> 設隨機變數X在1、2、3、4四個整數中等可能地取 一個值，另一個隨機變數Y只能在1~X中取一整數值，試求(X,Y)的聯合機率分佈
+>
+> ![ClShot 2025-05-31 at 22.05.28@2x](AI必備數學.assets/ClShot 2025-05-31 at 22.05.28@2x.png#40%)
+
+> **連續形隨機變量**
+>
+> 無限多個值（任何實數），積分 ∫
+> $$
+> F(x, y) = \int_{-\infty}^{x} \int_{-\infty}^{y} f(u, v) \, du \, dv
+> $$
+>
+> ###### 邊緣分布
+>
+> * X的邊緣分布：$f_X(x) = \int_{-\infty}^{\infty} f(x,y) \, dy $
+> * Y的邊緣分布：$f_Y(y) = \int_{-\infty}^{\infty} f(x,y) \, dx$
+>
+> ###### 舉例
+>
+> 測量身高，只能算**區間機率**
+>
+> * X = 身高 = [150cm, 200cm] 之間任何值 
+> * Y = 體重 = [40kg, 120kg] 之間任何值
+>
+> $$
+> P(170 \leq X \leq 175, 60 \leq Y \leq 70) =\\ \int_{170}^{175} \int_{60}^{70} f(x,y) \, dx \, dy
+> $$
+>
+> 總機率：$\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x,y) \, dx \, dy = 1$
 
 # 貝式分析
 
