@@ -31,16 +31,77 @@ vlook-doc-lib:
 
 **Web標準**也稱為**網頁標準**，由一系列的標準組成，大部分由W3C（ World Wide Web Consortium，全球資訊網協會）負責制定。由三個組成部分：
 
-*[<kbd>![](icon/logo.svg) W3C![](icon/icon-more.svg?fill=text)</kbd>](https://www.w3.org/)*
+*[<kbd>![](icon/logo.svg) W3C  ![](icon/icon-more.svg?fill=text)</kbd>](https://www.w3.org/)*
 
-* **HTML**：負責網頁的結構（頁面元素和內容）
-* **CSS**：負責網頁的表現（頁面元素的外觀、位置等頁面樣式，如：顏色、大小等）
-* **JavaScript**：負責網頁的行為（互動效果）
+* **HTML**：負責網頁的==結構==（頁面元素和內容）
+* **CSS**：負責網頁的==表現==（頁面元素的外觀、位置等頁面樣式，如：顏色、大小等）
+* **JavaScript**：負責網頁的==行為==（互動效果）
 
-# HTML快速入門
+# 什麼是HTML
 
-https://developer.mozilla.org/zh-TW/docs/Web/HTML
+HTML: **H**yper**T**ext **M**arkup **L**anguage，超文字標記語言
 
-這是第一章
+*[<kbd>![](icon/logo.svg) mdn  web docs  ![](icon/icon-more.svg?fill=text)</kbd>](https://developer.mozilla.org/zh-TW/docs/Web/HTML)*
+
+* 超文字：超越了文字的限制，比普通文字更強大，除了文字資訊，還可以定義圖片、音訊、視訊等內容
+* 標記語言：由標籤` <標籤名> `構成的語言
+    - HTML標籤都是預定義好的 。例如：使用 `<h1>` 標籤展示標題，使用`<a>`展示超連結，使用`<img>`展示圖片，`<video>`展示視訊
+    - HTML程式碼直接在瀏覽器中運行，HTML標籤由瀏覽器解析 
+
+![ClShot 2025-06-01 at 15.29.40@2x](web_dev.assets/ClShot 2025-06-01 at 15.29.40@2x.png)
+
+## 如何建立HTML
+
+*^tab^*
+
+> **建立文件**
+>
+> 滑鼠右鍵 -> 新增文字文件 -> 更改檔案類型為.html
+>
+> > [!caution]
+> >
+> > 如果建立完HTML文件後依然是文字文件格式，需要將系統中隱藏已知文件類型取消勾選
+> >
+> > ![ClShot 2025-06-01 at 15.36.54@2x](web_dev.assets/ClShot 2025-06-01 at 15.36.54@2x.png)
+
+> **編寫HTML架構**
+>
+> *==HTML結構==*
+>
+> ```html
+> <html>
+>      <head>
+>           <title>HTML 快速入門</title>
+>      </head>
+>      <body>
+>                 
+>      </body>
+> </html>
+> ```
+>
+> 其中`<html>`是根標籤，`<head>`和`<body>`是子標籤
+>
+> * `<head>` : 定義網頁的頭部，用來存放給瀏覽器看的資訊，如：CSS樣式、網頁的標題
+> * `<body>` : 定義網頁的主體部分，存放給使用者看的資訊，也是網頁的主體內容，如：文字、圖片、視訊、音訊、表格等
+
+> **在`<body>`中編寫HTML的核心內容**
+>
+> *==body核心內容==*
+>
+> ```html
+> <html>
+>      <head>
+>         <title>HTML 快速入門</title>
+>      </head>
+>      <body>
+>         <h1>Hello HTML</h1>
+>         <img src="img/1.png">
+>      </body>
+> </html>
+> ```
+
+> **程式碼下載**
+>
+> *[<kbd>![](icon/logo.svg) 01.  HTML快速入門 ![](icon/icon-download.svg?fill=text)</kbd>](web_dev.assets/code/第二章.zip)*
 
 # The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>
