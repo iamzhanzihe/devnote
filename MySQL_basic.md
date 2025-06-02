@@ -1881,8 +1881,12 @@ select * from employee
 SELECT * from employee 
 	INNER JOIN department on employee.dep_id=department.id;
 	
-SELECT * from employee, department on employee.dep_id=department.id;
+SELECT * from employee, department where employee.dep_id=department.id;
 ```
+
+> [!caution]
+>
+> 隱式連接不允許使用 `ON` 子句來指定連接條件，應該使用 `WHERE` 子句來指定條件
 
 ![INNER JOIN查詢](MySQL_basic.assets/Untitled-4895768.png)
 
@@ -2082,7 +2086,7 @@ SELECT * from employee
 >     ```sql
 >     /*計算部門總數*/
 >     select deptnu,count(*) total from employee group by deptnu
->                                                                                                                                                                                                                                                         
+>                                                                                                                                                                                                                                                             
 >     select a.ename, b.dname, a.job, c.total from employee a, dept b,
 >     	(select deptnu,count(*) total from employee group by deptnu) c
 >     	where a.deptnu=b.deptnu and a.job='文員' and a.deptnu=c.deptnu;

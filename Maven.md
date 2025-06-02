@@ -297,4 +297,79 @@ Apache Maven是一個項目管理和建構工具，它基於項目對象模型(P
 > >
 > > 盡量maven項目的pom.xml
 
+# 依賴管理
+
+## 依賴配置
+
+指當前專案執行所需要的jar包，一個專案中可以引入多個依賴
+
+配置：
+
+1. 在pom.xml中編寫`<dependencies>`標籤
+
+2. 在`<dependencies>`標籤中使用`<dependency>`引入坐標
+
+3. 定義坐標的 `groupId`、`artifactId`、`version`
+
+    ```xml
+    <dependencies>
+        <!-- 依賴 : spring-context -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>6.1.4</version>
+        </dependency>
+    </dependencies>
+    ```
+
+    > [!caution]
+    >
+    > 如果引入的依賴，在本地倉庫中不存在，將會連接遠端倉庫 / 中央倉庫下載依賴（這個過程會比較耗時，耐心等待）
+
+    > [!note]
+    >
+    > 如果不知道依賴的座標資訊，可以到mvn的中央倉庫 *[<kbd>![](icon/logo.svg) mvn倉庫  ![](icon/icon-more.svg?fill=text)</kbd>](https://mvnrepository.com/)*
+    >
+    > ![ClShot 2025-06-02 at 00.56.05@2x](Maven.assets/ClShot 2025-06-02 at 00.56.05@2x.png)
+
+4. 點擊刷新按鈕，引入最新的座標
+
+    ![ClShot 2025-06-02 at 00.53.39@2x](Maven.assets/ClShot 2025-06-02 at 00.53.39@2x.png)
+
+> [!note]
+>
+> **依賴傳遞**
+>
+> 當我們在配置pom.xml時引入spring-context，我們通過右側的maven面板可以看到，其實引入進來的依賴，並不只有這一項
+>
+> ![ClShot 2025-06-02 at 01.07.27@2x](Maven.assets/ClShot 2025-06-02 at 01.07.27@2x.png)
+>
+> 如果A 依賴了B，B依賴了C，C依賴了D，那麼在A項目中，也會有C、D依賴，因為依賴會傳遞，這就是依賴傳遞。
+>
+> 如果傳遞下來的依賴在項目開發中我們確實不需要，此時，我們可以通過Maven中的**排除依賴**功能排除掉
+
+## 依賴排除
+
+==主動斷開依賴的資源，被排除的資源**無需指定版本**==
+
+![ClShot 2025-06-02 at 00.57.49@2x](Maven.assets/ClShot 2025-06-02 at 00.57.49@2x.png)
+
+```xml
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>6.1.4</version>
+
+    <!--排除依賴, 主動斷開依賴的資源-->
+    <exclusions>
+        <exclusion>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-observation</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
+![ClShot 2025-06-02 at 01.03.22@2x](Maven.assets/ClShot 2025-06-02 at 01.03.22@2x.png)
+
 #  The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>
