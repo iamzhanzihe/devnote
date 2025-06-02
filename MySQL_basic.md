@@ -1882,6 +1882,9 @@ SELECT * from employee
 	INNER JOIN department on employee.dep_id=department.id;
 	
 SELECT * from employee, department where employee.dep_id=department.id;
+
+# 將資料表取別名
+SELECT * from employee e, department d where e.dep_id=d.id;
 ```
 
 > [!caution]
