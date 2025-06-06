@@ -4,7 +4,7 @@ vlook-doc-lib:
 
 ---
 
-###### ~VLOOK™~ *[<kbd>![](icon/vlook-hollow-dark.svg) VLOOK ![](icon/icon-more.svg)</kbd>](https://github.com/MadMaxChow/VLOOK)*<br>後端開發學習筆記-Maven<br>──<br><u>簡介</u><br>*本篇筆記是使用[<kbd>![](icon/Typora.svg) Typora</kbd>](https://typora.io/)及[<kbd>![](icon/markdown.svg) Markdown</kbd>](https://markdown.tw/)<br>結合GitHub開源模版撰寫而成並導出成HTML*<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`* *版本日期`2025年6月1日`*
+###### ~VLOOK™~ *[<kbd>![](icon/vlook-hollow-dark.svg) VLOOK ![](icon/icon-more.svg)</kbd>](https://github.com/MadMaxChow/VLOOK)*<br>後端開發學習筆記-Maven<br>──<br><u>簡介</u><br>*本篇筆記是使用[<kbd>![](icon/Typora.svg) Typora</kbd>](https://typora.io/)及[<kbd>![](icon/markdown.svg) Markdown</kbd>](https://markdown.tw/)<br>結合GitHub開源模版撰寫而成並導出成HTML*<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`* *版本日期`2025年6月6日`*
 
 [TOC]
 
@@ -371,5 +371,373 @@ Apache Maven是一個項目管理和建構工具，它基於項目對象模型(P
 ```
 
 ![ClShot 2025-06-02 at 01.03.22@2x](Maven.assets/ClShot 2025-06-02 at 01.03.22@2x.png)
+
+## 依賴範圍
+
+依賴的jar包，默認情況下可以在任何地方使用，在main目錄下，可以使用；在test目錄下，也可以使用
+
+在maven中，如果希望限制依賴的使用範圍，可以通過 `<scope>…</scope>` 設定其作用範圍
+
+|        scope值         | 主程序 | 測試程序 | 打包(運行) |    範例     |
+| :--------------------: | :----: | :------: | :--------: | :---------: |
+| ==**compile** (默認)== | ==✅==  |  ==✅==   |   ==✅==    |  ==log4j==  |
+|      ==**test**==      | ==❌==  |  ==✅==   |   ==❌==    |  ==junit==  |
+|      **provided**      |   ✅    |    ✅     |     ❌      | servlet-api |
+|      **runtime**       |   ❌    |    ✅     |     ✅      |  jdbc驅動   |
+
+![ClShot 2025-06-07 at 00.05.59@2x](Maven.assets/ClShot 2025-06-07 at 00.05.59@2x.png)
+
+如果對Junit單元測試的依賴，設定了scope為 test，就代表該依賴只能在測試(test)程式中使用，在主程序(main)中是無法使用的
+
+## 生命週期
+
+==生命週期是為了對所有的建構過程進行統一。 描述了一次項目建構經歷哪些階段==
+
+![ClShot 2025-06-05 at 22.51.43@2x](Maven.assets/ClShot 2025-06-05 at 22.51.43@2x.png)
+
+- **clean**：負責**清理專案**，移除之前建置產生的檔案
+- **default**：這是最常用的生命週期，主要負責專案的**建置和部署**過程
+- **site**：負責**產生專案文件和報告**
+
+每套生命週期包含一些階段，都是有順序的，後面的階段依賴於前面的階段。
+我們看到這三套生命週期，裡面有很多很多的階段，這麼多生命週期階段，其實我們常用的並不多，主要關注以下幾個：
+
+- clean：移除上一次建構生成的檔案
+- compile：編譯項目原始碼
+- test：使用合適的單元測試框架運行測試(junit)
+- package：將編譯後的檔案打包，如：jar、war等
+- install：安裝項目到本地倉庫
+
+> [!caution]
+>
+> 在同一套生命週期中，我們在執行後面的生命週期時，前面的生命週期都會執行，常用的clean跟別人屬於不同生命週期的
+
+Maven的生命週期是抽象的，換句話說生命週期本身不做任何實際工作。實際任務都交由插件來完成，有兩種執行方式：
+
+1. 在idea工具右側的maven工具列中，選擇對應的生命週期，連按兩下執行
+2. 在D OS命令列中，通過maven命令執行
+    * `mvn compile`
+    * `mvn test`
+    * `mvn package`
+    * `mvn install `
+
+![ClShot 2025-06-05 at 23.00.45@2x](Maven.assets/ClShot 2025-06-05 at 23.00.45@2x.png)
+
+![ClShot 2025-06-05 at 22.57.45@2x](Maven.assets/ClShot 2025-06-05 at 22.57.45@2x.png)
+
+# 單元測試
+
+==測試是為了確保程式碼正確運作，並在修改時能快速發現問題，避免錯誤進入生產環境造成更大損失==
+
+![ClShot 2025-06-05 at 23.35.31@2x](Maven.assets/ClShot 2025-06-05 at 23.35.31@2x-9138245.png)
+
+1. 單元測試
+
+    - 介紹：對軟體的基本組成單位進行測試，最小測試單位。
+
+    - 目的：檢驗軟體基本組成單位的正確性。==
+
+    - 測試人員：開發人員
+
+2. 集成測試
+
+    - 介紹：將已分別通過測試的單元，按設計要求組合成系統或子系統，再進行的測試。
+
+    - 目的：檢查單元之間的協作是否正確。
+
+    - 測試人員：開發人員
+
+3. 系統測試
+
+    - 介紹：對已經整合好的軟體系統進行徹底的測試。
+
+    - 目的：驗證軟體系統的正確性、性能是否滿足指定的要求。
+
+    - 測試人員：測試人員
+
+4. 驗收測試
+
+    - 介紹：交付測試，是針對使用者需求、業務流程進行的正式的測試。
+
+    - 目的：驗證軟體系統是否滿足驗收標準。
+
+    - 測試人員：客戶/需求方
+
+![ClShot 2025-06-05 at 23.40.26@2x](Maven.assets/ClShot 2025-06-05 at 23.40.26@2x.png)
+
+測試的方式：白盒測試、黑盒測試 及 灰盒測試
+
+* 白盒測試
+    清楚軟體內部結構、程式碼邏輯，用於驗證程式碼、邏輯正確性
+
+* 黑盒測試
+    不清楚軟體內部結構、程式碼邏輯，用於驗證軟體的功能、相容性、驗收測試等方面
+
+* 灰盒測試
+    結合了白盒測試和黑盒測試的特點，既關注軟體的內部結構又考慮外部表現
+
+## Junit測試
+
+==JUnit 是 Java 最流行的單元測試框架，用來編寫和執行自動化測試程式碼==
+
+---
+
+> **傳統main方法**
+>
+> ![ClShot 2025-06-05 at 23.47.53@2x](Maven.assets/ClShot 2025-06-05 at 23.47.53@2x-9138982.png)
+>
+> 通過main方法是可以進行測試的，但是main方法進行測試時，會存在如下問題：
+> 1. 測試程式碼與原始碼未分開，難維護
+> 2. 一個方法測試失敗，影響後面方法進行
+> 3. 無法自動化測試，得到測試報告
+>
+> _~Rd!~_
+
+> **使用Junit**
+>
+> ![ClShot 2025-06-06 at 00.09.44@2x](Maven.assets/ClShot 2025-06-06 at 00.09.44@2x.png)
+>
+> 使用了JUnit單元測試框架進行測試，將會有以下優勢：
+>
+> 1. 測試程式碼與原始碼分開，便於維護
+> 2. 可根據需要進行自動化測試
+> 3. 可自動分析測試結果，產出測試報告
+>
+> _~Gn!~_
+
+###### 在Java中使用Junit
+
+*^tab^*
+
+> **pom.xml引入依賴**
+>
+> ```xml
+> <dependency>
+>     <groupId>org.junit.jupiter</groupId>
+>     <artifactId>junit-jupiter</artifactId>
+>     <version>5.9.1</version>
+> </dependency>
+> ```
+
+> **test/java目錄下，建立測試類**
+>
+> 在*==test/java==*目錄下，建立測試類，並編寫對應的測試方法，並在方法上聲明`@Test`
+>
+> ```java
+> import org.junit.jupiter.api.Test;
+> 
+> @Test
+> public void testGetGender(){
+>     String gender = new UserService().getGender("C123456789");
+>     System.out.println(gender);
+> }
+> ```
+>
+> > [!caution]
+> >
+> > - 測試類的命名**規範**為：XxxxTest
+> > - 測試方法的命名**規定**為：public void xxx(){...} **必須是public void**_~Rd~_
+
+> **單元測試**
+>
+> * 測試通過：綠色_~Gn~_
+>
+>     ![ClShot 2025-06-06 at 00.14.56@2x](Maven.assets/ClShot 2025-06-06 at 00.14.56@2x.png)
+>
+> * 測試不通過：紅色_~Rd~_
+>
+>     ![ClShot 2025-06-06 at 00.14.25@2x](Maven.assets/ClShot 2025-06-06 at 00.14.25@2x.png)
+>
+> > [!note]
+> >
+> > 單元測試不報錯(**綠色通過_~Gn~_**)，並不代表程式沒有問題，可能只是這個寫法剛好測試通過
+
+> **檔案下載**
+>
+> *[<kbd>![](icon/logo.svg) maven junit  ![](icon/icon-download.svg?fill=text)</kbd>](Maven.assets/code/maven-project01.zip)*
+
+
+
+> [!note]
+>
+> 在maven項目中，test目錄存放單元測試的程式碼，是否可以在main目錄中編寫單元測試呢？ 
+>
+> 可以，但是不規範_~Rd~_
+>
+> ![ClShot 2025-06-06 at 23.56.36@2x](Maven.assets/ClShot 2025-06-06 at 23.56.36@2x.png)
+
+## 斷言
+
+==確定被測試的方法是否按照預期的效果正常工作==
+
+|                           斷言方法                           |                             描述                             |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+|       assertEquals(Object exp, Object act, String msg)       |               檢查兩個值是否相等，不相等就報錯               |
+|    assertNotEquals(Object unexp, Object act, String msg)     |               檢查兩個值是否不相等，相等就報錯               |
+|              assertNull(Object act, String msg)              |             檢查物件是否為null，不為null，就報錯             |
+|            assertNotNull(Object act, String msg)             |             檢查物件是否不為null，為null，就報錯             |
+|          assertTrue(boolean condition, String msg)           |             檢查條件是否為true，不為true，就報錯             |
+|          assertFalse(boolean condition, String msg)          |            檢查條件是否為false，不為false，就報錯            |
+|        assertSame(Object exp, Object act, String msg)        |           檢查兩個物件參照是否相等，不相等，就報錯           |
+| assertThrows(Class expectedType, Executable executable, String message) | 檢查程式碼是否拋出預期的異常類型，如果沒有拋出或拋出不同類型的異常，就報錯 |
+
+> **示範 `assertEquals`**
+>
+> 在剛剛的測試類中導入`Assertions`，並輸入預期結果做測試
+>
+> ```java
+> package org.example;
+> 
+> import org.junit.jupiter.api.Assertions;
+> import org.junit.jupiter.api.Test;
+> 
+> public class UserServiceTest  {
+> 
+>     @Test //通過表示結果符合預期
+>     public void testGenderWithAssert(){
+>         UserService userService = new UserService();
+>         String gender = userService.getGender("C123456789");
+>         Assertions.assertEquals("男", gender, "性別不正確");
+>     }
+>     
+> }
+> ```
+>
+> ![ClShot 2025-06-06 at 22.44.22@2x](Maven.assets/ClShot 2025-06-06 at 22.44.22@2x.png)
+
+> **示範`assertThrows`**
+>
+> 測試拋出的異常是不是與本身預期一致
+>
+> ```java
+> package org.example;
+> 
+> import org.junit.jupiter.api.Assertions;
+> import org.junit.jupiter.api.Test;
+> 
+> public class UserServiceTest  {
+> 
+>     @Test
+>     public void testGenderWithAssert2(){
+>         UserService userService = new UserService();
+>         Assertions.assertThrows(IllegalArgumentException.class, () -> {
+>             userService.getGender(null);
+>         });
+>     }
+>     
+>     @Test
+>     public void testGenderWithAssert3(){
+>         UserService userService = new UserService();
+>         Assertions.assertThrows(NullPointerException.class, () -> {
+>             userService.getGender(null);
+>         });
+>     }
+> }
+> ```
+>
+> > [!note]
+> >
+> > assertThrows 的第二個參數是 Executable 函數式介面，我們使用 Lambda 表達式 () -> {} 來實現這個介面。
+> >
+> > - `Executable` 是函數式介面（只有一個抽象方法 `execute()`）
+> >
+> > - `() -> {}` 是 Lambda 表達式，用來實現 Executable 介面
+>
+> ![ClShot 2025-06-06 at 22.54.03@2x](Maven.assets/ClShot 2025-06-06 at 22.54.03@2x.png)
+
+## 常見註解
+
+|         註解         |                             說明                             |              備註               |
+| :------------------: | :----------------------------------------------------------: | :-----------------------------: |
+|       `@Test`        |     測試類中的方法用它修飾才能成為測試方法，才能啟動執行     |            單元測試             |
+|    `@BeforeEach`     | 用來修飾一個實例方法，該方法會在每一個測試方法執行之前執行一次 |      初始化資源(準備工作)       |
+|     `@AfterEach`     | 用來修飾一個實例方法，該方法會在每一個測試方法執行之後執行一次 |       釋放資源(清理工作)        |
+|     `@BeforeAll`     |  用來修飾一個靜態方法，該方法會在所有測試方法之前只執行一次  |      初始化資源(準備工作)       |
+|     `@AfterAll`      |  用來修飾一個靜態方法，該方法會在所有測試方法之後只執行一次  |       釋放資源(清理工作)        |
+| `@ParameterizedTest` | 參數化測試的註解(可以讓單個測試運行多次，每次運行時僅參數不同) | 用了該註解，就不需要@Test註解了 |
+|    `@ValueSource`    |            參數化測試的參數來源，賦予測試方法參數            |    與參數化測試註解配合使用     |
+|    `@DisplayName`    |      指定測試類、測試方法顯示的名稱(默認為類名、方法名)      |                                 |
+
+執行順序：
+
+1. @BeforeAll (靜態方法，只執行一次)
+2. @BeforeEach (每個測試方法前執行)
+3. @Test (測試方法)
+4. @AfterEach (每個測試方法後執行)
+5. @AfterAll (靜態方法，只執行一次)
+
+>**示範 `@BeforeEach`、`@AfterEach`、`@BeforeAll`、`@AfterAll` **
+>
+>```java
+>package org.example;
+>
+>import org.junit.jupiter.api.*;
+>
+>public class UserServiceTest  {
+>
+>    @BeforeEach
+>    public void testBefore(){
+>        System.out.println("before each...");
+>    }
+>
+>    @AfterEach
+>    public void testAfter(){
+>        System.out.println("after each...");
+>    }
+>
+>    @BeforeAll //該方法必須被static修飾
+>    public static void testBeforeAll(){
+>        System.out.println("before all ...");
+>    }
+>
+>    @AfterAll //該方法必須被static修飾
+>    public static void testAfterAll(){
+>        System.out.println("after all...");
+>    }
+>
+>    @Test
+>    public void testGetGender(){
+>        String gender = new UserService().getGender("C123456789");
+>        System.out.println(gender);
+>    }
+>}
+>
+>```
+>
+>![ClShot 2025-06-06 at 23.26.19@2x](Maven.assets/ClShot 2025-06-06 at 23.26.19@2x.png)
+
+> **示範 `@ParameterizedTest`、`@ValueSource` 、`@DisplayName` **
+>
+> ```java
+> package org.example;
+> 
+> import org.junit.jupiter.api.*;
+> import org.junit.jupiter.params.ParameterizedTest;
+> import org.junit.jupiter.params.provider.ValueSource;
+> 
+> public class UserServiceTest  {
+> 
+>     @DisplayName("gender test")
+>     @ParameterizedTest
+>     @ValueSource(strings = {"C123456789", "C223456789", "C323456789"})
+>     public void testGetGender(String ID){
+>         String gender = new UserService().getGender(ID);
+>         System.out.println(gender);
+>     }
+> }
+> ```
+>
+> > [!note]
+> >
+> >  `@ParameterizedTest`、`@ValueSource` 這兩個註解通常會搭配使用
+> >
+> > * `@ParameterizedTest`：標記方法為參數化測試，允許同一個測試方法使用不同參數多次執行
+> > * `@ValueSource`：提供參數化測試的參數來源
+>
+> > [!caution]
+> >
+> > 使用 `@ParameterizedTest` 註解後就不需要 `@Test` 註解
+>
+> ![ClShot 2025-06-06 at 23.29.57@2x](Maven.assets/ClShot 2025-06-06 at 23.29.57@2x.png)
 
 #  The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>
