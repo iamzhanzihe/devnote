@@ -1,7 +1,9 @@
 ---
 title: 後端開發學習筆記-Maven
 vlook-doc-lib:
-
+- [快速的筆記網站跳轉](index.html?target=_self "可以快速挑轉到想要的網頁")
+- [後端開發學習筆記★Maven](Maven.html?target=_self "後端開發學習筆記★Maven")
+- [後端開發學習筆記★SpringBoot](SpringBoot.html?target=_self "後端開發學習筆記★SpringBoot")
 ---
 
 ###### ~VLOOK™~ *[<kbd>![](icon/vlook-hollow-dark.svg) VLOOK ![](icon/icon-more.svg)</kbd>](https://github.com/MadMaxChow/VLOOK)*<br>後端開發學習筆記-Maven<br>──<br><u>簡介</u><br>*本篇筆記是使用[<kbd>![](icon/Typora.svg) Typora</kbd>](https://typora.io/)及[<kbd>![](icon/markdown.svg) Markdown</kbd>](https://markdown.tw/)<br>結合GitHub開源模版撰寫而成並導出成HTML*<br>**JamesZhan**<br>*不允許複製下載`僅供閱覽`* *版本日期`2025年6月6日`*
