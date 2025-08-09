@@ -196,7 +196,7 @@ ___
     &lt; <
     ```
 
-# HTML主結構
+# 一般標籤
 
 ## 聲明標籤
 
@@ -425,7 +425,506 @@ ___
 > ```html
 > <video src="./media/vue.mp4" controls loop muted autoplay></video>
 > ```
+
+# 練習-自我介紹
+
+> **想法**
 >
-> 
+> 從上到下，先整體再局部，逐步分析製作
+> 分析內容 → 寫程式碼 → 保存 → 刷新瀏覽器，看效果
+
+![ClShot 2025-06-11 at 17.46.27@2x](web_HTML.assets/ClShot 2025-06-11 at 17.46.27@2x.png)
+
+> [!note]
+>
+> 在vscode裡面，可以使用 `lorem` 填充字數
+
+*[<kbd>![](icon/logo.svg) self-introduction.html ![](icon/icon-download.svg?fill=text)</kbd>](web_HTML.assets/code/self-introduction.html)*
+
+# 列表、表格、表單
+
+## 無序列表
+
+無序列表使用 `<ul>` 標籤創建，其中的每個項目用 `<li>` 標籤包圍。這種列表適用於項目之間**沒有特定順序或優先級的情況**，瀏覽器會自動為每個項目添加項目符號（如圓點、方塊等），用於展示並列的信息或選項
+
+![ClShot 2025-06-11 at 18.51.19@2x](web_HTML.assets/ClShot 2025-06-11 at 18.51.19@2x.png)
+
+```html
+<ul>
+  <li>第1項</li>
+  <li>第2項</li>
+  <li>第3項</li>
+</ul>
+```
+
+> [!caution]
+>
+> * `ul` 標籤裡面只能包裹 `li` 標籤
+> * `li` 標籤裡面可以包裹任何內容
+
+## 有序列表
+
+有序列表使用 `<ol>` 標籤創建，同樣每個項目用 `<li>` 標籤包圍。這種列表適用於**需要按照特定順序或步驟排列的內容**，瀏覽器會自動為每個項目添加數字編號（預設從1開始），常用於操作步驟、排名或任何需要體現先後順序的信息
+
+![ClShot 2025-06-11 at 18.51.50@2x](web_HTML.assets/ClShot 2025-06-11 at 18.51.50@2x.png)
+
+```html
+<ol>
+  <li>第1項</li>
+  <li>第2項</li>
+  <li>第3項</li>
+</ol>
+```
+
+> [!caution]
+>
+> * `ol` 標籤裡面只能包裹 `li` 標籤
+> * `li` 標籤裡面可以包裹任何內容
+
+## 定義列表
+
+定義列表使用 `<dl>` 標籤創建，由術語 `<dt>`（definition term）和描述 `<dd>`（definition description）組成。這種列表專門用於**展示術語及其對應的解釋或定義**，非常適合用於名詞解釋、FAQ問答或任何需要配對顯示的內容
+
+![ClShot 2025-06-11 at 18.52.36@2x](web_HTML.assets/ClShot 2025-06-11 at 18.52.36@2x.png#40%)
+
+```html
+<dl>
+    <dt>第1項</dt>
+    <dd>第1項的內容</dd>
+    <dd>第1項的內容</dd>
+    <dt>第2項</dt>
+    <dd>第2項的內容</dd>
+    <dd>第2項的內容</dd>
+    <dt>第3項</dt>
+    <dd>第3項的內容</dd>
+    <dd>第3項的內容</dd>
+</dl>
+```
+
+> [!caution]
+>
+> * `dl` 裡面只能包含`dt` 和 `dd`
+> * `dt` 和 `dd` 裡面可以包含任何內容
+
+## 表格
+
+|  標籤名   |    說明    | 詳細描述                                                     |
+| :-------: | :--------: | ------------------------------------------------------------ |
+| `<table>` |    表格    | 表格的根容器，定義整個表格結構的開始和結束                   |
+|  `<tr>`   |     行     | Table Row，定義表格中的一行，包含多個單元格                  |
+|  `<th>`   | 表頭單元格 | Table Header，用於定義表格的標題行，通常會以粗體顯示並居中對齊 |
+|  `<td>`   | 內容單元格 | Table Data，用於定義表格中的數據內容，包含實際的表格數據     |
+
+> [!caution]
+>
+> 在網頁中，**表格默認沒有邊框線**，使用 **border 屬性**可以為表格新增邊框線
+
+---
+
+> **沒有使用border**
+>
+> ![ClShot 2025-06-11 at 19.08.38@2x](web_HTML.assets/ClShot 2025-06-11 at 19.08.38@2x.png)
+
+> **使用border**
+>
+> ![ClShot 2025-06-11 at 19.08.16@2x](web_HTML.assets/ClShot 2025-06-11 at 19.08.16@2x.png)
+
+```html
+<table border="1">
+    <tr>
+        <th>姓名</th>
+        <th>語文</th>
+        <th>數學</th>
+        <th>總分</th>
+    </tr>
+    <tr>
+        <td>張三</td>
+        <td>99</td>
+        <td>100</td>
+        <td>199</td>
+    </tr>
+    <tr>
+        <td>李四</td>
+        <td>98</td>
+        <td>100</td>
+        <td>198</td>
+    </tr>
+    <tr>
+        <td>總結</td>
+        <td>全市第一</td>
+        <td>全市第一</td>
+        <td>全市第一</td>
+    </tr>
+</table>
+```
+
+### 表格結構標籤
+
+用表格結構標籤把內容劃分區域，讓表格結構更清晰，語義更清晰
+
+> [!note]
+>
+> 表格結構標籤可寫可不寫，因為在瀏覽器上不會呈現任何效果
+
+|  標籤名   |   含義   |   特殊說明   | 用途與特點                                                   |
+| :-------: | :------: | :----------: | ------------------------------------------------------------ |
+| `<thead>` | 表格頭部 | 表格頭部內容 | 包含表格的標題行，通常包含 `<th>` 標籤，有助於語義化和無障礙訪問 |
+| `<tbody>` | 表格主體 | 主要內容區域 | 包含表格的主要數據內容，是表格的核心部分                     |
+| `<tfoot>` | 表格底部 | 匯總信息區域 | 包含表格的總結信息，如合計、平均值等統計數據                 |
+
+```html
+<table border="1">
+    <thead>
+        <tr>
+            <th>姓名</th>
+            <th>語文</th>
+            <th>數學</th>
+            <th>總分</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>張三</td>
+            <td>99</td>
+            <td>100</td>
+            <td>199</td>
+        </tr>
+        <tr>
+            <td>李四</td>
+            <td>98</td>
+            <td>100</td>
+            <td>198</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>總結</td>
+            <td>全市第一</td>
+            <td>全市第一</td>
+            <td>全市第一</td>
+        </tr>
+    </tfoot>
+</table>
+```
+
+### 表格合併
+
+---
+
+> **跨列合併**
+>
+> ![ClShot 2025-06-11 at 19.25.21@2x](web_HTML.assets/ClShot 2025-06-11 at 19.25.21@2x.png)
+
+> **跨行合併**
+>
+> ![ClShot 2025-06-11 at 19.25.21@2x](web_HTML.assets/ClShot 2025-06-11 at 19.25.21@2x-9641161.png)
+
+合併表格的步驟：
+
+1. 明確合併的目標
+2. 保留**最左、最上**的儲存格，新增屬性（取值是**數字**，表示需要**合併的儲存格數量**）
+    * **跨列合併**，保留最上儲存格，新增屬性 **rowspan**
+    * **跨行合併**，保留最左儲存格，新增屬性 **colspan**
+3. 刪除多餘的表格
+
+```html
+<table border="1">
+    <thead>
+        <tr>
+            <th>姓名</th>
+            <th>語文</th>
+            <th>數學</th>
+            <th>總分</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>張三</td>
+            <td>99</td>
+            <td rowspan="2">100</td>
+            <td>199</td>
+        </tr>
+        <tr>
+            <td>李四</td>
+            <td>98</td>
+            <!-- <td>100</td> -->
+            <td>198</td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td>總結</td>
+            <td colspan="3">全市第一</td>
+        </tr>
+    </tfoot>
+</table>
+```
+
+
+
+> [!caution]
+>
+> 不能跨表格結構標籤合併儲存格（`thead`、`tbody`、`tfoot`）
+
+# 表單
+
+==用來收集用戶輸入資料並將其提交到伺服器進行處理的網頁元素容器==
+
+![ClShot 2025-06-12 at 12.37.16@2x](web_HTML.assets/ClShot 2025-06-12 at 12.37.16@2x.png#60%)
+
+## input標籤
+
+input 標籤 type 屬性值不同，則功能不同，通常**會搭配label標籤增大表單控制項的點選範圍**_~Rd~_
+
+```html
+<input type="..." >
+```
+
+| type 屬性值 | 說明                                         |
+| :---------: | -------------------------------------------- |
+|    text     | 文本框，用於輸入單行文本                     |
+|  password   | 密碼框                                       |
+|    radio    | 單選框                                       |
+|  checkbox   | 多選框                                       |
+|    file     | 上傳文件，要上傳多個要再加上 `multiple` 屬性 |
+
+> [!note]
+>
+> 可以透過 `placeholder` 提示使用者要輸入的資料
+>
+> ```html
+> <input type="..." placeholder="提示資訊">
+> ```
+
+### 單選框
+
+![ClShot 2025-06-12 at 13.18.14@2x](web_HTML.assets/ClShot 2025-06-12 at 13.18.14@2x.png)
+
+| 屬性名  |   作用   | 特殊說明                                   |
+| :-----: | :------: | ------------------------------------------ |
+|  name   | 控件名稱 | 控件分組，實現同組只能選中一個（單選功能） |
+| checked | 默認選中 | 屬性名和屬性值相同，簡寫為一個單詞         |
+
+```html
+<input type="radio" name="gender" checked> 男
+<input type="radio" name="gender"> 女
+```
+
+> [!note]
+>
+> 屬性值 `name` 可以自定義
+
+### 多選框
+
+![ClShot 2025-06-12 at 13.17.29@2x](web_HTML.assets/ClShot 2025-06-12 at 13.17.29@2x.png)
+
+```html
+<input type="checkbox" checked> 前端
+<input type="checkbox"> 後端
+<input type="checkbox" checked> 全端
+```
+
+### 上傳檔案
+
+默認情況下，檔案上傳表單控制項只能上傳一個檔案，新增 multiple 屬性可以實現檔案多選功能
+
+![ClShot 2025-06-12 at 13.35.59@2x](web_HTML.assets/ClShot 2025-06-12 at 13.35.59@2x.png)
+
+```html
+<input type="file" multiple>
+```
+
+## 下拉選單
+
+`select` 嵌套 `option`，`select` 是下拉菜單整體，`option` 是下拉菜單的每一項
+
+![ClShot 2025-06-12 at 13.39.31@2x](web_HTML.assets/ClShot 2025-06-12 at 13.39.31@2x.png)
+
+```html
+數字選擇
+<select>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3" selected>3</option>
+</select>
+```
+
+> [!note]
+>
+> 默認是選中第一個，除非以 `selected` 屬性指定默認選項
+
+## 多行文本輸入框
+
+![ClShot 2025-06-12 at 13.43.47@2x](web_HTML.assets/ClShot 2025-06-12 at 13.43.47@2x.png)
+
+```html
+<textarea placeholder="請輸入你的留言"></textarea>
+```
+
+> [!caution]
+>
+> * 實際開發中，使用 CSS 設定多行文本輸入框的尺寸
+> * 實際開發中，一般停用右下角的拖曳功能
+
+## label標籤
+
+`<label>` 是 HTML 中用於**為表單控件提供標籤說明**的元素，也常用來增大表單控制項的點選範圍
+
+*^tab^*
+
+> **隱式關連**
+>
+> 使用 `label` 標籤包裹文字和表單控制項，不需要屬性 
+>
+> ```html
+> <label>
+>   姓名：
+>   <input type="text" name="name">
+> </label>
+> ```
+
+> **顯式關聯**
+>
+> * `label` 標籤只包裹內容，不包裹表單控制項
+> * 設定 `label` 標籤的 `for` 屬性值 和表單控制項的 `id` 屬性值相同
+>
+> ```html
+> <label for="username">用戶名：</label>
+> <input type="text" id="username" name="username">
+> ```
+
+> [!note]
+>
+> 支援 label 標籤增大點選範圍的表單控制項：文字框、密碼框、上傳檔案、單選框、多選框、下拉菜單、文字域等等
+
+## 按鈕
+
+==**按鈕**是用於觸發動作或提交表單的互動元素==
+
+> [!caution]
+>
+> 按鈕需配合 form 標籤（表單區域）才能實現對應的功能
+
+| type 屬性值 | 說明                                             |
+| :---------: | ------------------------------------------------ |
+|   submit    | 提交按鈕，點擊後可以提交數據到後台（默認功能）   |
+|    reset    | 重置按鈕，點擊後將表單控件恢復默認值             |
+|   button    | 普通按鈕，默認沒有功能，一般配合 JavaScript 使用 |
+
+
+
+```html
+<!-- form 表單區域 -->
+<form action="">
+    使用者名稱：<input type="text">
+    <br><br>
+    密碼：<input type="password">
+    <br><br>
+
+    <button type="submit">提交</button>
+    <button type="reset">重設</button>
+    <button type="button">普通按鈕</button>
+</form>
+```
+
+
+
+![ClShot 2025-06-12 at 14.05.24@2x](web_HTML.assets/ClShot 2025-06-12 at 14.05.24@2x.png)
+
+# 布局標籤
+
+用來組織和結構化網頁內容的標籤，有分成兩種：通用容器標籤、語意化布局標籤
+
+## 通用容器標籤
+
+* `div`：獨佔一行
+* `span`：不換行
+
+```html
+<div>這是div標籤，獨佔一行</div>
+<span>這是span標籤，不獨佔一行</span>
+<span>這是span標籤，不獨佔一行</span>
+```
+
+
+
+![ClShot 2025-06-12 at 18.17.48@2x](web_HTML.assets/ClShot 2025-06-12 at 18.17.48@2x.png)
+
+## 語意化布局標籤
+
+| 標籤名  |    語義    |
+| :-----: | :--------: |
+| header  |  網頁頭部  |
+|   nav   |  網頁導航  |
+| footer  |  網頁底部  |
+|  aside  | 網頁側邊欄 |
+| section |  網頁區塊  |
+| article |  網頁文章  |
+
+# 練習-體育新聞列表
+
+![ClShot 2025-06-12 at 18.27.38@2x](web_HTML.assets/ClShot 2025-06-12 at 18.27.38@2x.png#20%)
+
+```html
+<ul>
+    <li>
+        <img src="https://picsum.photos/200/300" alt="random image">
+        <h2>title1</h2>
+    </li>
+    <li>
+        <img src="https://picsum.photos/200/300" alt="random image">
+        <h2>title2</h2>
+    </li>
+    <li>
+        <img src="https://picsum.photos/200/300" alt="random image">
+        <h2>title3</h2>
+    </li>
+</ul>
+```
+
+*[<kbd>![](icon/logo.svg) news-list  ![](icon/icon-more.svg?fill=text)</kbd>](web_HTML.assets/code/news-list.html)*
+
+# 練習-註冊
+
+![ClShot 2025-06-12 at 18.40.19@2x](web_HTML.assets/ClShot 2025-06-12 at 18.40.19@2x.png#20%)
+
+```html
+<h1>註冊資料</h1>
+    <form action="">
+        <h2>使用者資料</h2>
+        <label>姓名：<input type="text"></label><br><br>
+        <label>密碼：<input type="password"></label><br><br>
+        <label>確認密碼：<input type="password"></label><br><br>
+        <label>性別：
+            <input type="radio" name="gender" value="male" checked> 男
+            <input type="radio" name="gender" value="female"> 女
+        </label><br><br>
+        <label>
+            城市：
+            <select>
+                <option value="1">台北</option>
+                <option value="2">台中</option>
+                <option value="3">台南</option>
+                <option value="4">高雄</option>
+            </select>
+        </label><br><br>
+        <h2>專業技能</h2>
+        <label>興趣：
+            <label><input type="checkbox" name="interest" value="1"> 前端</label>
+            <label><input type="checkbox" name="interest" value="2"> 後端</label>
+            <label><input type="checkbox" name="interest" value="3"> 全端</label>
+        </label><br><br>
+        <label>
+            <textarea ></textarea>
+        </label>
+        <br><br>
+        <button type="submit">註冊</button>
+        <button type="reset">重置</button>
+    </form>
+```
+
+
+
+*[<kbd>![](icon/logo.svg) register ![](icon/icon-more.svg?fill=text)</kbd>](web_HTML.assets/code/register.html)*
 
 # The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>
