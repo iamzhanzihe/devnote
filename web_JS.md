@@ -1,10 +1,11 @@
 ---
-title:前端開發學習筆記-Javascript
+title:前端開發學習筆記-React
 vlook-doc-lib:
 - [筆記網站跳轉](index.html?target=_self "快速挑轉到想要的網頁")
 - [前端開發學習筆記★HTML](web_HTML.html?target=_self "網頁開發學習筆記★HTML")
-- [前端開發學習筆記★CSS](web_CSS.html?target=_self "網頁開發學習筆記★HTML")
-- [前端開發學習筆記★JS](web_JS.html?target=_self "網頁開發學習筆記★HTML")
+- [前端開發學習筆記★CSS](web_CSS.html?target=_self "網頁開發學習筆記★CSS")
+- [前端開發學習筆記★JS](web_JS.html?target=_self "網頁開發學習筆記★JS")
+- [前端開發學習筆記★React](web_React.html?target=_self "網頁開發學習筆記★React")
 
 ---
 
@@ -533,6 +534,785 @@ console.log(typeof hobbies)
 >   * String(資料)
 >   * 變數.toString(進制)
 
- 
+# 運算符
+
+## 賦值運算符
+
+==對變數進行賦值的運算子==
+
+| 運算符 |   名稱   |  等價寫法   |           說明           |          範例          |
+| :----: | :------: | :---------: | :----------------------: | :--------------------: |
+|  `=`   | 基本賦值 |      -      | 將右邊的值賦給左邊的變數 |        `x = 5`         |
+|  `+=`  | 加法賦值 | `x = x + y` | 將變數與右邊值相加後賦值 | `x += 3` → `x = x + 3` |
+|  `-=`  | 減法賦值 | `x = x - y` |  將變數減去右邊值後賦值  | `x -= 2` → `x = x - 2` |
+|  `*=`  | 乘法賦值 | `x = x * y` |  將變數乘以右邊值後賦值  | `x *= 4` → `x = x * 4` |
+|  `/=`  | 除法賦值 | `x = x / y` |  將變數除以右邊值後賦值  | `x /= 2` → `x = x / 2` |
+|  `%=`  | 取餘賦值 | `x = x % y` | 將變數對右邊值取餘後賦值 | `x %= 3` → `x = x % 3` |
+
+> [!note]
+>
+> 使用這些運算符，可以在對變數賦值時進行快速操作 
+
+---
+
+> **以前的寫法**
+>
+> ```javascript
+> let num = 1
+> num = num + 1
+> console.log(num)
+> ```
+
+> **更好的寫法**
+>
+> ```javascript
+> let num = 1
+>     num += 1
+>     console.log(num)
+> ```
+
+## 一元運算符
+
+ **一元運算符**是只需要**一個操作數**的運算符
+
+| 運算符 | 名稱          | 說明                   | 範例           | 結果        |
+| ------ | ------------- | ---------------------- | -------------- | ----------- |
+| `+`    | 正號          | 表示正數（通常可省略） | `+5`           | `5`         |
+| `-`    | 負號          | 表示負數或取相反數     | `-5`           | `-5`        |
+| `++`   | 前置/後置遞增 | 變數值加1              | `++x` 或 `x++` | `x = x + 1` |
+| `--`   | 前置/後置遞減 | 變數值減1              | `--x` 或 `x--` | `x = x - 1` |
+
+---
+
+> **事前加加**
+>
+> ```javascript
+> let num = 1
+> ++num
+> ```
+>
+> * 每執行1次，當前變數數值加1 
+> * 其作用相當於 num += 1
+>
+> ```javascript
+> let num = 1
+> console.log(++num + 2) 
+> ```
+>
+> num是先自己加1，在賦值給num，之後再加上2，所以答案是4
+
+> **事後加加**
+>
+> ```javascript
+> let num = 1
+> num++
+> ```
+>
+> * 每執行1次，當前變數數值加1 
+> * 其作用相當於 num += 1
+>
+> ```javascript
+> let num = 1
+> console.log(num++ + 2) 
+> ```
+>
+> num=1先和2相加完之後，num才賦值成2，所以相加起來答案是3
+
+> [!caution]
+>
+> 前置自增和後置自增獨立使用時二者並沒有差別，一般開發中都是獨立使用
+>
+> 後面 **i++ 後置自增**會使用相對較多,並且都是單獨使用
+
+## 比較運算符
+
+  **比較運算符**用來比較兩個值的大小關係或相等性，結果總是返回**布林值**（`true` 或 `false`）
+
+| 運算符 |    名稱    |            說明            |    範例     |  結果   |
+| :----: | :--------: | :------------------------: | :---------: | :-----: |
+|  `==`  |    等於    | 值相等（可能進行型別轉換） | `5 == "5"`  | `true`  |
+| `===`  |  嚴格等於  |       值和型別都相等       | `5 === "5"` | `false` |
+|  `!=`  |   不等於   |          值不相等          |  `5 != 3`   | `true`  |
+| `!==`  | 嚴格不等於 |       值或型別不相等       | `5 !== "5"` | `true`  |
+|  `>`   |    大於    |        左邊大於右邊        |   `8 > 5`   | `true`  |
+|  `<`   |    小於    |        左邊小於右邊        |   `3 < 7`   | `true`  |
+|  `>=`  |  大於等於  |     左邊大於或等於右邊     |  `5 >= 5`   | `true`  |
+|  `<=`  |  小於等於  |     左邊小於或等於右邊     |  `4 <= 6`   | `true`  |
+
+> [!important]
+>
+> **== vs === 的差異**
+>
+> * 不同類型之間比較會發生隱式轉換
+> * **開發中，請使用 ===**，因為更精確更好控制
+>
+> ```javascript
+> // == (寬鬆比較) - 會進行型別轉換
+> console.log(5 == "5");      // true
+> console.log(true == 1);     // true
+> console.log(null == undefined); // true
+> 
+> // === (嚴格比較) - 不進行型別轉換
+> console.log(5 === "5");     // false
+> console.log(true === 1);    // false
+> console.log(null === undefined); // false
+> ```
+
+字串比較，是比較字元對應的ASCII碼
+
+![ClShot 2025-09-09 at 23.19.33@2x](web_JS.assets/ClShot 2025-09-09 at 23.19.33@2x.png)
+
+* 從左往右依次比較 
+* 如果第一位一樣再比較第二位，以此類推
+
+```javascript
+// 逐字符比較 ASCII 值
+console.log("A" < "B");     // true (65 < 66)
+console.log("a" < "A");     // false (97 > 65)
+console.log("a" < "b");     // true (97 < 98)
+
+// 長度不同的字符串
+console.log("cat" < "catch");   // true
+console.log("cat" < "car");     // false ("t" > "r")
+console.log("" < "a");          // true (空字符串最小)
+```
+
+## 邏輯運算符
+
+==**邏輯運算符**用來組合或修改布林值==
+
+| 運算符 |     名稱     |         說明         |      範例       |  結果   |
+| :----: | :----------: | :------------------: | :-------------: | :-----: |
+|  `&&`  | 邏輯與 (AND) |   兩個都為真才為真   | `true && false` | `false` |
+|  `||`  | 邏輯或 (OR)  |  至少一個為真就為真  | `true || false` | `true`  |
+|  `!`   | 邏輯非 (NOT) | 取反，真變假，假變真 |     `!true`     | `false` |
+
+* 判斷一個數，介於0~100之間
+  * **錯誤寫法**：0 < X < 100
+  * **正確寫法**：X>0 **&&** X<100
+
+>**判斷一個數是4的倍數，且不是100的倍數**
+>
+>```html
+><!DOCTYPE html>
+><html lang="en">
+>
+><head>
+>  <meta charset="UTF-8">
+>  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>  <title>邏輯運算符</title>
+></head>
+>
+><body>
+>  <script>
+>    let num = prompt("Enter a number:")
+>    alert(num % 4 === 0 && num % 100 !== 0)
+>  </script>
+></body>
+>
+></html>
+>```
+
+## 運算符優先級
+
+**運算符優先級**決定了在一個表達式中，哪些運算符會先被執行。就像數學中的「先乘除後加減」一樣
+
+| 優先級 | 運算符類型 |          運算符           |              說明              |
+| :----: | :--------: | :-----------------------: | :----------------------------: |
+| **1**  |   小括號   |           `()`            |  最高優先級，用於改變運算順序  |
+| **2**  | 一元運算符 |       `++` `--` `!`       |       遞增、遞減、邏輯非       |
+| **3**  | 算數運算符 | 先 `*` `/` `%` 後 `+` `-` |        乘除模優先於加減        |
+| **4**  | 關係運算符 |     `>` `>=` `<` `<=`     | 大於、大於等於、小於、小於等於 |
+| **5**  | 相等運算符 |   `==` `!=` `===` `!==`   | 相等、不等、嚴格相等、嚴格不等 |
+| **6**  | 邏輯運算符 |      先 `&&` 後 `||`      |       邏輯與優先於邏輯或       |
+| **7**  | 賦值運算符 |            `=`            |            賦值操作            |
+| **8**  | 逗號運算符 |            `,`            |   最低優先級，順序執行表達式   |
+
+> [!important]
+>
+> * 一元運算子裡面的**邏輯非優先順序很高**
+> * **邏輯與比邏輯或優先順序高**
+
+# 分支語句
+
+* 以前我們寫的程式碼，寫幾句就從上往下執行幾句，這種叫**順序結構**
+* 有的時候要根據條件選擇執行程式碼，這種就叫**分支結構**
+* 某段程式碼被重複執行，就叫**循環結構**
+
+![ClShot 2025-09-10 at 00.00.07@2x](web_JS.assets/ClShot 2025-09-10 at 00.00.07@2x.png)
+
+## if分支語句
+
+**分支語句**是程式設計中的控制結構，用來根據不同的條件執行不同的程式碼路徑
+
+* **if 語句 - 單向分支**
+
+  ```javascript
+  if (條件) {
+    滿足條件時要執行的程式碼
+  }
+  ```
+
+  ```javascript
+  let age = 18;
+  if (age >= 18) {
+      console.log("您已成年，可以投票！");
+  }
+  ```
+
+*  **if...else 語句 - 雙向分支**
+
+  ```javascript
+  if (條件) {
+    滿足條件時要執行的程式碼
+  } else {
+    不滿足條件時要執行的程式碼
+  } 
+  ```
+
+  ```javascript
+  let score = 75;
+  if (score >= 60) {
+      console.log("及格！");
+  } else {
+      console.log("不及格，需要重考。");
+  }
+  ```
+
+* **if...else if...else 語句 - 多向分支**
+
+  ```javascript
+  if (條件1) {
+    滿足條件時要執行的程式碼
+  } else if (條件2){
+    滿足條件時要執行的程式碼
+  } else if (條件3){
+    滿足條件時要執行的程式碼
+  } else {
+    不滿足條件時要執行的程式碼
+  } 
+  ```
+
+  ```javascript
+  let grade = 85;
+  if (grade >= 90) {
+      console.log("優秀 A");
+  } else if (grade >= 80) {
+      console.log("良好 B");
+  } else if (grade >= 70) {
+      console.log("中等 C");
+  } else if (grade >= 60) {
+      console.log("及格 D");
+  } else {
+      console.log("不及格 F");
+  }
+  ```
+
+## 三元運算符
+
+**三元運算符**是 JavaScript 中唯一的三元運算符，也稱為**條件運算符**。它提供了一種簡潔的方式來寫簡單的 if-else 語句
+
+```javascript
+條件 ? 值1 : 值2
+```
+
+- **條件**：要評估的表達式
+- **值1**：條件為 `true` 時返回的值
+- **值2**：條件為 `false` 時返回的值
+
+---
+
+> **使用 if-else**
+>
+> ```javascript
+> let age = 20;
+> let status;
+> 
+> if (age >= 18) {
+>     status = "成年人";
+> } else {
+>     status = "未成年";
+> }
+> 
+> console.log(status); // "成年人"
+> ```
+
+> **使用三元運算符**
+>
+> ```javascript
+> let age = 20;
+> let status = age >= 18 ? "成年人" : "未成年";
+> 
+> console.log(status); // "成年人"
+> ```
+
+> [!note]
+>
+> 三元運算符只能用在比較簡單的條件判斷，如果邏輯太複雜就不適合
+
+## switch語句
+
+**Switch 語句**是一種多分支選擇結構，用於根據一個表達式的值來執行不同的程式碼塊。它是多個 if-else if 語句的優雅替代方案
+
+```javascript
+switch (表達式) {
+    case 值1:
+        // 程式碼塊1
+        break;
+    case 值2:
+        // 程式碼塊2
+        break;
+    case 值3:
+        // 程式碼塊3
+        break;
+    default:
+        // 預設程式碼塊
+        break;
+}
+```
+
+* 找到跟小括號裡資料全等的case值，並執行裡面對應的程式碼
+* 若沒有全等 ===  的則執行default裡的程式碼
+* 例：資料若跟值2全等，則執行程式碼2
+
+> [!caution]
+>
+> * switch case語句一般用於**等值判斷**，不適合於區間判斷
+> * switch case一般需要配合break關鍵字使用，沒有break會造成**case穿透**
+>
+> ```javascript
+> let fruit = "apple";
+> 
+> switch (fruit) {
+>     case "apple":
+>         console.log("這是蘋果");
+>         // 沒有 break，會繼續執行下面的 case
+>     case "banana":
+>         console.log("這是水果");
+>         // 沒有 break，會繼續執行下面的 case
+>     case "carrot":
+>         console.log("這是食物");
+>         break;
+>     default:
+>         console.log("未知項目");
+> }
+> 
+> // 輸出：
+> // 這是蘋果
+> // 這是水果
+> // 這是食物
+> ```
+
+```javascript
+let dayNumber = 3;
+
+switch (dayNumber) {
+    case 1:
+        console.log("星期一");
+        break;
+    case 2:
+        console.log("星期二");
+        break;
+    case 3:
+        console.log("星期三");
+        break;
+    case 4:
+        console.log("星期四");
+        break;
+    case 5:
+        console.log("星期五");
+        break;
+    case 6:
+        console.log("星期六");
+        break;
+    case 7:
+        console.log("星期日");
+        break;
+    default:
+        console.log("無效的日期");
+        break;
+}
+// 輸出：星期三
+```
+
+# 循環語句
+
+**循環語句**是程式設計中用來重複執行一段程式碼的控制結構，直到滿足特定條件為止。它讓我們能夠有效地處理重複性任務
+
+循環三要素：
+
+1. 以某個變量為起始值
+2. 變量不斷產生變化
+3. 慢慢靠近終止條件
+
+## 斷點除錯
+
+**斷點調適**是程式開發中最重要的偵錯技術，讓開發者能夠暫停程式執行，檢查變數值，逐步執行程式碼來找出問題
+
+**設置步驟：**
+
+1. 按 `F12` 開啟開發者工具
+2. 切換到 **Sources** 標籤
+3. 找到你的 JavaScript 檔案
+4. 點擊行號設置斷點
+
+![ClShot 2025-09-10 at 17.23.57@2x](web_JS.assets/ClShot 2025-09-10 at 17.23.57@2x.png)
+
+```
+📱 調適控制台
+├── ▶️ Continue (F8) - 繼續執行
+├── ⏭️ Step Over (F10) - 逐行執行
+├── ⬇️ Step Into (F11) - 進入函數
+├── ⬆️ Step Out (Shift+F11) - 跳出函數
+└── 🔄 Restart - 重新開始
+
+📊 變數監視區
+├── 🔍 Watch - 監視特定變數
+├── 📋 Scope - 當前作用域變數
+├── 📞 Call Stack - 函數呼叫堆疊
+└── 🔗 Breakpoints - 斷點列表
+```
+
+## while循環
+
+**While 循環**是一種條件控制的循環結構，只要指定的條件為 `true`，就會持續執行循環體內的程式碼。它特別適合用於**不知道確切循環次數**的情況
+
+```javascript
+while (條件) {
+    // 循環體 - 當條件為 true 時執行
+    // 通常需要更新條件相關的變數
+}
+```
+
+```javascript
+let count = 1;
+
+while (count <= 5) {
+    console.log(`計數：${count}`);
+    count++; // 重要：更新條件變數
+}
+
+console.log("循環結束");
+
+// 輸出：
+// 計數：1
+// 計數：2
+// 計數：3
+// 計數：4
+// 計數：5
+// 循環結束
+```
+
+> [!caution]
+>
+> * **不要忘記更新條件變數**，不然會陷入死循環
+>
+>   ```javascript
+>   // ❌ 危險：忘記更新條件變數
+>   let count = 1;
+>   while (count <= 5) {
+>       console.log(count);
+>       // 忘記 count++ 導致無限循環！
+>   }
+>   
+>   // ✅ 正確：記得更新條件
+>   let count = 1;
+>   while (count <= 5) {
+>       console.log(count);
+>       count++; // 重要！
+>   }
+>   ```
+>
+> * 條件永遠不成立
+>
+>   ```javascript
+>   // ❌ 循環永遠不會執行
+>   let number = 10;
+>   while (number < 5) {
+>       console.log(number); // 這行永遠不會執行
+>       number--;
+>   }
+>   
+>   // ✅ 檢查初始條件
+>   let number = 3;
+>   while (number < 5) {
+>       console.log(number); // 會執行
+>       number++;
+>   }
+>   ```
+
+## 循環退出
+
+主要有兩種方式：
+
+1. `break`（完全退出循環）
+2. `continue`（跳過當前迭代）
+
+|     方式     |         作用         |      適用場景      |        範例        |
+| :----------: | :------------------: | :----------------: | :----------------: |
+|  **break**   | **完全退出當前循環** | 找到目標、錯誤處理 |   搜尋、驗證失敗   |
+| **continue** |   **跳過當前迭代**   |    過濾無效資料    | 資料清理、條件篩選 |
+
+*==break範例==*
+
+```javascript
+let i = 1
+while (i <= 5) {
+  if (i === 3) {
+    break
+  }
+  console.log(`這是變數${i}`)
+  i++
+}
+
+// 輸出
+// 這是變數1
+// 這是變數2
+```
+
+*==continue範例==*
+
+```javascript
+let i = 1
+while (i <= 5) {
+  if (i === 3) {
+    i++
+    continue
+  }
+  console.log(`這是變數${i}`)
+  i++
+}
+
+// 輸出
+// 這是變數1
+// 這是變數2
+// 這是變數4
+// 這是變數5
+```
+
+## for循環
+
+**For 循環**是最常用的循環結構，特別適合**已知循環次數**或需要**按順序處理資料**的情況
+
+```javascript
+for (初始化; 條件; 更新) {
+    // 循環體
+}
+```
+
+1. 執行初始化（只執行一次）  
+2. 檢查條件   
+3. 條件為 true？ 
+   1. 是 → 執行循環體 → 執行更新 → 回到步驟 2 
+   2. 否 → 跳出循環
+
+```javascript
+// 1輸出到100
+for (let i = 1; i <= 100; i++) {
+  document.write(i + "<br>")
+}
+```
+
+for循環的最大價值：循環陣列
+
+```javascript
+let arr = ["James", "Wendy", "Alex"]
+for (let i = 0; i < arr.length; i++) {
+  document.write(arr[i] + "<br>")
+}
+```
+
+> [!note]
+>
+> index必須從0開始，因為陣列的起始值是0
+
+**巢狀for**
+
+一個 for 循環內部再包含另一個或多個 for 循環。這種結構特別適合處理**多維資料**、**矩陣運算**、**組合問題**等需要多層迭代的場景
+
+```javascript
+for (外層初始化; 外層條件; 外層更新) {
+  // 外層循環體
+
+  for (內層初始化; 內層條件; 內層更新) {
+      // 內層循環體
+      // 可以訪問外層和內層的變數
+  }
+
+  // 外層循環體繼續
+}
+```
+
+```javascript
+console.log("基本巢狀循環：");
+
+for (let i = 1; i <= 3; i++) {
+  console.log(`外層循環：第 ${i} 次`);
+
+  for (let j = 1; j <= 4; j++) {
+      console.log(`  內層循環：第 ${j} 次`);
+  }
+
+  console.log(`外層循環 ${i} 結束\n`);
+}
+
+// 輸出：
+// 外層循環：第 1 次
+//   內層循環：第 1 次
+//   內層循環：第 2 次
+//   內層循環：第 3 次
+//   內層循環：第 4 次
+// 外層循環 1 結束
+//
+// 外層循環：第 2 次
+//   內層循環：第 1 次
+//   內層循環：第 2 次
+//   內層循環：第 3 次
+//   內層循環：第 4 次
+// 外層循環 2 結束
+// ...
+```
+
+# 陣列
+
+**陣列**是一種用來**儲存多個值**的資料結構，可以把它想像成一個**有編號的盒子集合**，每個盒子都可以放入一個資料，而且可以透過編號（索引）來快速取得或修改資料
+
+```javascript
+// 想像陣列就像一排有編號的盒子
+// 索引:  0    1   2   3    4
+// 內容: [🍎, 🍌, 🍊, 🍇, 🍓]
+
+let fruits = ["蘋果", "香蕉", "橘子", "葡萄", "草莓"];
+
+console.log("陣列內容：", fruits);
+console.log("第一個水果：", fruits[0]); // 蘋果
+console.log("第三個水果：", fruits[2]); // 橘子
+console.log("陣列長度：", fruits.length); // 5
+
+```
+
+## 陣列基本使用
+
+* 聲明語法
+
+  ```javascript
+  let fruits = ["蘋果", "香蕉", "橘子", "葡萄", "草莓"];
+  
+  // let fruits = new Array("蘋果", "香蕉", "橘子", "葡萄", "草莓") 
+  ```
+
+* 取值
+
+  ```javascript
+  // 變數名[下標]
+  fruits[0]
+  
+  // 陣列長度
+  fruits.length
+  ```
+
+* 循環陣列
+
+  ```javascript
+  let arr = ["James", "Wendy", "Alex"]
+  for (let i = 0; i < arr.length; i++) {
+    document.write(arr[i] + "<br>")
+  }
+  ```
+
+## 陣列增刪改查
+
+![ClShot 2025-09-10 at 18.48.06@2x](web_JS.assets/ClShot 2025-09-10 at 18.48.06@2x.png)
+
+##  增
+
+* **push()**：在末尾新增一個或多個元素，並**返回該陣列的新長度** 
+
+  ```javascript
+  let fruits = new Array("蘋果", "香蕉")
+  console.log(fruits.push("芭樂", "葡萄"))
+  console.log(fruits)
+  
+  // 輸出
+  // 4
+  // ['蘋果', '香蕉', '芭樂', '葡萄']
+  ```
+
+* **unshift()**：在開頭添加一個或多個元素，並**返回該陣列的新長度** 
+
+  ```javascript
+  let fruits = new Array("蘋果", "香蕉")
+  console.log(fruits.unshift("芭樂", "葡萄"))
+  console.log(fruits)
+  
+  // 輸出
+  // 4
+  // ['芭樂', '葡萄', '蘋果', '香蕉']
+  ```
+
+## 刪
+
+* **pop()**：從末尾刪除，並返回該元素的值
+
+  ```javascript
+  let numbers = [1, 2, 3, 4, 5]
+  let removed = numbers.pop()
+  console.log("pop() 返回：", removed) // 5
+  console.log("刪除後陣列：", numbers) // [1, 2, 3, 4]
+  ```
+
+* **shift()**：從開頭刪除，並返回該元素的值
+
+  ```javascript
+  let colors = ["紅色", "綠色", "藍色", "黃色"]
+  let removed = colors.shift()
+  console.log("shift() 返回：", removed) // "紅色"
+  console.log("刪除後陣列：", colors) // ["綠色", "藍色", "黃色"]
+  ```
+
+* **splice(起始位置, 刪除個數)** ：從指定位置刪除，並返回該元素的值
+
+  ```javascript
+  let fruits = ["蘋果", "香蕉", "橘子", "葡萄", "草莓"]
+  let removed = fruits.splice(1, 2)
+  console.log("splice(1, 2) 刪除：", removed) // ["香蕉", "橘子"]
+  console.log("刪除後陣列：", fruits) // ["蘋果", "葡萄", "草莓"]
+  ```
+
+## 改
+
+直接索引修改：array[index] = newValue
+
+```javascript
+let fruits = ["蘋果", "香蕉", "橘子", "葡萄"];
+console.log("原始陣列：", fruits);
+
+fruits[1] = "草莓";
+console.log("修改索引 1：", fruits); // ["蘋果", "草莓", "橘子", "葡萄"]
+```
+
+>[!note]
+>
+>當修改不存在的索引，會擴展陣列
+>
+>```javascript
+>fruits[5] = "櫻桃";
+>console.log("擴展陣列：", fruits); // ["鳳梨", "草莓", "橘子", "芒果", empty, "櫻桃"]
+>console.log("新長度：", fruits.length); // 6
+>```
+>
+>
+
+## 查
+
+陣列[下標]
+
+```javascript
+let fruits = ["蘋果", "香蕉", "橘子", "葡萄"];
+console.log("原始陣列：", fruits);
+console.log(fruits[1]);
+```
+
+
 
 # The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>
