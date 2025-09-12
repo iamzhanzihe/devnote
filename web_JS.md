@@ -1032,7 +1032,7 @@ console.log("循環結束");
 >       console.log(number); // 這行永遠不會執行
 >       number--;
 >   }
->   
+>     
 >   // ✅ 檢查初始條件
 >   let number = 3;
 >   while (number < 5) {
@@ -1313,6 +1313,301 @@ console.log("原始陣列：", fruits);
 console.log(fruits[1]);
 ```
 
+# 函數
 
+函數就像是**工具箱裡的工具**，讓我們寫程式更有效率。想像一下，如果每次要釘釘子都要重新發明錘子，那會多麼浪費時間
+
+---
+
+> **沒有函數的情況**
+>
+> ```javascript
+> // 計算圓面積 - 寫了3次相同的公式
+> let area1 = 3.14159 * 5 * 5;      // 半徑5的圓
+> let area2 = 3.14159 * 10 * 10;    // 半徑10的圓  
+> let area3 = 3.14159 * 7 * 7;      // 半徑7的圓
+> ```
+
+>**有函數的情況**
+>
+>```javascript
+>// 寫一次函數，重複使用
+>function calculateArea(radius) {
+>    return Math.PI * radius * radius;
+>}
+>
+>let area1 = calculateArea(5);
+>let area2 = calculateArea(10);
+>let area3 = calculateArea(7);
+>```
+
+函數可以把具有相同或相似邏輯的程式碼包裹起來，通過函數呼叫執行這些被包裹的程式碼邏輯，這麼做的優勢是有利於精簡程式碼方便重複使用
+
+比如我們前面使用的 alert() 、 prompt() 和 console.log()   都是一些 js 函數，只不過已經封裝好了，我們直接使用的
+
+## 函數使用
+
+- **定義函數** = 製作工具（只做一次）
+- **呼叫函數** = 使用工具（可以用很多次）  
+
+> [!note]
+>
+> **函數取名規範**
+>
+> * 和變數命名基本一致
+> * 儘量小駝峰式命名法
+> * 前綴應該為動詞
+> * 命名建議：常用動詞約定
+>
+> | 動詞     | 含義                   | 範例函數                                        |
+> | -------- | ---------------------- | ----------------------------------------------- |
+> | **can**  | 判斷是否可執行某個動作 | `canEdit()`, `canDelete()`, `canAccess()`       |
+> | **has**  | 判斷是否包含某個值     | `hasPermission()`, `hasChildren()`, `hasData()` |
+> | **is**   | 判斷是否為某個值       | `isValid()`, `isActive()`, `isEmpty()`          |
+> | **get**  | 獲取某個值             | `getUser()`, `getTotal()`, `getId()`            |
+> | **set**  | 設置某個值             | `setTheme()`, `setLanguage()`, `setConfig()`    |
+> | **load** | 加載某些數據           | `loadConfig()`, `loadUserData()`, `loadPage()`  |
+
+```javascript
+// 最簡單的函數定義
+function sayHello() {
+  
+  //函數體
+  console.log("Hello, World!");
+}
+
+// 呼叫函數
+sayHello();  // 輸出: Hello, World!
+```
+
+> [!note]
+>
+> * 函數一開始需要 `function` 關鍵字聲名
+> * 函數沒有被調用是**不會**執行的
+>
+> **循環程式碼 VS 函數**
+>
+> * 循環的程式碼寫完直接執行
+> * 函數需要被調用才會執行，可以再不同地方重複執行多次
+
+## 傳遞參數
+
+**帶參數的函數**是指在定義函數時，可以接收外部傳入數據的函數。這些數據稱為「參數」，讓函數更加靈活和可重用
+
+- **形式參數**: 函數定義時的參數名稱
+- **實際參數**: 函數調用時傳入的具體值
+
+![ClShot 2025-09-11 at 17.01.17@2x](web_JS.assets/ClShot 2025-09-11 at 17.01.17@2x.png)
+
+```javascript
+// 不帶參數的函數
+function sayHello() {
+    console.log("Hello!");
+}
+
+// 帶參數的函數
+function sayHelloTo(name) {  // name 是參數
+    console.log("Hello, " + name + "!");
+}
+```
+
+> [!important]
+>
+> * 若函數完成功能需要呼叫者傳入資料，那麼就需要用有參數的函數
+> * 多個傳入參數需要使用 `,` 隔開
+> * **形式參數的數量 = 實際參數的數量**，數量可以不一致，但是不推薦
+
+> **函數：兩數相加**
+>
+> ```javascript
+> // 兩個數求和
+> function getSum(x, y) {
+>   document.write(x + y)
+> }
+> 
+> getSum(2, 5)
+> getSum() // NaN
+> ```
+>
+> > [!caution]
+> >
+> > **形式參數默認值**
+> >
+> > 如果沒有傳入參數，**x, y就會變成undefined**，這不是我們想要的，所以可以設定參數的默認值，防止這種狀況發生
+> >
+> > ```javascript
+> > // 兩個數求和
+> > function getSum(x=0, y=0) { // 設置默認值
+> >   document.write(x + y)
+> > }
+> > 
+> > getSum(2, 5)
+> > getSum() // 0
+> > ```
+> >
+> > **當函數有傳入參數，x=0, y=0 這個默認值是不會被執行的**
+
+## 函數返回值
+
+**返回值 (Return Value)** 是函數執行完畢後，**傳回給調用者**的結果。它是函數處理完輸入參數後產生的輸出
+
+使用 `return` 處理想要返回的結果 ：
+
+```javascript
+function add(a, b) {
+    return a + b;    // 返回計算結果
+}
+
+let result = add(5, 3);    // result 接收返回值 8
+console.log(result);       // 輸出: 8
+```
+
+> [!note]
+>
+> * 在函數體中使用 return 關鍵字能將內部的執行結果交給函數外部使用
+> * return  後面程式碼**不會再被執行**，會立即結束當前函數，所以 **return 後面的資料不要換行寫**
+> * return函數可以沒有 return，這種情況函數默認返回值為 undefined
+
+## 函數作用域
+
+**函數作用域 (Function Scope)** 是指變數在函數內部的可見性和存取範圍。在函數內部宣告的變數只能在該函數內部使用，外部無法存取
+
+參數有兩種作用域：
+
+* **全域作用域** ：指在程式的最外層宣告的變數，可以在程式的任何地方被存取
+
+  ```javascript
+  // 全域變數
+  let globalName = "Alice";
+  var globalAge = 25;
+  const GLOBAL_CONFIG = "production";
+  
+  function showUserInfo() {
+    console.log(globalName);    // 可以存取全域變數
+    console.log(globalAge);     // 可以存取全域變數
+    console.log(GLOBAL_CONFIG); // 可以存取全域變數
+  }
+  
+  function updateUser() {
+    globalName = "Bob";         // 可以修改全域變數
+    globalAge = 30;
+  }
+  
+  showUserInfo();    // Alice, 25, production
+  updateUser();
+  showUserInfo();    // Bob, 30, production
+  
+  // 在程式任何地方都可以存取
+  console.log("全域存取:", globalName);  // Bob
+  
+  ```
+
+* **函數作用域**：指在函數內部宣告的變數，只能在該函數內部被存取 
+
+  ```javascript
+  function myFunction() {
+    let localVar = "我在函數內部";    // 區域變數
+    console.log(localVar);           // 可以存取
+  }
+  
+  myFunction(); // 輸出: "我在函數內部"
+  console.log(localVar); // 錯誤！localVar 未定義
+  ```
+
+> [!note]
+>
+> **變數有一個坑， 特殊情況：**
+> 如果函數內部，變數沒有使用 `let` 聲明，直接賦值，也當全域變數看，但是**強烈不推薦**
+
+## 匿名函數
+
+**匿名函數 (Anonymous Function)** 是指沒有名稱的函數。它們通常用於一次性使用或作為參數傳遞給其他函數
+
+![ClShot 2025-09-11 at 18.19.22@2x](web_JS.assets/ClShot 2025-09-11 at 18.19.22@2x.png)
+
+```javascript
+// 一般的具名函數
+function namedFunction() {
+  console.log("我是具名函數");
+}
+
+// 匿名函數（賦值給變數）
+const anonymousFunction = function() {
+  console.log("我是匿名函數");
+};
+
+// 匿名箭頭函數
+const arrowFunction = () => {
+  console.log("我是匿名箭頭函數");
+};
+```
+
+**立即執行函數**
+
+全域作用域中創建了太多變數或函數，導致：
+
+- 命名衝突
+- 意外覆蓋
+
+此時立即執行函數可以解決這個問題
+
+```javascript
+// 立即執行的匿名函數
+(function() {
+  console.log("我立即執行！");
+})();
+
+// 帶參數的
+(function(name) {
+  console.log(`Hello, ${name}!`);
+})("World");
+
+// 箭頭函數版本的
+(() => {
+  console.log("箭頭函數也可以立即執行！");
+})();
+
+```
+
+>[!note]
+>
+>在打立即執行函數的時候可以先打()()，在第一個括號裡面放匿名函數，這樣會比較好打
+
+##  邏輯中斷
+
+**邏輯中斷 (Short-Circuit Evaluation)** 是指在邏輯運算中，當前面的條件已經能決定整個表達式的結果時，**後面的條件就不會被執行**
+
+*  **&& (邏輯 AND) - 遇假即停**
+
+  ```javascript
+  // && 的短路邏輯
+  true && true    // ✅ 繼續執行，返回最後一個真值
+  true && false   // ❌ 遇到 false，立即停止，返回 false
+  false && true   // ❌ 第一個就是 false，不執行後面的
+  false && false  // ❌ 第一個就是 false，不執行後面的
+  ```
+
+*  **|| (邏輯 OR) - 遇真即停**
+
+  ```javascript
+  // || 的短路邏輯
+  false || false  // ❌ 繼續執行，返回最後一個值
+  false || true   // ✅ 遇到 true，立即停止，返回 true
+  true || false   // ✅ 第一個就是 true，不執行後面的
+  true || true    // ✅ 第一個就是 true，不執行後面的
+  ```
+
+```javascript
+// 兩種寫法效果一樣
+function getSum(x = 0, y = 0) {
+    console.log(x + y)
+}
+
+function getSum(x, y) {
+    x = x || 0
+    y = y || 0
+    console.log(x + y)
+}
+```
 
 # The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>

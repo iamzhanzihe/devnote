@@ -111,12 +111,12 @@ React 引入了「**元件化**」的開發方式，把複雜的介面拆解成�
 >   import React from 'react';
 >   import ReactDOM from 'react-dom/client';
 >   import App from './App';
->   
+>           
 >   const root = ReactDOM.createRoot(document.getElementById('root'));
 >   root.render(<App />);
 >   ```
 
-**index.js程式的入口**
+## index.js程式的入口
 
 告訴瀏覽器「React 要在哪裡顯示」
 
@@ -151,7 +151,7 @@ React 引入了「**元件化**」的開發方式，把複雜的介面拆解成�
   - `document.getElementById('root')` = 找到 public/index.html 中 id 為 'root' 的元素
   - `render(<App />)` = 把 App 元件顯示在那個位置
 
-**App.js專案的根套件**
+## App.js專案的根套件
 
 定義你的網頁長什麼樣子
 
@@ -352,9 +352,352 @@ export default App;
   }
   
   export default App;
-  
   ```
-
   
+
+# React事件綁定
+
+**事件綁定** = 讓你的網頁元素可以「回應」用戶的操作
+
+比如：
+
+- 按鈕被點擊 → 執行某個動作
+- 輸入框內容改變 → 更新資料
+- 滑鼠移入 → 顯示提示
+
+```jsx
+<元素 on事件名={處理函數}>內容</元素>
+```
+
+>[!note]
+>
+>處理函數整體上遵循駝峰命名法，例如： clickHandler、moveHandler
+
+進行事件綁定前，需要先建立一個事件函數，在綁定到事件上：
+
+```jsx
+function App() {
+  const clickHandler = () => {
+    console.log("按鍵被點擊");
+  }
+
+  return (
+    <div className="App">
+      <button onClick={clickHandler}>click me</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> [!important]
+>
+> 這裡 `<button onClick={clickHandler}>click me</button>` 裡面的 `clickHandler` 他是一個**回調函數**等待被執行，並**不是函數執行完的結果**，當點擊事件觸發了才會執行回調函數
+
+## 獲取事件對象參數
+
+
+
+**事件參數 `e`**（通常叫做 `event`）是瀏覽器自動傳給事件處理函數的**事件對象**
+
+它包含了關於這個事件的**所有資訊**
+
+```jsx
+function App() {
+  const clickHandler = (e) =>{
+    console.log("按鍵被點擊", e);
+  }
+
+  return (
+    <div className="App">
+      <button onClick={clickHandler}>click me</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> [!note]
+>
+> 為什麼 `<button onClick={clickHandler}>click me</button>` 沒有傳入參數，卻可以獲得事件參數e？
+>
+> 因為當你寫 `onClick={handleClick}` 時，**React 會自動把事件對象當作第一個參數傳給你的函數**！
+>
+> ```jsx
+> // React 內部大概是這樣處理的
+> const button = document.createElement('button');
+> button.addEventListener('click', (event) => {
+>   handleClick(event); // React 自動傳入 event！
+> });
+> ```
+>
+
+## 傳遞自定義參數
+
+當你需要在事件觸發時傳遞自定義參數時，需要在事件綁定的位置**使用箭頭函數來包裝你的處理函數**，這樣就可以在調用時傳入實際參數
+
+1. 事件函數中放入形式參數
+2. 改造成箭頭函數，並傳入實際參數
+
+```jsx 
+function App() {
+  const clickHandler = (name) =>{
+    console.log("按鍵被點擊", name);
+  }
+
+  return (
+    <div className="App">
+      <button onClick={() => clickHandler("James")}>click me</button>
+      
+      {/*<button onClick={function () {clickHandler("James")}}>*/}
+      {/*  click me*/}
+      {/*</button>*/}
+    </div>
+  );
+}
+
+export default App;
+```
+
+> **為什麼要使用箭頭函數？**
+>
+> React 的事件處理基於**回調函數**模式：
+>
+> - React 期望你提供一個**函數**，不是函數的執行結果
+> - 當事件發生時，React 會**調用**你提供的函數
+> - 這就是經典的「稍後調用」回調機制
+>
+> ---
+>
+> > **錯誤寫法**
+> >
+> > ```jsx
+> > function WrongExample() {
+> >     const handleClick = (param) => {
+> >        console.log('處理參數：', param);
+> >        return '執行結果';
+> >     };
+> > 
+> >     return (
+> >        // ❌ 這會在渲染時立即執行函數
+> >        <button onClick={handleClick('我的參數')}>
+> >          錯誤按鈕
+> >        </button>
+> >     );
+> > }
+> > ```
+> > 
+> > * handleClick('我的參數') 在渲染時立即執行
+> >* onClick 得到的是返回值 '執行結果'，不是函數
+> > * React 無法調用一個字符串作為回調函數
+> > * 點擊時會報錯或無反應
+> > 
+> > _~Rd~_
+>
+> > **正確寫法**
+> >
+> > ```jsx
+> > function CorrectExample() {
+> >   const handleClick = (param) => {
+> >     console.log('處理參數：', param);
+> >   };
+> > 
+> >   return (
+> >     // ✅ 提供一個回調函數給 React
+> >     <button onClick={() => handleClick('我的參數')}>
+> >       正確按鈕
+> >     </button>
+> >   );
+> > }
+> > ```
+> >
+> > * 渲染時：創建箭頭函數 (e) => handleClick('我的參數', e)
+> > * onClick 得到這個箭頭函數
+> > * 點擊時：React 調用箭頭函數，傳入事件對象
+> > * 箭頭函數內部調用 handleClick，傳入自定義參數和事件對象
+> >
+> > _~Gn~_
+
+## 同時傳遞事件對象和自定義參數
+
+```jsx
+function App() {
+  const clickHandler = (name, e) =>{
+    console.log("按鍵被點擊", name, e);
+  }
+
+  return (
+    <div className="App">
+      <button onClick={(e) => clickHandler("James", e)}>click me</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> [!note]
+>
+> `(e) => clickHandler("James", e)` 作為回調函數傳遞給 onClick，當點擊發生時，這個回調函數接收事件對象 e，然後將 "James" 和 e 傳遞給 clickHandler 函數
+
+> [!caution]
+>
+> 實際參數的位置要和形式參數對應上
+
+# React組件
+
+一個組件就是使用者介面的一部分，它可以有自己的邏輯和外觀，組件之間可以互相嵌套，也可以重複使用多次
+
+在React中，一個組件就是**首字母大寫的函數**，內部存放了組件的邏輯和UI，渲染組件只需要把組件**當成標籤書寫**即可
+
+![ClShot 2025-09-11 at 23.49.07@2x](web_React.assets/ClShot 2025-09-11 at 23.49.07@2x.png)
+
+1. 定義組件
+
+   ```jsx
+   function Button() {
+     return (
+       <button>Click me</button>
+     );
+   }
+   
+   // const Button = () => {
+   //   return (
+   //     <button>Click me</button>
+   //   );
+   // }
+   ```
+
+2. 使用組件
+
+   ```jsx
+   function Button() {
+     return (
+       <button>Click me</button>
+     );
+   }
+   
+   // const Button = () => {
+   //   return (
+   //     <button>Click me</button>
+   //   );
+   // }
+   
+   function App() {
+   
+     return (
+       <div className="App">
+         {/*單標籤*/}
+         <Button/>
+         {/*雙標籤*/}
+         <Button></Button>
+       </div>
+     );
+   }
+   
+   export default App;
+   ```
+
+# useState管理狀態
+
+**useState** 是 React 的一個 **Hook**，讓你在**函數組件**中添加和管理**狀態（state）**，和普通JS變數不同的是，狀態變數一旦發生變化，組件的UI也會跟著變化（**資料驅動視圖**）
+
+![ClShot 2025-09-12 at 00.03.08@2x](web_React.assets/ClShot 2025-09-12 at 00.03.08@2x.png)
+
+```jsx
+const [狀態變數, 設定函數] = useState(初始值);
+//     ^^^^^^   ^^^^^^        ^^^^
+//     當前值   更新狀態的函數   初始狀態值
+```
+
+1. 調用useState添加一個狀態變量(**需要導入**)
+2. 建立點擊事件回調，並更新狀態值
+
+```jsx
+import {useState} from 'react'
+
+function App() {
+  // 1. 使用useState添加一個狀態
+  const [count, setCount] = useState(0)
+
+  // 2. 點擊按鈕回調，更新狀態
+  const clickHandler = () => {
+    setCount(count + 1)
+  }
+
+  return (
+    <div className="App">
+      <button onClick={clickHandler}>{count}</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+## 修改對象狀態
+
+對於對象類型的狀態變數，應該始終**傳給set方法**來進行修改
+
+> [!important]
+>
+> 在React中，狀態被認為是**唯讀**的，我們應該**始終替換它而不是修改它**，直接修改狀態不能引發視圖更新
+>
+> ![ClShot 2025-09-12 at 00.22.46@2x](web_React.assets/ClShot 2025-09-12 at 00.22.46@2x.png)
+
+---
+
+> **直接修改對象值**
+>
+> ```jsx
+> import {useState} from 'react';
+> 
+> function App() {
+>   const [form, setForm] = useState({name: "James"});
+> 
+>   const changeForm = () => {
+>     form.name = "Jack"
+>   }
+> 
+>   return (
+>     <div className="App">
+>       <button onClick={changeForm}>{form.name}</button>
+>     </div>
+>   );
+> }
+> 
+> export default App;
+> ```
+>
+> _~Rd~_
+
+> **呼叫set傳入新對象修改**
+>
+> ```jsx
+> import {useState} from 'react';
+> 
+> function App() {
+>   const [form, setForm] = useState({name: "James"});
+> 
+>   const changeForm = () => {
+>     setForm({
+>       ...form,
+>       name: "Jack"
+>     })
+>   }
+> 
+>   return (
+>     <div className="App">
+>       <button onClick={changeForm}>{form.name}</button>
+>     </div>
+>   );
+> }
+> 
+> export default App;
+> ```
+>
+> _~Gn~_
 
 # The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>
