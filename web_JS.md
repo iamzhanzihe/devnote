@@ -1032,7 +1032,7 @@ console.log("循環結束");
 >       console.log(number); // 這行永遠不會執行
 >       number--;
 >   }
->     
+>         
 >   // ✅ 檢查初始條件
 >   let number = 3;
 >   while (number < 5) {
@@ -1609,5 +1609,116 @@ function getSum(x, y) {
     console.log(x + y)
 }
 ```
+
+# 物件
+
+JavaScript 中的 Object（物件/對象）是一種資料類型，用來儲存**鍵值對**（key-value pairs）的**無序集合**
+
+```javascript
+// 建立物件的方式
+let person = {
+  name: "小明",
+  age: 25,
+};
+```
+
+## 物件使用
+
+聲名物件有兩種方法：
+
+1. ```javascript
+   let 物件名 = {}
+   ```
+
+2. ```javascript
+   let 物件名 = new Object()
+   ```
+
+>  [!note]
+>
+> 實際開發中，我們多用中括號。 {} 是物件字面量
+
+物件是 JavaScript 的基本資料結構，可以包含：
+
+  - 屬性（properties）：儲存資料的鍵值對(名詞)
+  - 方法（methods）：儲存函式的屬行為(動詞)
+
+> **建立產品物件**
+>
+> ```javascript
+> let goods = {
+>   name: "iphone17",
+>   num: "A20341",
+>   weight: "0.2kg"
+> }
+> ```
+
+### 增
+
+```javascript
+// 點記法 物件.屬性 = 新值
+student.school = "台大";
+
+// 方括號記法
+student["grade"] = "大二";
+```
+
+### 刪(少用)
+
+```javascript
+// delete 操作符
+delete student.grade;
+delete student["phone"];
+
+// 確認刪除結果
+console.log(student.grade);  // undefined
+```
+
+### 改
+
+```javascript
+// 直接賦值 物件.屬性 = 新值  
+student.age = 21;
+student["name"] = "小華改名了";
+```
+
+### 查
+
+```javascript
+// 點記法 物件.屬性
+console.log(student.name);        // "小華"
+
+// 方括號記法
+console.log(student["age"]);      // 20
+```
+
+> [!important]
+>
+> 如果變量名稱屬於多詞屬性，像是"item-name"，"box-count"，這樣的就**沒有辦法使用物件.屬性**
+
+>[!note]
+>
+>有就改，沒有就加，delete才會刪
+
+## 物件的方法
+
+方法就是物件裡面的函式。可以把它想像成物件的「技能」或「行為」
+
+```javascript
+// 想像一個人的物件
+const person = {
+  name: "小明",        // 屬性：資料
+  age: 25,            // 屬性：資料
+  sayHello: function() {  // 方法：行為/動作
+    console.log("你好！");
+  }
+};
+```
+
+![ClShot 2025-09-12 at 23.15.52@2x](web_JS.assets/ClShot 2025-09-12 at 23.15.52@2x.png)
+
+> [!note]
+>
+> 在調用方法的時候，使用 **物件名稱.方法名稱()** 來呼叫方法
 
 # The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>
