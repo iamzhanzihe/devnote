@@ -111,7 +111,7 @@ React 引入了「**元件化**」的開發方式，把複雜的介面拆解成�
 >   import React from 'react';
 >   import ReactDOM from 'react-dom/client';
 >   import App from './App';
->           
+>               
 >   const root = ReactDOM.createRoot(document.getElementById('root'));
 >   root.render(<App />);
 >   ```
@@ -600,6 +600,59 @@ export default App;
    export default App;
    ```
 
+## 基礎樣式控制
+
+React組件基礎的樣式控制有兩種方式：
+
+1. **行內樣式（不推薦）**
+
+   ```jsx
+   function App() {
+   
+     return (
+       <div className="App">
+         <span style={{color: "red", fontSize: "32px"}}>這是span文字</span>
+       </div>
+     );
+   }
+   
+   export default App;
+   ```
+
+2. **class類名控制**
+
+   建議獨立建立一個控制樣式的css檔案，再引入app.js中做使用
+
+   ```css
+   .test {
+       color: blue;
+       font-size: 24px;
+   }
+   ```
+
+   ```jsx
+   import './index.css'
+   
+   function App() {
+   
+     return (
+       <div className="App">
+         <span style={{color: "red", fontSize: "32px"}}>這是span文字</span>
+         <span className="test">這是span文字</span>
+       </div>
+     );
+   }
+   
+   export default App;
+   ```
+
+   >[!note]
+   >
+   >導入CSS樣式必須使用 `className=` ，這是React JSX的規定，因為 `class` 是 JavaScript 的**保留字**（用於定義類）
+
+
+
+
 # useState管理狀態
 
 **useState** 是 React 的一個 **Hook**，讓你在**函數組件**中添加和管理**狀態（state）**，和普通JS變數不同的是，狀態變數一旦發生變化，組件的UI也會跟著變化（**資料驅動視圖**）
@@ -699,5 +752,105 @@ export default App;
 > ```
 >
 > _~Gn~_
+
+# 練習-bilibili評論案例
+
+![ClShot 2025-09-13 at 16.12.13@2x](web_React.assets/ClShot 2025-09-13 at 16.12.13@2x.png)
+
+1. 渲染評論列表
+
+   * 使用useState來渲染評論列表
+   * 使用map方法對列表資料進行遍歷渲染（別忘了加key）
+
+   ```jsx
+   const [commentList, setCommentList] = useState(defaultList)
+   
+   {/* 評論列表 */}
+   <div className="reply-list">
+     {/* 評論項 */}
+     {commentList.map(item => (
+       <div key={item.rpid} className="reply-item">
+         {/* 頭像 */}
+         <div className="root-reply-avatar">
+           <div className="bili-avatar">
+             <img
+               className="bili-avatar-img"
+               alt=""
+               src={item.user.avatar}
+             />
+           </div>
+         </div>
+   
+         <div className="content-wrap">
+           {/* 用戶名 */}
+           <div className="user-info">
+             <div className="user-name">{item.user.uname}</div>
+           </div>
+           {/* 評論內容 */}
+           <div className="root-reply">
+             <span className="reply-content">{item.content}</span>
+             <div className="reply-info">
+               {/* 評論時間 */}
+               <span className="reply-time">{item.ctime}</span>
+               {/* 評論數量 */}
+               <span className="reply-time">點讚數:{item.like}</span>
+               <span className="delete-btn">
+               刪除
+             </span>
+   
+             </div>
+           </div>
+         </div>
+       </div>
+     ))}
+   </div>
+   ```
+
+2. 刪除評論實現
+
+   * 只有自己的評論才顯示刪除按鈕(條件過濾)
+
+     ```jsx
+     {/* 評論數量 */}
+     <span className="reply-time">點讚數:{item.like}</span>
+     {user.uid === item.user.uid &&
+       <span className="delete-btn" onClick={() => handleDel(item.rpid)}>
+         刪除
+       </span>
+     }
+     ```
+
+   * 點選刪除按鈕，刪除當前評論，列表中不再顯示
+
+     ```jsx
+     const handleDel = (rid) => {
+       console.log(rid)
+       setCommentList(commentList.filter((item) => item.rpid !== rid))
+     }
+     ```
+
+3. 渲染導航Tab和高亮實現
+
+   點誰就把誰的type（獨一無二的標識）記錄下來，然後和遍歷時的每一項的type做匹配，誰匹配到就設定負責高亮的類名
+
+   ```jsx
+   <li className="nav-sort">
+     {/* 高亮類名： active */}
+     {tabs.map(item => (
+       <span key={item.type} className={`nav-item ${type === item.type && 'active'}`} onClick={() => handleTabChange(item.type)}>{item.text}</span>
+     ))}
+   </li>
+   ```
+
+   ```jsx
+   const [type, setType] = useState("hot")
+   
+   const handleTabChange = (type) => {
+     console.log(type)
+     setType(type)
+   }
+   ```
+
+4. 評論列表排序功能實現
 
 # The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>

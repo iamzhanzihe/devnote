@@ -1647,9 +1647,9 @@ let person = {
 >
 > ```javascript
 > let goods = {
->   name: "iphone17",
->   num: "A20341",
->   weight: "0.2kg"
+>     name: "iphone17",
+>     num: "A20341",
+>     weight: "0.2kg"
 > }
 > ```
 
@@ -1721,4 +1721,121 @@ const person = {
 >
 > 在調用方法的時候，使用 **物件名稱.方法名稱()** 來呼叫方法
 
-# The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>
+## 遍歷物件
+
+> [!TIP]
+>
+> for 遍歷對象的問題：
+>
+> * 對象沒有像陣列一樣的length屬性，所以無法確定長度
+> * 對象裡面是無序的鍵值對，沒有規律
+
+**遍歷陣列(不建議使用)**
+
+```javascript
+let arr = [1, 2, 3, 4, 5]
+for (let k in arr) {
+  console.log(k); // 0 1 2 3 4 k是陣列的index
+  console.log(arr[k]) // 1 2 3 4 5 arr[k]是陣列的值
+}
+```
+
+![ClShot 2025-09-13 at 14.22.52@2x](web_JS.assets/ClShot 2025-09-13 at 14.22.52@2x.png)
+
+> [!note]
+>
+> 可以看到 `let k in arr` 中 k的值是一個**字符串格式的資料(字是黑色的)**
+
+**遍歷物件**
+
+```javascript
+let goods = {
+  name: "iphone17",
+  num: "A20341",
+  weight: "0.2kg"
+}
+for (let k in goods) {
+  console.log(k);
+  console.log(goods[k]);
+  // console.log(goods.k); 錯誤方法
+}
+```
+
+> [!note]
+>
+> * 由於 k 是變數，獲得**對象的屬性名**，所以必須使用 [ ] 語法解析 
+> * 對象名[k] 才能獲得屬性值
+
+## 內置函數
+
+內置函數（Built-in Functions） 是 JavaScript 本身就提供給我們使用的函數，不需要自己寫，直接呼叫就可以用。
+
+想像成：JavaScript 預先準備好的工具箱，例如 `Math` 物件就提供很多內置的方法，專門處理數學運算
+
+```javascript
+// 取絕對值
+Math.abs(-5);        // 5
+Math.abs(3);         // 3
+
+// 四捨五入
+Math.round(4.7);     // 5
+Math.round(4.3);     // 4
+
+// 無條件進位
+Math.ceil(4.1);      // 5
+Math.ceil(4.9);      // 5
+
+// 無條件捨去
+Math.floor(4.9);     // 4
+Math.floor(4.1);     // 4
+
+// 找最大值
+Math.max(1, 3, 2);   // 3
+Math.max(10, 5, 8);  // 10
+
+// 找最小值
+Math.min(1, 3, 2);   // 1
+Math.min(10, 5, 8);  // 5
+
+// 陣列找最大最小值
+const numbers = [1, 5, 3, 9, 2];
+Math.max(...numbers);  // 9
+Math.min(...numbers);  // 1
+```
+
+## 資料存放差異
+
+* **簡單資料類型**：又叫做基本資料類型或者值類型，**儲存在Stack中**，變數中儲存的是**值本身**，例如：string ，number，boolean，undefined，null
+* **引用資料類型**：複雜資料類型，**儲存在Heap中**，變數中儲存的僅僅是**地址**（引用），因此叫做引用資料類型，通過 new 關鍵字建立的對象（系統對象、自訂對象），如 Object、Array、Date
+
+![ClShot 2025-09-13 at 15.23.06@2x](web_JS.assets/ClShot 2025-09-13 at 15.23.06@2x.png)
+
+---
+
+>**簡單資料類型**
+>
+>```javascript
+>let num = 10 
+>
+>// num2 複製 num 的值，也是 10（獨立存儲）
+>let num2 = num 
+>num = 20         
+>console.log(num2) // 結果：10
+>
+>```
+>
+>![ClShot 2025-09-13 at 15.28.22@2x](web_JS.assets/ClShot 2025-09-13 at 15.28.22@2x.png)
+
+> **引用資料類型**
+>
+> ```javascript
+> let obj1 = { age: 18 }  // obj1 在棧中存放堆地址，堆中存放 {age: 18}
+> let obj2 = obj1         // obj2 複製 obj1 的地址（指向同一個堆對象）
+> obj1.age = 20           // 修改堆中的對象，obj1 和 obj2 都指向它
+> console.log(obj2)       // 結果：{age: 20}
+> 
+> ```
+>
+> ![ClShot 2025-09-13 at 15.28.47@2x](web_JS.assets/ClShot 2025-09-13 at 15.28.47@2x.png)
+
+#  The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>
