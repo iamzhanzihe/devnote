@@ -111,7 +111,7 @@ React 引入了「**元件化**」的開發方式，把複雜的介面拆解成�
 >   import React from 'react';
 >   import ReactDOM from 'react-dom/client';
 >   import App from './App';
->               
+>                   
 >   const root = ReactDOM.createRoot(document.getElementById('root'));
 >   root.render(<App />);
 >   ```
@@ -666,29 +666,31 @@ const [狀態變數, 設定函數] = useState(初始值);
 ```
 
 1. 調用useState添加一個狀態變量(**需要導入**)
+
+   ```jsx
+   import {useState} from 'react'
+   ```
 2. 建立點擊事件回調，並更新狀態值
 
-```jsx
-import {useState} from 'react'
-
-function App() {
-  // 1. 使用useState添加一個狀態
-  const [count, setCount] = useState(0)
-
-  // 2. 點擊按鈕回調，更新狀態
-  const clickHandler = () => {
-    setCount(count + 1)
-  }
-
-  return (
-    <div className="App">
-      <button onClick={clickHandler}>{count}</button>
-    </div>
-  );
-}
-
-export default App;
-```
+   ```jsx
+   function App() {
+     // 1. 使用useState添加一個狀態
+     const [count, setCount] = useState(0)
+   
+     // 2. 點擊按鈕回調，更新狀態
+     const clickHandler = () => {
+       setCount(count + 1)
+     }
+   
+     return (
+       <div className="App">
+         <button onClick={clickHandler}>{count}</button>
+       </div>
+     );
+   }
+   
+   export default App;
+   ```
 
 ## 修改對象狀態
 
@@ -753,7 +755,43 @@ export default App;
 >
 > _~Gn~_
 
-# 練習-bilibili評論案例
+*[<kbd>![](icon/logo.svg) bilibili練習  ![](icon/icon-more.svg?fill=text)</kbd>](#bilibili評論案例)*
+
+## 控制表單狀態
+
+使用 React 組件的狀態（useState）來控制表單的狀態
+
+![ClShot 2025-09-15 at 22.02.58@2x](web_React.assets/ClShot 2025-09-15 at 22.02.58@2x.png)
+
+1. 準備一個React狀態值，讓input標籤value屬性保持更新
+
+2. 通過value屬性綁定狀態，通過onChange更新變量
+
+```jsx   
+import {useState} from "react";
+
+function App() {
+
+  const [value, setValue] = useState('');
+
+  return (
+    <div className="App">
+    <input
+      type="text"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}/>
+    </div>
+  );
+}
+
+export default App;
+```
+
+
+
+# 練習
+
+## bilibili評論案例
 
 ![ClShot 2025-09-13 at 16.12.13@2x](web_React.assets/ClShot 2025-09-13 at 16.12.13@2x.png)
 
@@ -851,6 +889,52 @@ export default App;
    }
    ```
 
+   > [!note]
+   >
+   > className={nav-item ${type === item.type && 'active'}} 這樣的寫法不夠整潔，不好讀，可以用第三方套件**通過條件動態控制class類名的顯示**
+   >
+   > ![ClShot 2025-09-15 at 21.36.10@2x](web_React.assets/ClShot 2025-09-15 at 21.36.10@2x.png)
+   >
+   > ```bash
+   > npm install classnames
+   > ```
+   >
+   > ```jsx
+   > <li className="nav-sort">
+   >   {/* 高亮類名： active */}
+   >   {tabs.map(item => (
+   >     <span key={item.type} className={classNames("nav-item", {"active": type===item.type})} onClick={() => handleTabChange(item.type)}>{item.text}</span>
+   >   ))}
+   > </li>
+   > ```
+   >
+   > 
+
 4. 評論列表排序功能實現
+
+   導入lodash第三方套件，完成排序功能(需要先 `npm install lodash`)
+
+   ![ClShot 2025-09-15 at 21.28.15@2x](web_React.assets/ClShot 2025-09-15 at 21.28.15@2x.png)
+
+   ```jsx
+   import _ from 'lodash'
+   ```
+
+   ```jsx
+   const [type, setType] = useState("hot")
+   const handleTabChange = (type) => {
+     console.log(type)
+     setType(type)
+     if (type === "hot") {
+       // 根據點讚數量排序
+       setCommentList(_.orderBy(commentList, 'like', 'desc'))
+     } else {
+       // 根據發布時間排序
+       setCommentList(_.orderBy(commentList, 'ctime', 'desc'))
+     }
+   }
+   ```
+
+
 
 # The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>

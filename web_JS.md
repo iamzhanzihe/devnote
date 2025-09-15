@@ -325,6 +325,9 @@ let 變量名稱 = ['元素1'. '元素2', '元素3']
 
 當某個變數永遠不會改變的時候，就可以使用 `const` 來聲明，而不是 `let`
 
+* 表示語意更明確，實際開發過程中也是使用 `const` 居多
+* 只要有變量先給 `const` ，如果之後會被修改在換成 `let`
+
 ```javascript
 const PI = 3.14
 ```
@@ -336,6 +339,12 @@ const PI = 3.14
 > ![ClShot 2025-06-14 at 16.59.23@2x](web_JS.assets/ClShot 2025-06-14 at 16.59.23@2x.png)
 >
 > ![ClShot 2025-06-14 at 16.59.59@2x](web_JS.assets/ClShot 2025-06-14 at 16.59.59@2x.png)
+
+>[!important]
+>
+>基本資料類型需要修改值就要使用 `let` ，但是引用資料類型可以**維持使用** `const`，因為引用資料類型存放的是資料的地址，只要不涉及地址更改就可以使用 `const`
+>
+>![ClShot 2025-09-15 at 22.32.39@2x](web_JS.assets/ClShot 2025-09-15 at 22.32.39@2x.png)
 
 # 資料類型
 
@@ -1032,7 +1041,7 @@ console.log("循環結束");
 >       console.log(number); // 這行永遠不會執行
 >       number--;
 >   }
->         
+>           
 >   // ✅ 檢查初始條件
 >   let number = 3;
 >   while (number < 5) {
