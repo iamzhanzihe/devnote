@@ -3,8 +3,9 @@ title:前端開發學習筆記-HTML
 vlook-doc-lib:
 - [筆記網站跳轉](index.html?target=_self "快速挑轉到想要的網頁")
 - [前端開發學習筆記★HTML](web_HTML.html?target=_self "網頁開發學習筆記★HTML")
-- [前端開發學習筆記★CSS](web_CSS.html?target=_self "網頁開發學習筆記★HTML")
-- [前端開發學習筆記★JS](web_JS.html?target=_self "網頁開發學習筆記★HTML")
+- [前端開發學習筆記★CSS](web_CSS.html?target=_self "網頁開發學習筆記★CSS")
+- [前端開發學習筆記★JS](web_JS.html?target=_self "網頁開發學習筆記★JS")
+- [前端開發學習筆記★React](web_React.html?target=_self "網頁開發學習筆記★React")
 
 ---
 

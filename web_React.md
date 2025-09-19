@@ -111,7 +111,7 @@ React 引入了「**元件化**」的開發方式，把複雜的介面拆解成�
 >   import React from 'react';
 >   import ReactDOM from 'react-dom/client';
 >   import App from './App';
->                   
+>                         
 >   const root = ReactDOM.createRoot(document.getElementById('root'));
 >   root.render(<App />);
 >   ```
@@ -563,6 +563,7 @@ export default App;
      );
    }
    
+   // 箭頭函數
    // const Button = () => {
    //   return (
    //     <button>Click me</button>
@@ -579,6 +580,7 @@ export default App;
      );
    }
    
+   // 箭頭函數
    // const Button = () => {
    //   return (
    //     <button>Click me</button>
@@ -650,7 +652,227 @@ React組件基礎的樣式控制有兩種方式：
    >
    >導入CSS樣式必須使用 `className=` ，這是React JSX的規定，因為 `class` 是 JavaScript 的**保留字**（用於定義類）
 
+## 組間之間資料傳遞
 
+組件需要互相溝通才能協作。以下是主要的傳遞方式：
+
+* A-B 父子資料傳遞
+* B-C 兄弟資料傳遞
+* A-E 跨層資料傳遞
+
+![ClShot 2025-09-18 at 23.53.55@2x](web_React.assets/ClShot 2025-09-18 at 23.53.55@2x.png)
+
+*^tab^*
+
+> **父傳子**
+>
+> ![ClShot 2025-09-18 at 23.56.56@2x](web_React.assets/ClShot 2025-09-18 at 23.56.56@2x.png)
+>
+> 實現方法：
+>
+> 1. 父組件傳遞資料 - 在子組件標籤上**綁定屬性**
+>
+>    ```jsx
+>    function App() {
+>      const name= 'this is app name'
+>    
+>      return (
+>        <div className="App">
+>          <Son name={name}></Son>
+>        </div>
+>      );
+>    }
+>    ```
+>
+> 2. 子組件接收資料 - 子組件**通過props參數**接收資料
+>
+>    ```jsx
+>    function Son(props){
+>      return <div>this is son, {props.name}</div>;
+>    }
+>    ```
+>
+>    > [!note]
+>    >
+>    > props包含了父組件傳遞過來的所有資料(可傳遞任意的資料)，子元件**只能讀取props中的資料**，**不能直接進行修改**
+>    >
+>    > **父元件的資料只能由父元件修改**
+>
+> > [!TIP]
+> >
+> > **特殊的prop children** (需要成對標籤)
+> >
+> > 當我們把內容嵌套在子組件標籤中時，父組件會自動在名為children的prop屬性中接收該內容
+> >
+> > ![ClShot 2025-09-19 at 00.11.47@2x](web_React.assets/ClShot 2025-09-19 at 00.11.47@2x.png)
+> >
+> > ```jsx
+> > function Son(props){
+> >   console.log(props);
+> >   return <div>this is son, {props.children}</div>;
+> > }
+> > 
+> > function App() {
+> > 
+> >   return (
+> >     <div className="App">
+> >       <Son>
+> >         <span>this is span</span>
+> >       </Son>
+> >     </div>
+> >   );
+> > }
+> > 
+> > export default App;
+> > ```
+> >
+> > 
+
+> **子傳父**
+>
+> ![ClShot 2025-09-19 at 00.13.52@2x](web_React.assets/ClShot 2025-09-19 at 00.13.52@2x.png)
+>
+> 在子元件中呼叫父元件中的函數並傳遞參數
+>
+> ```jsx
+> import {useState} from "react";
+> 
+> function Son({onGetSonMsg}) {
+>     // Son組件資料
+>     const sonMsg = "this is son msg"
+>     return (
+>       <div>
+>         this is son
+>         {/*2.子組件調用父組件的函數*/}
+>         <button onClick={() => onGetSonMsg(sonMsg)}>Get Son</button>
+>       </div>
+>     )
+> }
+> 
+> function App() {
+>     const [msg, setMsg] = useState("");
+>     const getMsg = (msg) => {
+>       console.log(msg)
+>       setMsg(msg)
+>     }
+>     return (
+>       <div className="App">
+>         this is app, {msg}
+>         {/*1.建立回調給子組件*/}
+>         <Son onGetSonMsg={getMsg}></Son>
+>       </div>
+>     );
+> }
+> 
+> export default App;
+> ```
+>
+
+> **兄弟互傳**
+>
+> ![ClShot 2025-09-19 at 17.59.27](web_React.assets/ClShot 2025-09-19 at 17.59.27.png)
+>
+> 通過父組件進行兄弟組件之間的資料傳遞
+>
+> 1. A組件先通過子傳父的方式把資料傳給父組件App
+> 2. App拿到資料後通過父傳子的方式再傳遞給B組件
+>
+> ```jsx
+> import {useState} from "react";
+> 
+> function A ({onGetAMsg}) {
+>   const msg = 'this is a message!'
+> 
+>   return (
+>     <div>
+>       this is a component
+>       <button onClick={() => onGetAMsg(msg)}>send</button>
+>     </div>
+>   )
+> }
+> 
+> function B ({msg}) {
+>   return (
+>     <div>
+>       this is b component, {msg}
+>     </div>
+>   )
+> }
+> 
+> function App() {
+>   const [msg, setMsg] = useState('')
+>   const getAMsg = (msg) => {
+>     console.log(msg)
+>     setMsg(msg)
+>   }
+> 
+>   return (
+>     <div className="App">
+>       <A onGetAMsg={getAMsg}></A>
+>       <B msg={msg}></B>
+>     </div>
+>   );
+> }
+> 
+> export default App;
+> ```
+
+> **跨層傳遞**
+>
+> ![ClShot 2025-09-19 at 19.45.32](web_React.assets/ClShot 2025-09-19 at 19.45.32.png)
+>
+> > [!note]
+> >
+> > 只要有頂層和底層的關係就可以直接使用這套機制
+>
+> 1. 使用createContext方法建立一個上下文物件Ctx
+> 2. 在頂層組件（App）中通過 Ctx.Provider 組件提供資料
+> 3. 在底層組件（B）中通過 useContext 鉤子函數獲取資料
+>
+> ```jsx
+> // app -> A -> B
+> 
+> // 1. 使用createContext方法創建上下文物鍵
+> import {createContext, useContext} from 'react';
+> const MsgContext = createContext()
+> 
+> function A () {
+>   return (
+>     <div>
+>       this is a component
+>       <B/>
+>     </div>
+>   )
+> }
+> 
+> function B () {
+>   // 3. 通過 useContext 鉤子函數獲取消費資料
+>   const msg = useContext(MsgContext)
+>   return (
+>     <div>
+>       this is b component, {msg}
+>     </div>
+>   )
+> }
+> 
+> function App() {
+>  const msg = 'this is app msg'
+>   return (
+>     <div className="App">
+>       {/*2. 通過 Ctx.Provider 組件提供資料*/}
+>       <MsgContext.Provider value={msg}>
+>         this is app
+>         <A/>
+>       </MsgContext.Provider>
+>     </div>
+>   );
+> }
+> 
+> export default App;
+> 
+> ```
+>
+> 
 
 
 # useState管理狀態
@@ -786,6 +1008,367 @@ function App() {
 
 export default App;
 ```
+
+# useRef取得 DOM 元素
+
+`useRef` 是 React 中用來直接存取 DOM 元素的 Hook，分為兩步驟：
+
+1. 使用useRef建立 ref 對象，並與 JSX 綁定
+2. 在DOM可用時，通過 inputRef.current 拿到 DOM 對象
+
+```jsx
+import {useRef} from 'react'
+
+function App() {
+
+  // 1. 生成useRef並綁定
+  const inputRef = useRef(null)
+
+  const showDom = () => {
+    // 2. 通過 inputRef.current 拿到 DOM 對象
+    console.log(inputRef.current)
+  }
+
+  return (
+    <div className="App">
+      <input type="text" ref={inputRef} />
+      <button onClick={showDom}>Click</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+> [!note]
+>
+> **為什麼使用useRef而不是使用傳統的DOM獲取？**
+>
+>  React 會不斷重新渲染頁面，每次重新渲染時，你都要重新去「找」這個輸入框在哪裡
+>
+> **用 useRef 的話：** 就像你在輸入框上貼了一張「我的名片」，之後不管頁面怎麼變化，你都可以直接透過這張名片找到它，不用再重新搜尋
+
+*[<kbd>![](icon/logo.svg) bilibili發表評論  ![](icon/icon-more.svg?fill=text)</kbd>](#bilibili發表評論)*
+
+
+
+# useEffect副作用
+
+`useEffect` 是 React Hook，用於處理組件的**副作用**（side effects）。它會在組件渲染完成後執行，讓我們可以安全地執行各種任務，有兩個核心使用場景：
+
+1. **渲染完成後執行任務**
+
+   **渲染完成**的時候再執行一些任務時使用 `useEffect`
+
+   - DOM 操作（設置焦點、測量尺寸）
+   - 更新頁面標題
+   - 初始化第三方庫
+   - 設置事件監聽器
+
+2. **特定條件下執行邏輯**
+
+   想要在**特定的條件**下去執行 useEffect 裡面的邏輯時使用
+
+   - **API 調用** 
+   - 數據獲取
+   - 搜索功能
+   - 即時數據更新
+
+> [!important]
+>
+> |   觸發方式   |               例子                |  何時執行  |
+> | :----------: | :-------------------------------: | :--------: |
+> | **事件引起** | `onClick`, `onChange`, `onSubmit` | 用戶操作時 |
+> | **渲染引起** |            `useEffect`            | 組件渲染後 |
+
+```jsx
+useEffect(
+  () => {
+    // 副作用函數
+    // 在這裡寫副作用邏輯
+    
+    return () => {
+      // 清理函數（可選）
+      // 在組件卸載或下次副作用執行前調用
+    };
+  },
+  [依賴項1, 依賴項2] // 依賴陣列（可選）空陣列 = 只執行一次
+);
+```
+
+## useEffect 依賴項參數
+
+useEffect副作用函數的執行時機存在多種情況，根據**傳入依賴項的不同**，會有不同的執行表現
+
+|   依賴項類型   | 初始渲染 | State 改變 | Props 改變 | 使用建議                 |
+| :------------: | :------: | :--------: | :--------: | ------------------------ |
+| **沒有依賴項** |    ✅     |     ✅      |     ✅      | 謹慎使用，易造成性能問題 |
+| **空陣列 []**  |    ✅     |     ❌      |     ❌      | 初始化、設定監聽器       |
+|  **[特定值]**  |    ✅     |  依值而定  |  依值而定  | 響應特定變化，最常用     |
+
+*^tab^*
+
+> **沒有依賴項**
+>
+> ```jsx
+> import {useState, useEffect} from 'react'
+> 
+> function App () {
+>   // 1. 沒有依賴項
+>   const [count, setCount] = useState(0);
+>   useEffect(() => {
+>     console.log('useEffect 被執行了')
+>   })
+> 
+>   return (
+>     <div className="App">
+>       this is app
+>       <button onClick={() => setCount(count + 1)}>{count}</button>
+>     </div>
+>   )
+> }
+> export default App;
+> ```
+>
+> 執行時機：
+>
+> * 組件初始渲染時執行 
+> * count 改變時執行
+> * 任何 state 改變都會執行
+
+> **空陣列 []**
+>
+> ```jsx
+> import {useState, useEffect} from 'react'
+> 
+> function App () {
+>   const [count, setCount] = useState(0);
+>   // 2. 傳入空陣列
+>   useEffect(() => {
+>     console.log('useEffect 被執行了')
+>   },[])
+> 
+>   return (
+>     <div className="App">
+>       this is app
+>       <button onClick={() => setCount(count + 1)}>{count}</button>
+>     </div>
+>   )
+> }
+> export default App;
+> ```
+>
+> 執行時機：
+>
+> * 組件初始渲染時執行
+
+> **添加特定依賴**
+>
+> ```jsx
+> import {useState, useEffect} from 'react'
+> 
+> function App () {
+>   const [count, setCount] = useState(0);
+>   // 3. 傳入特定依賴
+>   useEffect(() => {
+>     console.log('useEffect 被執行了')
+>   },[count])
+> 
+>   return (
+>     <div className="App">
+>       this is app
+>       <button onClick={() => setCount(count + 1)}>{count}</button>
+>     </div>
+>   )
+> }
+> export default App;
+> ```
+>
+>  執行時機：
+>
+> * 組件初始渲染時執行
+> * 只針對count 改變時執行
+
+> [!important]
+>
+> **沒有依賴項** VS **依賴 [count]**
+>
+> 可以看到兩個的執行結果一樣，但是兩個其實有很大的差異，如果再增加多一點的狀態就可以觀察到，例如增加name這個狀態：
+>
+> |         操作          | 沒有依賴項 | 依賴 [count] |
+> | :-------------------: | :--------: | :----------: |
+> |     **初始渲染**      |   ✅ 執行   |    ✅ 執行    |
+> | **點擊 "增加 Count"** |   ✅ 執行   |    ✅ 執行    |
+> | **點擊 "改變 Name"**  |   ✅ 執行   | ❌ **不執行** |
+> |  **點擊 "切換主題"**  |   ✅ 執行   | ❌ **不執行** |
+
+## 清除副作用
+
+![ClShot 2025-09-19 at 21.28.51](web_React.assets/ClShot 2025-09-19 at 21.28.51.png)
+
+組件卸載或依賴項改變時，我們需要清理之前設置的副作用，避免記憶體洩漏和意外行為
+
+副作用清除就是在適當的時機**撤銷**或**清理**之前設置的副作用，比如：
+
+- 移除事件監聽器
+- 清除定時器
+- 取消網路請求
+- 清理訂閱
+
+*^tab^*
+
+> **沒有清除副作用**
+>
+> ```jsx
+> import {useState, useEffect} from 'react'
+> 
+> function Son() {
+>   useEffect(() => {
+>     const timer = setInterval(() => {
+>       console.log('timer執行中...')
+>     }, 1000)
+>   })
+>   return (
+>     <div>this is son</div>
+>   )
+> }
+> 
+> function App () {
+>   const [show, setShow] = useState(true)
+>   return (
+>     <div className="App">
+>       {show && <Son/>}
+>       <button onClick={() => setShow(false)}>清理組件</button>
+>     </div>
+>   )
+> }
+> export default App;
+> ```
+>
+> ![ClShot 2025-09-19 at 21.37.53](web_React.assets/ClShot 2025-09-19 at 21.37.53.png)
+>
+> 可以看到及使組件已經被清理，但是計時器依然再執行，繼續輸出 "timer執行中..."，需要添加一個清除函數來解決這個問題
+
+> **清除副作用**
+>
+> ```jsx
+> import {useState, useEffect} from 'react'
+> 
+> function Son() {
+>   useEffect(() => {
+>     const timer = setInterval(() => {
+>       console.log('timer執行中...')
+>     }, 1000)
+> 
+>     // 清除副作用
+>     return () => {
+>       clearInterval(timer)
+>     }
+>   })
+>   return (
+>     <div>this is son</div>
+>   )
+> }
+> 
+> function App () {
+>   const [show, setShow] = useState(true)
+>   return (
+>     <div className="App">
+>       {show && <Son/>}
+>       <button onClick={() => setShow(false)}>清理組件</button>
+>     </div>
+>   )
+> }
+> export default App;
+> ```
+>
+> ```markdown
+> 用戶操作 → 控制台輸出
+> -------------------
+> 1. 頁面加載    → 🟢 Son 組件掛載
+>                → ⏰ timer執行中...
+> 2. 等待1秒     → ⏰ timer執行中...
+> 3. 點擊清理組件 → 🔴 Son 組件卸載，清除定時器
+> 4. 等待1秒     → (無輸出 ✅ 定時器已停止)
+> ```
+
+# 自定義Hook
+
+它的名稱以 `use` 開頭，並且可以調用其他的 Hook。它讓我們可以將**組件邏輯提取到可重複使用的函數中**
+
+操作步驟：
+
+1. 聲明一個以use開頭的函數
+2. 在函數內封裝可以重複使用的邏輯
+3. 把需要用到的狀態或者回調，使用return傳出來
+4. 在哪個組件中用到該邏輯，就執行剛剛聲明的函數並解析出來狀態和回調來使用
+
+> [!caution]
+>
+> 1. 只能在組件中或者其他自訂Hook函數中呼叫
+> 2. 只能在組件的頂層呼叫，不能嵌套在 if、for、其他函數中
+
+*^tab^*
+
+> **原先邏輯**
+>
+> ```jsx
+> import {useState} from 'react'
+> 
+> function App () {
+>   // 設置按鍵點擊狀態
+>   const [value, setValue] = useState(true);
+>   const show = () => {
+>     setValue(!value);
+>   }
+> 
+> 
+>   return (
+>     <div className="App">
+>       {/*顯示或是隱藏內容*/}
+>       {value && <div>this is div</div>}
+>       <button onClick={show}>顯示/隱藏</button>
+>     </div>
+>   )
+> }
+> export default App;
+> ```
+
+> **封裝後重複使用**
+>
+> ```jsx
+> import {useState} from 'react'
+> 
+> // 1. 定義use開頭的函數
+> function useShow () {
+>   // 2. 封裝重用邏輯
+>   const [value, setValue] = useState(true);
+>   const show = () => {
+>     setValue(!value);
+>   }
+> 
+>   // 3. 將需要用到的狀態傳出來
+>   return {
+>     value, show
+>   }
+> }
+> 
+> function App () {
+>   // 4. 調用並解析
+>   const {value, show} = useShow();
+> 
+>   return (
+>     <div className="App">
+>       {/*顯示或是隱藏內容*/}
+>       {value && <div>this is div</div>}
+>       <button onClick={show}>顯示/隱藏</button>
+>     </div>
+>   )
+> }
+> export default App;
+> ```
+>
+> 
 
 
 
@@ -934,6 +1517,123 @@ export default App;
      }
    }
    ```
+
+## bilibili發表評論
+
+![ClShot 2025-09-18 at 23.01.59@2x](web_React.assets/ClShot 2025-09-18 at 23.01.59@2x.png)
+
+1. 獲取表單中的評論文字
+
+   ```jsx
+   const [content, setContent] = useState('')
+   
+   {/* 評論框 */}
+   <textarea
+     className="reply-box-textarea"
+     placeholder="發一條友善的評論"
+     value={content}
+     onChange={(e)=> setContent(e.target.value)}
+   />
+   ```
+
+2. 點擊發布按鈕發布評論
+
+   ```jsx
+   const handlePublish = () => {
+     setCommentList([
+       ...commentList,
+       {
+         rpid: 231,
+         user: {
+           uid: '36080105',
+           avatar,
+           uname: '許嵩',
+         },
+         content: content,
+         ctime: '11-13 11:29',
+         like: 88,
+       }
+     ])
+   }
+   
+   {/* 發布按鈕 */}
+   <div className="reply-box-send">
+     <div className="send-text" onClick={handlePublish}>發布</div>
+   </div>
+   ```
+
+3. id處理和時間處理
+
+   ```bash
+   # 處理唯一的隨機數id
+   # https://www.npmjs.com/package/uuid
+   npm install uuid
+   
+   # 處理時間 生成固定格式
+   # https://www.npmjs.com/package/dayjs
+   npm install dayjs
+   ```
+
+   ```jsx
+   import { v4 as uuidV4 } from 'uuid';
+   import dayjs from 'dayjs';
+   
+   const handlePublish = () => {
+     setCommentList([
+       ...commentList,
+       {
+         rpid: uuidV4(),
+         user: {
+           uid: '36080105',
+           avatar,
+           uname: '許嵩',
+         },
+         content: content,
+         ctime: dayjs(new Date()).format('MM-DD hh:mm'),
+         like: 88,
+       }
+     ])
+   }
+   ```
+
+4. 清空內容並重新聚焦
+
+   ```jsx
+   const [content, setContent] = useState('')
+   const inputRef = useRef(null)
+   
+   const handlePublish = () => {
+     setCommentList([
+       ...commentList,
+       {
+         rpid: uuidV4(),
+         user: {
+           uid: '36080105',
+           avatar,
+           uname: '許嵩',
+         },
+         content: content,
+         ctime: dayjs(new Date()).format('MM-DD hh:mm'),
+         like: 88,
+       }
+     ])
+     // 清空輸入內容
+     setContent("")
+   
+     // 使用useRef重新聚焦
+     inputRef.current.focus()
+   }
+   
+   <textarea
+     className="reply-box-textarea"
+     placeholder="發一條友善的評論"
+     value={content}
+     ref={inputRef}
+     onChange={(e)=> setContent(e.target.value)}
+   />
+   ```
+
+   
 
 
 
