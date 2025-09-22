@@ -15,10 +15,10 @@ vlook-doc-lib:
 
 # 什麼是web前端
 
-前端開發，主要的職責就是將資料以好看的樣式呈現出來。說白了，就是開發網頁
+前端開發，主要的職責就是將資料以好看的樣式呈現出來
 
 * 網頁由哪些部分組成 ?
-    * 文字、圖片、音訊、視訊、超連結、表格等等
+    * 文字、圖片、音訊、超連結、表格等等
 * 我們看到的網頁，背後的本質是什麼 ?
     * 前端程式設計師寫的前端程式碼 
 * 前端的程式碼是如何轉換成使用者眼中的網頁的 ?
@@ -908,7 +908,9 @@ input 標籤 type 屬性值不同，則功能不同，通常**會搭配label標�
 | section |  網頁區塊  |
 | article |  網頁文章  |
 
-# 練習-體育新聞列表
+# 練習
+
+## 體育新聞列表
 
 ![ClShot 2025-06-12 at 18.27.38@2x](web_HTML.assets/ClShot 2025-06-12 at 18.27.38@2x.png#20%)
 
@@ -931,7 +933,7 @@ input 標籤 type 屬性值不同，則功能不同，通常**會搭配label標�
 
 *[<kbd>![](icon/logo.svg) news-list  ![](icon/icon-more.svg?fill=text)</kbd>](web_HTML.assets/code/news-list.html)*
 
-# 練習-註冊
+## 練習-註冊
 
 ![ClShot 2025-06-12 at 18.40.19@2x](web_HTML.assets/ClShot 2025-06-12 at 18.40.19@2x.png#20%)
 

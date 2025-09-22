@@ -389,9 +389,467 @@ DOM對象都是根據標籤生成的，所以操作標籤本質上就是操作DO
 </html>
 ```
 
+# 事件監聽
+
+事件是程式設計中的一個基本概念，代表**在程式執行過程中發生的特定動作或狀況**，程式可以透過**事件監聽機制來偵測這些事件的發生**，並**執行相對應的處理函數來回應**用戶的操作或系統的變化，從而實現**互動式和響應式**的程式行為
+
+語法：
+
+```javascript
+物件.addEventListener('事件類型', 要執行的函數)
+```
+
+事件監聽三要素：
+
+* **事件源**：  那個dom元素被事件觸發了，要獲取dom元素   
+
+* **事件類型**： 用什麼方式觸發，比如滑鼠點選 click、滑鼠經過 mouseover 等
+
+  | 事件分類       | 事件名稱     | 觸發時機     | 常用場景             | 程式碼範例                                        |
+  | -------------- | ------------ | ------------ | -------------------- | ------------------------------------------------- |
+  | **🖱️ 鼠標事件** | `click`      | 鼠標點擊     | 按鈕點擊、連結導航   | `element.addEventListener('click', handler)`      |
+  | :              | `mouseenter` | 鼠標經過     | 懸停效果、提示顯示   | `element.addEventListener('mouseenter', handler)` |
+  | :              | `mouseleave` | 鼠標離開     | 隱藏提示、恢復狀態   | `element.addEventListener('mouseleave', handler)` |
+  | **🎯 焦點事件** | `focus`      | 獲得焦點     | 輸入框激活、高亮顯示 | `input.addEventListener('focus', handler)`        |
+  | :              | `blur`       | 失去焦點     | 驗證輸入、保存數據   | `input.addEventListener('blur', handler)`         |
+  | **⌨️ 鍵盤事件** | `keydown`    | 鍵盤按下觸發 | 快捷鍵、即時響應     | `element.addEventListener('keydown', handler)`    |
+  | :              | `keyup`      | 鍵盤抬起觸發 | 輸入完成檢測         | `element.addEventListener('keyup', handler)`      |
+  | **📝 文本事件** | `input`      | 用戶輸入事件 | 即時搜索、表單驗證   | `input.addEventListener('input', handler)`        |
+
+* **事件呼叫的函數**： 要做什麼事
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件監聽</title>
+</head>
+
+<body>
+  <button>click me</button>
+</body>
+<script>
+  const btn = document.querySelector('button')
+  btn.addEventListener('click', () => {
+    alert('clicked')
+  })
+</script>
+
+</html>
+```
+
+*[<kbd>![](icon/logo.svg) 隨機點名  ![](icon/icon-more.svg?fill=text)</kbd>](#隨機點名)*
+
+## 事件監聽版本
+
+* **DOM L0**：事件源.on事件 = function() { }
+
+  ```javascript
+  button.onclick = function() {
+    console.log('第一個處理函數');
+  };
+  
+  button.onclick = function() {
+    console.log('第二個處理函數');
+  };
+  
+  // 點擊按鈕只會輸出：第二個處理函數
+  // 第一個被覆蓋了！
+  ```
+
+* **DOM L2**：事件源.addEventListener(事件， 事件處理函數)
+
+  ```javascript
+  button.addEventListener('click', function() {
+    console.log('第一個處理函數');
+  });
+  
+  button.addEventListener('click', function() {
+    console.log('第二個處理函數');
+  });
+  
+  // 點擊按鈕會輸出：
+  // 第一個處理函數
+  // 第二個處理函數
+  // 兩個都會執行！✅
+  ```
+
+>[!tip]
+>
+>on方式會被覆蓋，addEventListener方式可以多次綁定，擁有事件更多特性，推薦使用
+
+|     特性     | DOM L0 (on方式) | DOM L2 (addEventListener) |
+| :----------: | :-------------: | :-----------------------: |
+| **重複綁定** |   ❌ 會被覆蓋    |      ✅ 可以綁定多次       |
+| **事件特性** |   ❌ 功能有限    |        ✅ 功能完整         |
+|  **相容性**  |  ✅ 所有瀏覽器   |       ✅ 現代瀏覽器        |
+|  **靈活性**  |     ❌ 較低      |          ✅ 較高           |
+|  **推薦度**  |    ❌ 不推薦     |      ✅ **強烈推薦**       |
+
+|      等級       | 年份  |     特色      |      事件處理      |
+| :-------------: | :---: | :-----------: | :----------------: |
+| **DOM Level 0** | 1990s | 最早期的 DOM  |   `on事件` 屬性    |
+| **DOM Level 1** | 1998  | 基本 DOM 結構 |    沒有事件規範    |
+| **DOM Level 2** | 2000  | 加入事件模型  | `addEventListener` |
+| **DOM Level 3** | 2004  | 擴展事件類型  |    更多事件類型    |
+| **DOM Level 4** | 2015+ | 現代 DOM API  |     持續演進中     |
+
+## 事件物件
+
+**事件物件**是當事件被觸發時，瀏覽器自動創建並傳遞給事件處理函數的一個**包含事件詳細資訊的物件**
+
+- 🎯 **事件類型** (什麼事件)
+- 📍 **事件目標** (發生在哪個元素)
+- ⏰ **事件時間** (什麼時候發生)
+- 📊 **事件詳情** (滑鼠位置、按鍵等)
+
+```javascript
+element.addEventListener('click', function(e) {
+    // 這個 e 就是事件對象！
+    console.log(event); // 包含了事件的所有資訊
+});
+```
+
+![ClShot 2025-09-21 at 16.17.15](web_WebAPI.assets/ClShot 2025-09-21 at 16.17.15.png)
+
+常用屬性：
+
+|    屬性分類    |     屬性名稱      |                   描述                   | 適用事件類型 |        實際應用場景        |
+| :------------: | :---------------: | :--------------------------------------: | :----------: | :------------------------: |
+| **📋 基本屬性** |      `type`       |            獲取當前的事件類型            |   所有事件   |   判斷事件類型、條件處理   |
+| **🖱️ 滑鼠座標** | `clientX/clientY` | 獲取光標相對於瀏覽器可見窗口左上角的位置 |   滑鼠事件   |   跟隨滑鼠效果、拖拽功能   |
+| **🎯 元素座標** | `offsetX/offsetY` |  獲取光標相對於當前DOM元素左上角的位置   |   滑鼠事件   |  元素內精確定位、繪圖應用  |
+| **⌨️ 鍵盤輸入** |       `key`       |           用戶按下的鍵盤鍵的值           |   鍵盤事件   | 快捷鍵、表單驗證、遊戲控制 |
+
+*[<kbd>![](icon/logo.svg) 評論字數統計  ![](icon/icon-more.svg?fill=text)</kbd>](#評論字數統計)*
+
+## 環境物件this
+
+**`this`** 是 JavaScript 中的一個**特殊關鍵字**，它指向**當前執行環境的對象**。`this` 的值會根據**函數被調用的方式**而動態改變
+
+```javascript
+// this 就像是一個「代名詞」
+// 它指向「誰在執行這個函數」
+
+function test() {
+  console.log(this);
+}
+test()
+// window.tesst()
+
+// 當函數獨立調用時，this 會採用「默認綁定」規則，指向window
+```
+
+![ClShot 2025-09-21 at 16.45.42](web_WebAPI.assets/ClShot 2025-09-21 at 16.45.42.png)
+
+```javascript
+const btn = document.querySelector('button')
+btn.addEventListener('click', function () {
+  console.log(this);
+})
+```
+
+![ClShot 2025-09-21 at 16.48.35](web_WebAPI.assets/ClShot 2025-09-21 at 16.48.35.png)
+
+>[!important]
+>
+>* **誰呼叫， this 就是誰**
+>* 直接呼叫函數，其實相當於是 window.函數，所以 this 指 window
+>* **箭頭函數沒有this**
+
+## 回調函數
+
+**回調函數**是一個**作為參數傳遞給另一個函數**的函數，並在**特定時機被調用**
+
+* 設定定時器，當時間一到就會觸發某個函數
+* 觸發事件時，執行某函數
+
+```javascript
+// 回調函數就是「稍後調用」的函數
+function greet(name, callback) {
+  console.log('Hello ' + name);
+  callback(); // 在這裡調用回調函數
+}
+
+function sayGoodbye() {
+  console.log('Goodbye!');
+}
+
+// sayGoodbye 就是回調函數
+greet('Alice', sayGoodbye);
+// 輸出：
+// Hello Alice
+// Goodbye!
+```
+
+>[!tip]
+>
+>* 回呼函數本質還是函數，只不過把它當成參數使用
+>* 使用匿名函數做為回呼函數比較常見
 
 
 
+# 練習
+
+## 隨機點名
+
+* 點選開始按鈕隨機抽取陣列的一個資料，放到頁面中
+* 點選結束按鈕刪除陣列當前抽取的一個資料
+* 當抽取到最後一個資料的時候，兩個按鈕同時停用（寫點開始裡面，只剩最後一個資料不用抽了）
+
+![ClShot 2025-09-21 at 14.58.22](web_WebAPI.assets/ClShot 2025-09-21 at 14.58.22.png)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+      * {
+          margin: 0;
+          padding: 0;
+      }
+
+      h2 {
+          text-align: center;
+      }
+
+      .box {
+          width: 600px;
+          margin: 50px auto;
+          display: flex;
+          font-size: 25px;
+          line-height: 40px;
+      }
+
+      .qs {
+
+          width: 450px;
+          height: 40px;
+          color: red;
+
+      }
+
+      .btns {
+          text-align: center;
+      }
+
+      .btns button {
+          width: 120px;
+          height: 35px;
+          margin: 0 50px;
+      }
+  </style>
+</head>
+
+<body>
+  <h2>隨機點名</h2>
+  <div class="box">
+      <span>名字是：</span>
+      <div class="qs">這裡顯示姓名</div>
+  </div>
+  <div class="btns">
+      <button class="start">開始</button>
+      <button class="end">結束</button>
+  </div>
+
+  <script>
+      // 資料陣列
+      const arr = ['馬超', '黃忠', '趙雲', '關羽', '張飛']
+      const content = document.querySelector('.qs')
+      let timer = 0
+      let random = 0
+
+      // 開始按鍵
+      const start = document.querySelector('.start')
+      start.addEventListener('click', () => {
+          timer = setInterval(() => {
+              random = parseInt(Math.random() * arr.length)
+              content.innerHTML = arr[random]
+          }, 50)
+
+          if (arr.length === 1) {
+              start.disabled = true
+              end.disabled = true
+          }
+      })
+
+      // 結束按鍵
+      const end = document.querySelector('.end')
+      end.addEventListener('click', () => {
+          clearInterval(timer)
+
+          // 抽選到的要刪除
+          arr.splice(random, 1)
+          console.log(arr);
+
+      })
+  </script>
+</body>
+
+</html>
+```
+
+## 評論字數統計
+
+* 點擊textarea時，顯示字數總計：離開textarea時，隱藏字數總計
+* 檢測輸入事件，並統計字數
+* 按下Enter發布評論，並清空textarea
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>評論回車發佈</title>
+  <style>
+    .wrapper {
+      min-width: 400px;
+      max-width: 800px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .wrapper textarea {
+      outline: none;
+      border-color: transparent;
+      resize: none;
+      background: #f5f5f5;
+      border-radius: 4px;
+      flex: 1;
+      padding: 10px;
+      transition: all 0.5s;
+      height: 30px;
+    }
+
+    .wrapper textarea:focus {
+      border-color: #e4e4e4;
+      background: #fff;
+      height: 50px;
+    }
+
+    .wrapper button {
+      background: #00aeec;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      margin-left: 10px;
+      width: 70px;
+      cursor: pointer;
+    }
+
+    .wrapper .total {
+      margin-right: 80px;
+      color: #999;
+      margin-top: 5px;
+      opacity: 0;
+      transition: all 0.5s;
+    }
+
+    .list {
+      min-width: 400px;
+      max-width: 800px;
+      display: flex;
+    }
+
+    .list .item {
+      width: 100%;
+      display: flex;
+    }
+
+    .list .item .info {
+      flex: 1;
+      border-bottom: 1px dashed #e4e4e4;
+      padding-bottom: 10px;
+    }
+
+    .list .item p {
+      margin: 0;
+    }
+
+    .list .item .name {
+      color: #FB7299;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .list .item .text {
+      color: #333;
+      padding: 10px 0;
+    }
+
+    .list .item .time {
+      color: #999;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <textarea id="tx" placeholder="發一條友善的評論" rows="2" maxlength="200"></textarea>
+    <button>發佈</button>
+  </div>
+  <div class="wrapper">
+    <span class="total">0/200字</span>
+  </div>
+  <div class="list">
+    <div class="item" style="display: none;">
+      <div class="info">
+        <p class="name">清風徐來</p>
+        <p class="text">大家都辛苦啦，感謝各位大大的努力，能圓滿完成真是太好了[笑哭][支援]</p>
+        <p class="time">2022-10-10 20:29:21</p>
+      </div>
+    </div>
+  </div>
+  <script>
+    const text = document.querySelector('#tx')
+    const total = document.querySelector('.total')
+    const item = document.querySelector('.item')
+    const infoText = document.querySelector('.text')
+
+
+    // 點擊textarea時，顯示/隱藏字數總計
+    text.addEventListener('focus', () => {
+      total.style.opacity = 1
+    })
+    text.addEventListener('blur', () => {
+      total.style.opacity = 0
+    })
+
+    // 檢測輸入事件
+    tx.addEventListener('input', () => {
+      total.innerHTML = `${tx.value.length}/200字`
+    })
+
+    // 按下Enter發布評論  
+    tx.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        // 輸入不為空才顯示和輸出
+        if (tx.value.trim()) {
+          item.style.display = 'block'
+          infoText.innerHTML = tx.value
+        }
+        // 清空textarea 復原統計
+        tx.value = ''
+        total.innerHTML = '0/200字'
+      }
+    })
+  </script>
+</body>
+
+
+</html>
+```
 
 
 
