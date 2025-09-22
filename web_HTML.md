@@ -15,7 +15,7 @@ vlook-doc-lib:
 
 # 什麼是web前端
 
-前端開發，主要的職責就是將資料以好看的樣式呈現出來
+==主要的職責就是將資料以好看的樣式呈現出來==
 
 * 網頁由哪些部分組成 ?
     * 文字、圖片、音訊、超連結、表格等等
@@ -67,7 +67,7 @@ HTML: **H**yper**T**ext **M**arkup **L**anguage，超文字標記語言
     - HTML標籤都是預定義好的 。例如：使用 `<h1>` 標籤展示標題，使用`<a>`展示超連結，使用`<img>`展示圖片，`<video>`展示視訊
     - HTML程式碼直接在瀏覽器中運行，HTML標籤由瀏覽器解析 
 
-![ClShot 2025-06-01 at 15.29.40@2x](web_HTML.assets/ClShot 2025-06-01 at 15.29.40@2x.png)
+![標籤介紹](web_HTML.assets/ClShot 2025-06-01 at 15.29.40@2x.png)
 
 ## 如何建立HTML
 
@@ -109,7 +109,7 @@ HTML: **H**yper**T**ext **M**arkup **L**anguage，超文字標記語言
 > >
 > > 在.html的檔案中，輸入!配合Tab/Enter按鍵
 > >
-> > ![ClShot 2025-09-01 at 19.00.51@2x](web_HTML.assets/ClShot 2025-09-01 at 19.00.51@2x.png)
+> > ![快速生成HTML](web_HTML.assets/ClShot 2025-09-01 at 19.00.51@2x.png)
 
 > **在`<body>`中編寫HTML的核心內容**
 >
@@ -162,13 +162,13 @@ ___
 >
 > 子級標籤換行且縮排（Tab鍵）
 >
-> ![1680255766672](web_HTML.assets/1680255766672.png)
+> ![父子關係](web_HTML.assets/1680255766672.png)
 
 > **兄弟關係（並列關係）**
 >
 > 兄弟標籤換行要對齊
 >
-> ![1680255775150](web_HTML.assets/1680255775150.png)
+> ![兄弟關係](web_HTML.assets/1680255775150.png)
 
 >[!note]
 >
