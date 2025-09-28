@@ -1,3 +1,17 @@
+---
+title:前端開發學習筆記-WebAPI
+vlook-doc-lib:
+- [筆記網站跳轉](index.html?target=_self "快速挑轉到想要的網頁")
+- [前端開發學習筆記★HTML](web_HTML.html?target=_self "網頁開發學習筆記★HTML")
+- [前端開發學習筆記★CSS](web_CSS.html?target=_self "網頁開發學習筆記★CSS")
+- [前端開發學習筆記★JS](web_JS.html?target=_self "網頁開發學習筆記★JS")
+- [前端開發學習筆記★WebAPI](web_WebAPI.html?target=_self "網頁開發學習筆記★JS")
+- [前端開發學習筆記★AJAX](web_AJAX.html?target=_self "網頁開發學習筆記★JS")
+- [前端開發學習筆記★React](web_React.html?target=_self "網頁開發學習筆記★React")
+---
+
+
+
 [TOC]
 
 # 什麼是Web API
@@ -590,6 +604,450 @@ greet('Alice', sayGoodbye);
 >* 回呼函數本質還是函數，只不過把它當成參數使用
 >* 使用匿名函數做為回呼函數比較常見
 
+# 事件流
+
+==事件流（Event Flow）是指當事件發生時，事件在 DOM 樹中傳播的機制和順序==
+
+![ClShot 2025-09-23 at 20.22.55](web_WebAPI.assets/ClShot 2025-09-23 at 20.22.55.png)
+
+在網頁上點擊一個元素時，這個點擊事件不是只在那個元素上發生，而是會在整個 DOM 樹中「旅行」。這個旅行的路徑和順序就叫做**事件流**
+
+## 事件捕獲
+
+- **方向**：從父到子（從DOM的根元素開始去執行對應的事件）
+- **特點**：事件從最外層的 Document 開始，一層層向下傳遞到同名事件的目標元素
+- **使用頻率**：較少使用捕獲機制
+
+```javascript
+DOM.addEventListener(事件類型, 事件處理函數, 是否使用捕獲機制)
+
+// addEventListener第三個參數傳入 true 代表是捕獲階段觸發（很少使用）
+// 若是用 L0 事件監聽，則只有冒泡階段，沒有捕獲
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件流</title>
+  <style>
+    .father {
+      width: 500px;
+      height: 500px;
+      background-color: pink;
+    }
+
+    .son {
+      width: 200px;
+      height: 200px;
+      background-color: purple;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="father">
+    <div class="son"></div>
+  </div>
+
+  <script>
+    document.addEventListener('click', function () {
+      alert('我是爺爺')
+    }, true)
+
+    document.querySelector('.father').addEventListener('click', function () {
+      alert('我是爸爸')
+    }, true)
+    document.querySelector('.son').addEventListener('click', function () {
+      alert('我是兒子')
+    }, true)
+  </script>
+</body>
+
+</html>
+```
+
+> [!tip]
+>
+> ```javascript
+> document.addEventListener('click', function () {
+>       alert('我是爺爺')
+>     }, true)
+> ```
+>
+> 不寫默認是false，冒泡事件
+
+## 事件冒泡
+
+- **方向**：從子到父（一個元素觸發事件後，會依次向上呼叫所有父級元素的**同名事件**）
+- **特點**：事件從目標元素開始，一層層向上冒泡到最外層
+- **使用頻率**：**這是主要使用的階段**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件流</title>
+  <style>
+    .father {
+      width: 500px;
+      height: 500px;
+      background-color: pink;
+    }
+
+    .son {
+      width: 200px;
+      height: 200px;
+      background-color: purple;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="father">
+    <div class="son"></div>
+  </div>
+
+  <script>
+    document.addEventListener('click', function () {
+      alert('我是爺爺')
+    })
+
+    document.querySelector('.father').addEventListener('click', function () {
+      alert('我是爸爸')
+    })
+    document.querySelector('.son').addEventListener('click', function () {
+      alert('我是兒子')
+    })
+  </script>
+</body>
+
+</html>
+```
+
+## 阻止冒泡
+
+**阻止冒泡**就是阻止事件繼續向上層父元素傳播的機制。當你在某個元素上阻止冒泡後，事件就會「停在這裡」，不會再往上傳遞給父元素
+
+```javascript
+button.addEventListener('click', function(e) {
+  console.log('處理按鈕點擊');
+  event.stopPropagation(); // 事件到此為止
+});
+```
+
+> [!important]
+>
+> 阻止冒泡一定要拿到事件物件 e，此方法可以阻斷事件流動傳播，不光在冒泡階段有效，捕獲階段也有效
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件流</title>
+  <style>
+    .father {
+      width: 500px;
+      height: 500px;
+      background-color: pink;
+    }
+
+    .son {
+      width: 200px;
+      height: 200px;
+      background-color: purple;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="father">
+    <div class="son"></div>
+  </div>
+
+  <script>
+    document.addEventListener('click', function (e) {
+      alert('我是爺爺')
+      e.stopPropagation()
+    }, true)
+
+    document.querySelector('.father').addEventListener('click', function () {
+      alert('我是爸爸')
+    }, true)
+    document.querySelector('.son').addEventListener('click', function () {
+      alert('我是兒子')
+    }, true)
+  </script>
+</body>
+
+</html>
+```
+
+## 阻止默認行為
+
+每個HTML元素在特定事件發生時都有自己的「預設動作」，而 `preventDefault()` 就是用來取消這些預設動作
+
+```html
+<!-- 連結的預設行為：跳轉頁面 -->
+<a href="https://google.com">點我會跳轉到 Google</a>
+
+<!-- 表單的預設行為：提交並刷新頁面 -->
+<form action="/submit">
+  <input type="text" name="username">
+  <button type="submit">提交會刷新頁面</button>
+</form>
+```
+
+> [!important]
+>
+> 以上這些標籤，都會有預設的事件，例如可以在資料驗證和處理之前先阻止默認行為
+>
+> |        方法         |        作用        |  影響範圍  |
+> | :-----------------: | :----------------: | :--------: |
+> | `preventDefault()`  | 阻止元素的預設行為 |  當前元素  |
+> | `stopPropagation()` |  阻止事件冒泡傳播  | 父子元素間 |
+
+```javascript
+// 阻止連結跳轉
+document.querySelector('a').addEventListener('click', function(event) {
+  event.preventDefault(); // 不會跳轉了！
+  console.log('連結被點擊，但不跳轉');
+});
+
+// 阻止表單提交
+document.querySelector('form').addEventListener('submit', function(event) {
+  event.preventDefault(); // 不會提交和刷新頁面！
+  console.log('表單被提交，但頁面不刷新');
+});
+```
+
+
+
+## 解綁事件
+
+移除之前添加的事件監聽器，讓元素不再響應特定的事件，解綁事件的方法取決於事件使用哪一種方式來綁定(L0, L2)
+
+* **傳統on註冊（L0）**：
+  * 同一個物件，後面註冊的事件會覆蓋前面註冊(同一個事件)
+  * 直接使用null覆蓋就可以實現事件的解綁
+* **事件監聽註冊（L2）**：
+  * 後面註冊的事件不會覆蓋前面註冊的事件(同一個事件)
+  * 必須使用removeEventListener(事件類型, 事件處理函數, 獲取捕獲或者冒泡階段)
+  * 匿名函數無法被解綁
+
+*^tab^*
+
+> **傳統on註冊（L0）**
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="en">
+> 
+> <head>
+>   <meta charset="UTF-8">
+>   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>   <title>事件流</title>
+> </head>
+> 
+> <body>
+>   <button>click</button>
+>   <script>
+>     const btn = document.querySelector('button')
+>     btn.onclick = function () {
+>       alert("button clicked")
+>       btn.onclick = null  // L0：直接使用 null 覆蓋
+>     }
+>   </script>
+> </body>
+> 
+> </html>
+> ```
+
+> **事件監聽註冊（L2）**
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="en">
+> 
+> <head>
+>   <meta charset="UTF-8">
+>   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>   <title>事件流</title>
+> </head>
+> 
+> <body>
+>   <button>click</button>
+>   <script>
+>     const btn = document.querySelector('button')
+>     function fn() {
+>       alert('btn clicked')
+>     }
+>     btn.addEventListener('click', fn)
+>     btn.removeEventListener('click', fn) // 必須使用removeEventListener
+>   </script>
+> </body>
+> 
+> </html>
+> ```
+
+## 事件委託
+
+**事件委託**（Event Delegation）是一種利用**事件冒泡機制**的編程技巧。不直接在子元素上綁定事件，而是在父元素上監聽事件，然後根據事件的目標元素來決定如何處理
+
+---
+
+> **傳統作法**
+>
+> ```markdown
+> ❌ 每張桌子都配一個服務員
+> 桌子1：服務員A 👨‍💼
+> 桌子2：服務員B 👩‍💼
+> 桌子3：服務員C 👨‍💼
+> ...
+> 
+> 問題：
+> - 需要很多服務員（成本高）
+> - 有些桌子沒客人，服務員閒置
+> - 新桌子要重新分配服務員
+> ```
+
+> **事件委託**
+>
+> ```markdown
+> ✅ 一個總服務員巡視全場
+> - 客人舉手 🙋‍ → 服務員看到 → 過去服務
+> - 不管是老桌子還是新加的桌子
+> - 一個人就能處理整個餐廳
+> 
+> 優勢：
+> - 人力成本低
+> - 反應靈活
+> - 新桌子自動有服務
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>事件委託</title>
+</head>
+
+<body>
+  <ul>
+    <li>我是第1個li</li>
+    <li>我是第2個li</li>
+    <li>我是第3個li</li>
+    <li>我是第4個li</li>
+    <li>我是第5個li</li>
+    <p>我是p標籤不變色</p>
+  </ul>
+  <script>
+    const ul = document.querySelector('ul')
+    ul.addEventListener('click', function (e) { // 透過事件物件得到當前點擊的對象
+      if (e.target.tagName === 'LI') { // 只有li標籤能變色
+        e.target.style.color = 'red'
+      }
+    })
+  </script>
+</body>
+
+</html>
+```
+
+## 頁面加載事件
+
+頁面加載事件（Page Load Events）是指在網頁載入過程中觸發的各種事件，這些事件讓開發者能夠在特定的載入階段執行相應的 JavaScript 代碼
+
+> [!note]
+>
+> * 有些時候需要等頁面資源全部處理完了做一些事情
+> * 程式碼喜歡把 script 寫在 head 中，這時候直接找 dom 元素找不到
+
+可以使用：
+
+* load：
+
+  ```javascript
+  window.addEventListener('load', function() {
+    console.log('頁面完全載入完成');
+    // 所有資源都已載入完成
+  });
+  ```
+
+* DOMContentLoaded
+
+  ```javascript
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM 已完全載入和解析');
+    // 可以安全地操作 DOM 元素
+  });
+  ```
+
+|   比較項目   |                **load**                 |                 **DOMContentLoaded**                 |
+| :----------: | :-------------------------------------: | :--------------------------------------------------: |
+| **觸發時機** |           頁面完全載入完成時            |                DOM 已完全載入和解析時                |
+| **等待資源** | 等待所有資源（圖片、CSS、JS、iframe等） |               僅等待 HTML 文檔解析完成               |
+| **觸發速度** |                  較慢                   |                         較快                         |
+| **適用場景** |    需要確保所有資源都載入完成的操作     |           可以安全地操作 DOM 元素的初始化            |
+| **事件對象** |                `window`                 |                      `document`                      |
+| **語法示例** | `window.addEventListener('load', ...)`  | `document.addEventListener('DOMContentLoaded', ...)` |
+
+## 頁面滾動事件
+
+頁面滾動事件（Scroll Events）是指當用戶滾動網頁或特定元素時觸發的事件，讓開發者能夠根據滾動行為執行相應的 JavaScript 代碼
+
+> [!note]
+>
+> 很多網頁需要檢測使用者把頁面滾動到某個區域後做一些處理， 比如固定導覽列，比如返回頂部，想要頁面滾動一段距離，比如100px，就讓某些元素顯示隱藏
+
+```javascript
+// 監聽整個頁面滾動
+window.addEventListener('scroll', function() {
+  console.log('頁面正在滾動');
+  console.log('滾動位置:', window.scrollY);
+});
+
+// 監聽特定元素滾動
+const container = document.querySelector('.scrollable-container');
+container.addEventListener('scroll', function() {
+  console.log('容器正在滾動');
+});
+```
+
+---
+
+> ![ClShot 2025-09-28 at 18.35.45@2x](web_WebAPI.assets/ClShot 2025-09-28 at 18.35.45@2x.png)
+
+>**屬性說明**
+>
+>元素.scrollLeft和元素.scrollTop （屬性）
+>
+>* 獲取被捲去的大小
+>* 獲取元素內容往左、往上滾出去看不到的距離
+>* 這兩個值是可讀寫的
+
+**scrollTo() 方法可把內容滾動到指定的坐標**
+
+* 元素.scrollTo(x, y)
+
+```javascript
+window.scrollTo(0, 0)
+
+// 綁定按鈕事件
+document.querySelector('#back-to-top').addEventListener('click', scrollTo(0, 0));
+```
+
 
 
 # 練習
@@ -847,6 +1305,125 @@ greet('Alice', sayGoodbye);
   </script>
 </body>
 
+
+</html>
+```
+
+## Tab欄切換
+
+* 滑鼠經過不同的選項卡，底部可以顯示不同的內容
+* 移除非當前類active，並添加active到當前鼠標上指到的物件
+
+![ClShot 2025-09-22 at 19.04.05](web_WebAPI.assets/ClShot 2025-09-22 at 19.04.05.gif)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tab欄切換</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .tab {
+      width: 590px;
+      height: 340px;
+      margin: 20px;
+      border: 1px solid #e4e4e4;
+    }
+
+    .tab-nav {
+      width: 100%;
+      height: 60px;
+      line-height: 60px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .tab-nav h3 {
+      font-size: 24px;
+      font-weight: normal;
+      margin-left: 20px;
+    }
+
+    .tab-nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .tab-nav ul li {
+      margin: 0 20px;
+      font-size: 14px;
+    }
+
+    .tab-nav ul li a {
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      color: #333;
+    }
+
+    .tab-nav ul li a.active {
+      border-color: #e1251b;
+      color: #e1251b;
+    }
+
+    .tab-content {
+      padding: 0 16px;
+    }
+
+    .tab-content .item {
+      display: none;
+    }
+
+    .tab-content .item.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="tab">
+    <div class="tab-nav">
+      <h3>每日特價</h3>
+      <ul>
+        <li><a class="active" href="javascript:;">精選</a></li>
+        <li><a href="javascript:;">美食</a></li>
+        <li><a href="javascript:;">百貨</a></li>
+        <li><a href="javascript:;">廣場</a></li>
+        <li><a href="javascript:;">預告</a></li>
+      </ul>
+    </div>
+    <div class="tab-content">
+      <div class="item active">精選</div>
+      <div class="item">美食</div>
+      <div class="item">百貨</div>
+      <div class="item">廣場</div>
+      <div class="item">預告</div>
+    </div>
+  </div>
+  <script>
+    const as = document.querySelectorAll('.tab-nav a')
+
+    // 導航欄
+    for (let i = 0; i < as.length; i++) {
+      as[i].addEventListener('mouseenter', function () {
+        // 移除active
+        document.querySelector('.tab-nav .active').classList.remove('active')
+        document.querySelector('.tab-content .active').classList.remove('active')
+        // 使用this 添加active到該物件
+        this.classList.add('active')
+        document.querySelector(`.tab-content .item:nth-child(${i + 1})`).classList.add('active')
+      })
+    }
+  </script>
+</body>
 
 </html>
 ```

@@ -5,6 +5,8 @@ vlook-doc-lib:
 - [前端開發學習筆記★HTML](web_HTML.html?target=_self "網頁開發學習筆記★HTML")
 - [前端開發學習筆記★CSS](web_CSS.html?target=_self "網頁開發學習筆記★CSS")
 - [前端開發學習筆記★JS](web_JS.html?target=_self "網頁開發學習筆記★JS")
+- [前端開發學習筆記★WebAPI](web_WebAPI.html?target=_self "網頁開發學習筆記★JS")
+- [前端開發學習筆記★AJAX](web_AJAX.html?target=_self "網頁開發學習筆記★JS")
 - [前端開發學習筆記★React](web_React.html?target=_self "網頁開發學習筆記★React")
 ---
 
@@ -111,7 +113,7 @@ React 引入了「**元件化**」的開發方式，把複雜的介面拆解成�
 >   import React from 'react';
 >   import ReactDOM from 'react-dom/client';
 >   import App from './App';
->                         
+>                             
 >   const root = ReactDOM.createRoot(document.getElementById('root'));
 >   root.render(<App />);
 >   ```
@@ -1341,34 +1343,37 @@ useEffect副作用函數的執行時機存在多種情況，根據**傳入依賴
 > 
 > // 1. 定義use開頭的函數
 > function useShow () {
->   // 2. 封裝重用邏輯
->   const [value, setValue] = useState(true);
->   const show = () => {
->     setValue(!value);
->   }
+>     // 2. 封裝重用邏輯	
+>     const [value, setValue] = useState(true);
+>     const show = () => {
+>       setValue(!value);
+>     }
 > 
->   // 3. 將需要用到的狀態傳出來
->   return {
->     value, show
->   }
+>     // 3. 將需要用到的狀態傳出來
+>     return {
+>       value, show
+>     }
 > }
 > 
 > function App () {
->   // 4. 調用並解析
->   const {value, show} = useShow();
+>     // 4. 調用並解析
+>     const {value, show} = useShow();
 > 
->   return (
->     <div className="App">
->       {/*顯示或是隱藏內容*/}
->       {value && <div>this is div</div>}
->       <button onClick={show}>顯示/隱藏</button>
->     </div>
->   )
+>     return (
+>       <div className="App">
+>         {/*顯示或是隱藏內容*/}
+>         {value && <div>this is div</div>}
+>         <button onClick={show}>顯示/隱藏</button>
+>       </div>
+>     )
 > }
 > export default App;
 > ```
 >
-> 
+
+
+
+*[<kbd>![](icon/logo.svg) bilibili需求優化  ![](icon/icon-more.svg?fill=text)</kbd>](#bilibili需求優化)*
 
 
 
@@ -1633,8 +1638,123 @@ useEffect副作用函數的執行時機存在多種情況，根據**傳入依賴
    />
    ```
 
+
+## bilibili需求優化
+
+* 使用 *[<kbd>![](icon/logo.svg) json-server 工具  ![](icon/icon-more.svg?fill=text)</kbd>](https://github.com/typicode/json-server)*模擬api服務並以*[<kbd>![](icon/logo.svg) axios  ![](icon/icon-more.svg?fill=text)</kbd>](https://axios-http.com/docs/intro)*請求api的方式獲取評論列表並渲染
+
+  1. ```bash
+     npm install json-server -D
+     npm install axios
+     ```
+
+  2. 建立db.json檔案
+
+  3. 在package.json中添加啟動命令
+
+     ```json
+     "scripts": {
+       "start": "react-scripts start",
+       "build": "react-scripts build",
+       "serve": "json-server db.json --port 3004"
+     }
+     ```
+
+  4. ```bash
+     npm run serve #啟動服務(不可關閉)
+     ```
+
+  5. 使用useEffect調用API
+
+     ```jsx
+     const [commentList, setCommentList] = useState([])
+     
+     useEffect(() => {
+       // 請求資料
+       async function getList() {
+         const res = await axios.get('http://localhost:3004/list')
+         setCommentList(res.data)
+       }
+       getList()
+     },[])
+     ```
+
+*  使用自訂Hook函數封裝資料請求的邏輯
+
+   1. 定義Hook
+
+      ```jsx
+      function useGetList() {
+        const [commentList, setCommentList] = useState([])
+      
+        useEffect(() => {
+          // 請求資料
+          async function getList() {
+            const res = await axios.get('http://localhost:3004/list')
+            setCommentList(res.data)
+          }
+          getList()
+        },[])
+      
+        return {
+          commentList,
+          setCommentList,
+        }
+      }
+      ```
+
+   2. 使用Hook
+
+      ```jsx
+      const {commentList, setCommentList} = useGetList()
+      ```
+*  把評論中的每一項抽象成一個獨立的元件實現渲染
+
+   > [!tip]
+   >
+   > App作為**容器元件**負責資料的獲取，Item作為**展示元件**負責資料的渲染
+
+   ```jsx
+   function Item({item, onDel}) {
+     return (
+       <div className="reply-item">
+         {/* 頭像 */}
+         <div className="root-reply-avatar">
+           <div className="bili-avatar">
+             <img
+               className="bili-avatar-img"
+               alt=""
+               src={item.user.avatar}
+             />
+           </div>
+         </div>
    
+         <div className="content-wrap">
+           {/* 用戶名 */}
+           <div className="user-info">
+             <div className="user-name">{item.user.uname}</div>
+           </div>
+           {/* 評論內容 */}
+           <div className="root-reply">
+             <span className="reply-content">{item.content}</span>
+             <div className="reply-info">
+               {/* 評論時間 */}
+               <span className="reply-time">{item.ctime}</span>
+               {/* 評論數量 */}
+               <span className="reply-time">點讚數:{item.like}</span>
+               {user.uid === item.user.uid &&
+                 <span className="delete-btn" onClick={() => onDel(item.rpid)}>
+                           刪除
+                         </span>
+               }
+             </div>
+           </div>
+         </div>
+       </div>
+     )
+   }
+   ```
 
-
+   ![ClShot 2025-09-22 at 20.59.23](web_React.assets/ClShot 2025-09-22 at 20.59.23.png)
 
 # The End<br>*Written by JamesZhan*<br><sub>若是內容有錯誤歡迎糾正 *[<kbd>![](icon/gmail.svg?fill=text) Email</kbd>](mailto:henry16801@gmail.com?subject="內容錯誤糾正(非錯誤糾正可自行更改標題)")*</sub>
