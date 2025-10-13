@@ -1048,7 +1048,77 @@ window.scrollTo(0, 0)
 document.querySelector('#back-to-top').addEventListener('click', scrollTo(0, 0));
 ```
 
+## 頁面尺寸事件
 
+頁面尺寸事件是當瀏覽器視窗大小發生變化時觸發的 JavaScript 事件，讓開發者能夠監聽和響應視窗尺寸的改變
+
+- 用戶手動調整瀏覽器視窗大小
+- 設備方向改變（手機橫豎屏切換）
+- 瀏覽器進入/退出全螢幕模式
+
+```javascript
+// 基本的尺寸變化事件監聽
+window.addEventListener('resize', function() {
+    console.log('視窗尺寸已改變');
+});
+```
+
+**clientWidth、clientHeight獲取元素寬高**
+
+* 獲取元素的可見部分寬高（**不包含邊框，margin，滾動條**等）
+* clientWidth和clientHeight
+
+![ClShot 2025-09-29 at 20.46.50@2x](web_WebAPI.assets/ClShot 2025-09-29 at 20.46.50@2x.png)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>頁面尺寸事件</title>
+  <style>
+    div {
+      width: 200px;
+      height: 200px;
+      background-color: pink;
+      margin: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>這個是div標籤</div>
+  <script>
+    const div = document.querySelector('div')
+    console.log(div.clientWidth)
+  </script>
+</body>
+
+</html>
+```
+
+![ClShot 2025-09-29 at 20.54.17@2x](web_WebAPI.assets/ClShot 2025-09-29 at 20.54.17@2x.png)
+
+> [!note]
+>
+> 若是想知道元素的大小並且**包含邊框的話就要使用offsetWidth**
+>
+> |      屬性       |        包含內容         |                 計算公式                 |         用途         |  返回值   |
+> | :-------------: | :---------------------: | :--------------------------------------: | :------------------: | :-------: |
+> | **clientWidth** |     內容 + padding      |   `width + paddingLeft + paddingRight`   | 獲取元素內部可用空間 | 整數 (px) |
+> | **offsetWidth** | 內容 + padding + border | `clientWidth + borderLeft + borderRight` |   獲取元素完整寬度   | 整數 (px) |
+
+**offsetLeft、coffsetTop獲取元素位置**
+
+* 獲取元素距離自己定位**父級元素**的左、上距離
+* offsetLeft和offsetTop  注意是**唯讀屬性**
+* 這個屬性可以讓我們知道距離父元素的距離，實現滾動到某一個位置時，做出先對應的事件
+
+![ClShot 2025-09-29 at 21.01.45@2x](web_WebAPI.assets/ClShot 2025-09-29 at 21.01.45@2x.png)
+
+*[<kbd>![](icon/logo.svg) 固定導航欄  ![](icon/icon-more.svg?fill=text)</kbd>](#固定導航欄)*
 
 # 練習
 
@@ -1422,6 +1492,107 @@ document.querySelector('#back-to-top').addEventListener('click', scrollTo(0, 0))
         document.querySelector(`.tab-content .item:nth-child(${i + 1})`).classList.add('active')
       })
     }
+  </script>
+</body>
+
+</html>
+```
+
+## 固定導航欄
+
+需求：當頁面滾動到秒殺模組，導覽列自動滑入，否則滑出
+
+* 用到頁面滾動事件
+* 檢測頁面滾動大於等於 秒殺模組的位置 則滑入，否則滑出
+* 主要移動的是秒殺模組的頂部位置
+
+![ClShot 2025-09-29 at 21.49.43](web_WebAPI.assets/ClShot 2025-09-29 at 21.49.43.gif)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .content {
+      overflow: hidden;
+      width: 1000px;
+      height: 3000px;
+      background-color: pink;
+      margin: 0 auto;
+    }
+
+    .backtop {
+      display: none;
+      width: 50px;
+      left: 50%;
+      margin: 0 0 0 505px;
+      position: fixed;
+      bottom: 60px;
+      z-index: 100;
+    }
+
+    .backtop a {
+      height: 50px;
+      width: 50px;
+      background: url(./images/bg2.png) 0 -600px no-repeat;
+      opacity: 0.35;
+      overflow: hidden;
+      display: block;
+      text-indent: -999em;
+      cursor: pointer;
+    }
+
+    .header {
+      position: fixed;
+      top: -80px;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background-color: purple;
+      text-align: center;
+      color: #fff;
+      line-height: 80px;
+      font-size: 30px;
+      transition: all .3s;
+    }
+
+    .sk {
+      width: 300px;
+      height: 300px;
+      background-color: skyblue;
+      margin-top: 500px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">我是頂部導覽列</div>
+  <div class="content">
+    <div class="sk">秒殺模組</div>
+  </div>
+  <div class="backtop">
+    <a href="javascript:;"></a>
+  </div>
+  <script>
+    const sk = document.querySelector('.sk')
+    const header = document.querySelector('.header')
+    // 頁面滾動事件
+    window.addEventListener('scroll', function () {
+      // 頁面被捲去的頭部 >= 秒殺模組的位置offsetTop
+      const scroll = document.documentElement.scrollTop
+      header.style.top = scroll >= sk.offsetTop ? 0 : '-80px'
+    })
   </script>
 </body>
 

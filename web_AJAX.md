@@ -300,6 +300,8 @@ axios({
 ></html>
 >```
 
+*[<kbd>![](icon/logo.svg) 圖書管理案例  ![](icon/icon-more.svg?fill=text)</kbd>](#圖書管理)*
+
 # HTTP協議
 
 ==規定了瀏覽器傳送及伺服器返回內容的格式==
@@ -344,9 +346,490 @@ axios({
 >
 > ![ClShot 2025-09-28 at 23.13.08@2x](web_AJAX.assets/ClShot 2025-09-28 at 23.13.08@2x.png)
 
+# 圖片上傳
+
+上傳圖片我們先獲取圖片物件，再來可以透過FormData攜帶圖片資料，提交表搬內容到伺服器
+
+> [!note]
+>
+> **FormData** 是瀏覽器提供的一個 Web API，它可以模擬 HTML 表單的資料格式。當我們需要上傳檔案（如圖片）時，FormData 是最常用的方式
+
+1. 獲取圖片檔案
+
+   獲得事件對象`e.target.files[0]`
+
+2. 建立 FormData，攜帶圖片
+
+   ```javascript
+   const fd = new FormData()
+   fd.append('img', e.target.files[0])
+   ```
+
+3. 發送請求
+
+   ```javascript
+   axios({
+     url: 'http://hmajax.itheima.net/api/uploadimg',
+     method: 'post',
+     data: fd
+   }).then(res => {
+     console.log(res);
+     // 取的圖片在伺服器上的路徑
+     const imgUrl = result.data.data.url
+     document.querySelector('.uploadImg').src = imgUrl
+   })
+   ```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>image upload</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <input type="file" class="upload">
+  <img src="" class="uploadImg">
+  <script>
+    document.querySelector('.upload').addEventListener('change', e => {
+      // 1.獲取圖片檔案
+      console.dir(e.target.files[0]);
+
+      // 2.建立 FormData
+      const fd = new FormData()
+      fd.append('img', e.target.files[0])
+
+      axios({
+        url: 'http://hmajax.itheima.net/api/uploadimg',
+        method: 'post',
+        data: fd
+      }).then(res => {
+        console.log(res);
+        const imgUrl = result.data.data.url
+        document.querySelector('.uploadImg').src = imgUrl
+      })
+    })
+  </script>
+</body>
+
+</html>
+```
+
+# AJAX原理
+
+**XMLHttpRequest** (XHR) 是瀏覽器提供的一個 API，是實現 AJAX 的核心物件。它允許 JavaScript 在背景與伺服器進行 HTTP 通訊
+
+前面提到的Axios就**是基於 XHR**與伺服器做交互
+
+```mermaid
+graph LR
+  A[Axios] -->|包裝| B[XMLHttpRequest]
+  B -->|請求| C[伺服器]
+  C -->|響應| B
+  B -->|返回| A
+  
+  style A fill:#5DA9E9
+  style B fill:#FF9A56
+  style C fill:#6C757D
+```
+
+## 使用 XMLHttpRequest
+
+1. 建立 XMLHttpRequest 對象
+2. 組態請求方法和請求 url 地址
+3. 監聽 loadend 事件，接收響應結果
+4. 發起請求
+
+```javascript
+// 1. 建立xhr物件
+const xhr = new XMLHttpRequest()
+
+// 2. 配置請求方法
+xhr.open('GET', 'http://hmajax.itheima.net/api/province')
+
+// 3. 監聽loadend事件
+xhr.addEventListener('loadend', () => {
+  console.log(xhr.response);
+  
+  // 轉換JS物件
+  const data = JSON.parse(xhr.response).list.join('<br>')
+  console.log(data);
+})
+
+// 4. 發送請求
+xhr.send()
+```
+
+>[!note]
+>
+>xhr.response 回傳的結果是一個JSON的字符串，如果需要將**JSON 格式的字串轉換為 JavaScript 物件**就要使用**JSON.parse()**
+
+## XMLHttpRequest查詢參數
+
+查詢參數（Query Parameters）是附加在 URL 後面的鍵值對，用於向伺服器傳遞資料，在XHR
+
+中有多種方式連接
+
+1. 直接拼接在 URL 中
+
+   ```javascript
+   // 1. 建立xhr物件
+   const xhr = new XMLHttpRequest()
+   
+   // 2. 配置請求方法
+   xhr.open('GET', 'http://hmajax.itheima.net/api/city?pname=辽宁省')
+   
+   // 3. 監聽loadend事件
+   xhr.addEventListener('loadend', () => {
+     console.log(xhr.response);
+     const data = JSON.parse(xhr.response)
+     console.log(data);
+   })
+   // 4. 發送請求
+   xhr.send()
+   ```
+
+2. **使用 URLSearchParams**
+
+   ```javascript
+   // 建立查詢參數物件並轉成字串
+   const paramsObj = new URLSearchParams({
+     pname: '辽宁省',
+     cname: '大连市'
+   }).toString()
+   
+   const xhr = new XMLHttpRequest()
+   xhr.open('GET', `http://hmajax.itheima.net/api/area?${paramsObj}`)
+   xhr.addEventListener('loadend', () => {
+     console.log(xhr.response);
+     const data = JSON.parse(xhr.response).list
+     console.log(data);
+   })
+   xhr.send()
+   ```
+
+   > [!note]
+   >
+   > 需要將URLSearchParams對象轉換成字串在放入查詢的連結當中a
+   > **對比axios**
+   >
+   > ![ClShot 2025-10-05 at 18.48.28@2x](web_AJAX.assets/ClShot 2025-10-05 at 18.48.28@2x.png)
+
+## XMLHttpRequest資料提交
+
+使用 XMLHttpRequest 提交 JSON 時，必須自己處理三件事情：
+
+1. 手動設定 `Content-Type` 為 `application/json`，告訴伺服器傳送的是 JSON 格式
+2. 你必須用 `JSON.stringify()` 把 JavaScript 物件轉成 JSON 字串
+3. 收到回應時，要用 `JSON.parse()` 把 JSON 字串轉回物件
+
+```javascript
+const xhr = new XMLHttpRequest()
+xhr.open('POST', 'http://hmajax.itheima.net/api/register')
+xhr.addEventListener('loadend', () => {
+  console.log(xhr.response);
+})
+
+// 告訴伺服器傳送的是 JSON 格式
+xhr.setRequestHeader('Content-Type', 'application/json')
+const userObj = {
+  username: 'james12353412',
+  password: '12l3kopdsf'
+}
+
+// JavaScript 物件轉成 JSON 字串
+const userStr = JSON.stringify(userObj)
+
+xhr.send(userStr)
+```
+
+## Promise
+
+Promise 是 JavaScript 中處理**異步操作**的一種機制，它代表一個「未來才會完成的操作」的結果，一個Promise物件，必然處於以下幾種狀態之一：
+
+* **待定（pending）**：初始狀態，既沒有被兌現，也沒有被拒絕
+* **已兌現（fulfilled）**：操作成功完成
+* **已拒絕（rejected）**：操作失敗
+
+![ClShot 2025-10-06 at 19.13.12@2x](../../Pictures/螢幕截圖/ClShot 2025-10-06 at 19.13.12@2x.png)
+
+> [!caution]
+>
+> Promise物件一旦被兌現/拒絕就是確定了，狀態無法再被改變
+
+```javascript
+// 1. 建立Promise物件
+const promise = new Promise((resolve, reject) => {
+  // 2. 執行異步操作
+	// 成功調用resolve觸發then()執行
+  // 失敗調用reject觸發catch()執行
+});
+
+// 3. 接收結果
+p.then(result => {
+  // 成功
+}).catch(error => {
+  // 失敗
+})
+```
+
+> [!TIP]
+>
+> 在 JavaScript 中，有很多操作需要花時間才能完成，例如：
+>
+> - **發送 HTTP 請求**：等待伺服器回應（可能需要 1-2 秒）
+> - **讀取檔案**：從硬碟讀取資料
+> - **定時器**：等待一段時間後執行
+> - **資料庫查詢**：等待資料庫回傳結果
+>
+> 如果這些操作會「阻塞」程式執行，整個網頁就會卡住，使用者無法做任何事情
+
+> **模擬耗時操作**
+>
+> ```javascript
+> // promise物件創建時這裡所有的code都會先執行
+> const promise = new Promise((resolve, reject) => {
+>   console.log('Promise物件成功建立');
+>   setTimeout(() => {
+>     // 成功失敗後會改變promise狀態
+>     // resolve('模擬AJAX請求成功')
+>     reject(new Error('模擬AJAX請求失敗'))
+>   }, 2000)
+> })
+> console.log(promise); // 原先為pending狀態
+> 
+> // 獲取結果
+> promise.then(result => {
+>   console.log(result);
+> }).catch(error => {
+>   console.log(error);
+> })
+> ```
+>
+> ![ClShot 2025-10-06 at 19.21.49@2x](web_AJAX.assets/ClShot 2025-10-06 at 19.21.49@2x.png)
+
+*[<kbd>![](icon/logo.svg) Promise + XHR 獲取省份列表  ![](icon/icon-more.svg?fill=text)</kbd>](#Promise + XHR 獲取省份列表)*
+
+# 案例練習
+
+## 圖書管理
+
+*[<kbd>![](icon/logo.svg) 圖書管理API  ![](icon/icon-more.svg?fill=text)</kbd>](https://s.apifox.cn/1b0dd84f-faa8-435d-b355-5a8a329e34a8/api-87683394)*
+
+### 渲染列表(查)
+
+給自己取個名字，並告訴伺服器，默認會有三本書，基於這三本書做資料的增刪改查
+
+![ClShot 2025-10-01 at 18.07.55](web_AJAX.assets/ClShot 2025-10-01 at 18.07.55.png)
+
+```javascript
+const creator = "James614630241"
+function getBooksList() {
+  // 獲取資料
+  axios({
+    url: 'http://hmajax.itheima.net/api/books',
+    params: {
+      creator
+    }
+  }).then(res => {
+    // 渲染資料
+    const booksList = res.data.data
+    const htmlstr = booksList.map((item, index) => {
+      return `<tr>
+          <td>${index + 1}</td>
+          <td>${item.bookname}</td>
+          <td>${item.author}</td>
+          <td>${item.publisher}</td>
+          <td>
+            <span class="del">刪除</span>
+            <span class="edit">編輯</span>
+          </td>
+        </tr>`
+    }).join('')
+    document.querySelector('.list').innerHTML = htmlstr
+  })
+}
+getBooksList()
+```
+
+![ClShot 2025-10-01 at 18.26.43](web_AJAX.assets/ClShot 2025-10-01 at 18.26.43.png)
+
+### 新增圖書(增)
+
+![ClShot 2025-10-01 at 18.29.07](web_AJAX.assets/ClShot 2025-10-01 at 18.29.07.png)
+
+1. 讓彈出視窗可以用JavaScript控制
+2. 收集資料並提交資料
+3. 重新整理圖書列表  
+
+```javascript
+// 使用 Bootstrap 的 Modal 構造函數創建一個新的模態框實例
+const addModalDom = document.querySelector('.add-modal')
+const addModal = new bootstrap.Modal(addModalDom)
+
+// 點選保存按鈕
+document.querySelector('.add-btn').addEventListener('click', () => {
+  const addForm = document.querySelector('.add-form')
+  const bookObj = serialize(addForm, { hash: true, empty: true })
+  axios({
+    url: 'http://hmajax.itheima.net/api/books',
+    method: 'post',
+    data: {
+      ...bookObj,
+      creator
+    }
+  }).then(res => {
+    console.log(res);
+    getBooksList()
+    addModal.hide()
+  })
+})
+```
 
 
 
+### 刪除圖書(刪)
+
+1. 綁定點擊事件(獲得圖書ID)
+
+   > [!tip]
+   >
+   > * 因為資料是動態選染出來的，要使用事件委託來綁定父級
+   > * 需要在每一本圖書上加上ID屬性
+   >
+   > ![ClShot 2025-10-01 at 20.03.01](web_AJAX.assets/ClShot 2025-10-01 at 20.03.01.png)
+   >
+   > 
+
+2. 調用刪除API
+
+3. 刷新圖書資料
+
+```javascript
+// 事件委託
+document.querySelector('.list').addEventListener('click', (e) => {
+  if (e.target.classList.contains('del')) {
+    const bookId = e.target.parentNode.dataset.id
+    axios({
+      url: `http://hmajax.itheima.net/api/books/${bookId}`,
+      method: 'delete'
+    }).then(res => {
+      getBooksList()
+    })
+  }
+})
+```
+
+
+
+### 編輯圖書(改)
+
+1. 編輯圖書-彈框（顯示&隱藏)
+2. 表單資料顯示在表格中
+3. 保存修改&刷新列表
+
+```javascript
+const editModalDom = document.querySelector('.edit-modal')
+const editModal = new bootstrap.Modal(editModalDom)
+
+// 事件委託
+document.querySelector('.list').addEventListener('click', (e) => {
+  if (e.target.classList.contains('edit')) {
+
+    // 獲得圖書詳情
+    const bookId = e.target.parentNode.dataset.id
+    axios({
+      url: `http://hmajax.itheima.net/api/books/${bookId}`,
+    }).then(res => {
+      // 渲染前端表格資料
+      const bookObj = res.data.data
+      
+      // 取得物件的所有鍵
+      const keys = Object.keys(bookObj)
+      
+      // 遍歷每個鍵值並填入表單
+      keys.forEach(key => {
+        document.querySelector(`.edit-form .${key}`).value = bookObj[key]
+      })
+    })
+    editModal.show()
+  }
+})
+
+// 點擊修改按鈕蒐集表單資料
+document.querySelector('.edit-btn').addEventListener('click', () => {
+  const editForm = document.querySelector('.edit-form')
+  const { id, bookname, author, publisher } = serialize(editForm, { hash: true, empty: true })
+  axios({
+    url: `http://hmajax.itheima.net/api/books/${id}`,
+    method: 'put',
+    data: {
+      bookname, author, publisher, creator
+    }
+  }).then(() => {
+    getBooksList()
+    editModal.hide()
+  })
+})
+```
+
+## Promise + XHR 獲取省份列表
+
+使用 Promise 管理 XHR 獲取省份列表，並展示到頁面上
+
+步驟：
+
+1. 建立 Promise 對象
+2. 執行 XHR 非同步程式碼，獲取省份列表 http://hmajax.itheima.net/api/province
+3. 關聯成功或失敗函數，做後續處理
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>promise+xhr</title>
+</head>
+
+<body>
+  <p class="list"></p>
+  <script>
+    // 1. 建立Promise物件
+    const promise = new Promise((resolve, reject) => {
+
+      // 2. 執行XHR
+      const xhr = new XMLHttpRequest()
+      xhr.open('GET', 'http://hmajax.itheima.net/api/province')
+      xhr.addEventListener('loadend', () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.response))
+        } else {
+          reject(new Error(xhr.response))
+        }
+      })
+      xhr.send()
+    })
+
+    // 3. 後續處理
+    promise.then(result => {
+      console.log(result);
+      document.querySelector('.list').innerHTML = result.list.join('<br>')
+
+    }).catch(error => {
+      console.log(error);
+      document.querySelector('.list').innerHTML = error.message
+    })
+  </script>
+</body>
+
+</html>
+```
 
 
 
