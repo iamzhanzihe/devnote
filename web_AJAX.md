@@ -614,6 +614,238 @@ p.then(result => {
 
 *[<kbd>![](icon/logo.svg) Promise + XHR 獲取省份列表  ![](icon/icon-more.svg?fill=text)</kbd>](#Promise + XHR 獲取省份列表)*
 
+## 回調函數地獄和Promise鏈式調用
+
+回調函數地獄指的是當多個異步操作需要按順序執行時,回調函數層層嵌套，形成了難以閱讀和維護的「金字塔」結構
+
+```javascript
+// 回調函數地獄的典型例子
+getData(function(a) {
+    getMoreData(a, function(b) {
+        getMoreData(b, function(c) {
+            getMoreData(c, function(d) {
+                getMoreData(d, function(e) {
+                    console.log('最終結果:', e);
+                });
+            });
+        });
+    });
+});
+```
+
+回調函數地獄的問題：
+
+1. **可讀性差** - 代碼橫向發展，難以閱讀
+2. **維護困難** - 修改邏輯時容易出錯
+3. **錯誤處理複雜** - 每層都需要單獨處理錯誤
+4. **代碼耦合度高** - 難以重用和測試
+
+```mermaid
+flowchart LR
+    A["new Promise()"] -->|執行| B[".then(回調函數)"]
+    B -->|執行| C["新的<br/>Promise對象"]
+    B -->|"回傳該對象<br/>return 結果"| C
+    
+    style A fill:#f39c12,color:#fff,stroke:#333,stroke-width:2px
+    style B fill:#3498db,color:#fff,stroke:#333,stroke-width:2px
+    style C fill:#2ecc71,color:#fff,stroke:#333,stroke-width:2px
+```
+
+可以透過 .then() 方法會return一個新生成的 Promise 對象特性，繼續串聯下一環任務，直到結束
+
+```javascript
+// 1. 建立Promise對象
+const p = new Promise((resolve, reject) => {
+  // 2. 模擬耗時操作
+  setTimeout(() => {
+    resolve('台北市')
+  }, 2000)
+})
+
+const p2 = p.then(result => {
+  // 使用return 來建立Promise對象並傳遞結果
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(result + '信義區')
+    }, 2000)
+  })
+})
+
+p2.then(result => {
+  console.log(result);
+})
+
+// 想要了解新生成的Promise對象是否跟一開始的一樣
+console.log(p === p2);  // false
+```
+
+> **使用axios完成Promise連續調用**
+>
+> ```mermaid
+> flowchart LR
+>     A["狀態為<br/>Promise對象"] -->|執行| B["then(回調函數)"]
+>     B -->|return 狀態值<br/>Promise 對象| C["新的<br/>Promise對象"]
+>     C -->|執行| D["then(回調函數)"]
+>     D -->|return 狀態值<br/>Promise 對象| E["新的<br/>Promise對象"]
+>     E -->|執行| F["then(回調函數)"]
+>     
+>     style A fill:#f39c12,color:#fff,stroke:#333,stroke-width:2px
+>     style B fill:#3498db,color:#fff,stroke:#333,stroke-width:2px
+>     style C fill:#2ecc71,color:#fff,stroke:#333,stroke-width:2px
+>     style D fill:#3498db,color:#fff,stroke:#333,stroke-width:2px
+>     style E fill:#2ecc71,color:#fff,stroke:#333,stroke-width:2px
+>     style F fill:#3498db,color:#fff,stroke:#333,stroke-width:2px
+> ```
+>
+> ```javascript
+> // axios回傳的資料型態就是Promise型態
+> axios({ url: 'http://hmajax.itheima.net/api/province' }).then(result => {
+>   pname = result.data.list[0]
+>   return axios({ url: 'http://hmajax.itheima.net/api/city', params: { pname } })
+> }).then(result => {
+>   cname = result.data.list[0]
+>   return axios({ url: 'http://hmajax.itheima.net/api/area', params: { pname, cname } })
+> }).then(result => {
+>   console.log(result);
+> })
+> ```
+>
+> > [!important]
+> >
+> > axios回傳的資料型態本身已經是Promise型態，所以不需要再額外建立Promise物件
+
+## async/await
+
+這兩個關鍵字可以讓我們用一種更簡潔的寫法寫出基於Promise的異步行為，並且不需要Promise鏈式調用
+
+
+
+* **async** - 用來聲明一個異步函數
+
+* **await** - 用來等待一個 Promise 完成的結果
+
+```javascript
+// 1. 定義await修飾函數
+async function getData() {
+  // 2. await等待Promisr對象返回結果
+  const pObj = await axios({ url: 'http://hmajax.itheima.net/api/province' })
+  const pname = pObj.data.list[0]
+  const cObj = await axios({ url: 'http://hmajax.itheima.net/api/city', params: { pname } })
+  cname = cObj.data.list[0]
+  const aObj = await axios({ url: 'http://hmajax.itheima.net/api/area', params: { pname, cname } })
+  const areaName = aObj.data.list[0]
+}
+getData()
+```
+
+> [!caution]
+>
+> 可以使用 `try...catch ` 來捕獲異步操作中的錯誤的標準方式
+>
+> ``` javascript
+> try {
+>   // 嘗試執行的代碼
+> 
+> } catch (error) {
+>   // 如果 try 區塊中發生錯誤,會執行這裡
+>   // try後續都不會再繼續執行
+> ```
+>
+> 
+
+## Promise.all
+
+`Promise.all()` 是 JavaScript 中用來**同時處理多個非同步操作**的方法。它接收一個 Promise 陣列作為輸入(合併多個Promise)，並返回一個新的 Promise
+
+* **全部成功才成功**
+
+  - 當**所有** Promise 都成功（resolved）時，`Promise.all()` 才會成功
+
+  - 返回結果是一個陣列，包含所有 Promise 的結果，**順序與輸入順序一致**
+
+* **一個失敗就失敗**
+
+  - 只要**任何一個** Promise 失敗（rejected），整個 `Promise.all()` 就會立即失敗
+
+  - 返回第一個失敗的 Promise 的錯誤原因
+
+```mermaid
+graph LR
+  subgraph Input["輸入多個 Promise"]
+      P1["new Promise()"]
+      P2["new Promise()"]
+      P3["new Promise()"]
+  end
+  
+  P1 --> PromiseAll["新的<br/>Promise 對象"]
+  P2 --> PromiseAll
+  P3 --> PromiseAll
+  
+  PromiseAll -->|"所有 Promise 成功"| Then[".then(回調函數)"]
+  PromiseAll -->|"任意一個 Promise 失敗"| Catch[".catch(回調函數)"]
+  
+  style P1 fill:#ff9966
+  style P2 fill:#ff9966
+  style P3 fill:#ff9966
+  style PromiseAll fill:#99cc66
+  style Then fill:#6699cc
+  style Catch fill:#cc6666
+```
+
+```javascript
+Promise.all([promise1, promise2, promise3])
+  .then(results => {
+    // results 是一個陣列 [result1, result2, result3]
+    console.log(results);
+  })
+  .catch(error => {
+    // 任何一個 Promise 失敗就會進到這裡
+    console.error(error);
+  });
+```
+
+```javascript
+import axios from 'axios';
+
+const fetchUser = axios.get('/api/user');
+const fetchPosts = axios.get('/api/posts');
+const fetchComments = axios.get('/api/comments');
+
+Promise.all([fetchUser, fetchPosts, fetchComments])
+  .then(([userRes, postsRes, commentsRes]) => {
+    // 三個請求都成功後才會執行
+    console.log('用戶資料:', userRes.data);
+    console.log('文章列表:', postsRes.data);
+    console.log('評論列表:', commentsRes.data);
+  })
+  .catch(error => {
+    console.error('其中一個請求失敗:', error);
+  });
+```
+
+
+
+# 事件循環Eventloop
+
+事件循環是 JavaScript 處理非同步操作的核心機制。由於 **JavaScript 是單執行緒(single-threaded)的語言**，意味著它一次只能執行一件事情，但透過事件循環，它可以有效地處理非同步任務，讓程式看起來像是在同時做很多事。
+
+JavaScript 的執行環境包含幾個重要部分。首先是調用**堆疊(Call Stack)**，這是用來追蹤目前正在執行的函式。當一個函式被呼叫時，它會被推入堆疊頂端，執行完畢後就會被移除。接著是**任務佇列(Task Queue)**，這裡存放著等待執行的回調函式。
+
+當我們執行非同步操作時,比如說使用 setTimeout 或是發送一個 fetch 請求，這些操作會被**交給瀏覽器或 Node.js 的 Web API 去處理**。當這些操作完成時，它們的回調函式會被放入任務佇列中等待。但這些**回調函式不會立即執行**，而是要**等到調用堆疊清空後，事件循環才會把它們推入堆疊執行**。
+
+![ClShot 2025-10-14 at 14.38.35](web_AJAX.assets/ClShot 2025-10-14 at 14.38.35.png)
+
+## 巨集任務與微任務
+
+ES6 之後引入了 Promise 物件，讓 JS 引擎也可以發起非同步任務了
+
+|         任務類型         |    執行環境     | 任務內容                                                     |
+| :----------------------: | :-------------: | :----------------------------------------------------------- |
+| **巨集任務 (Macrotask)** | 瀏覽器環境執行  | • JS 腳本本身的執行 (script)<br>• setTimeout / setInterval<br>• AJAX 請求完成事件<br>• 使用者互動事件等 |
+|  **微任務 (Microtask)**  | JS 引擎環境執行 | • Promise 物件的 .then()<br>• Promise 物件的 .catch()<br>• JS 引擎的非同步代碼 |
+
+![ClShot 2025-10-15 at 17.46.56](web_AJAX.assets/ClShot 2025-10-15 at 17.46.56.png)
+
 # 案例練習
 
 ## 圖書管理

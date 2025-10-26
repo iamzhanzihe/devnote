@@ -113,7 +113,7 @@ React 引入了「**元件化**」的開發方式，把複雜的介面拆解成�
 >   import React from 'react';
 >   import ReactDOM from 'react-dom/client';
 >   import App from './App';
->                             
+>                               
 >   const root = ReactDOM.createRoot(document.getElementById('root'));
 >   root.render(<App />);
 >   ```
@@ -1254,32 +1254,32 @@ useEffect副作用函數的執行時機存在多種情況，根據**傳入依賴
 > **清除副作用**
 >
 > ```jsx
-> import {useState, useEffect} from 'react'
+> import { useState, useEffect } from 'react'
 > 
 > function Son() {
->   useEffect(() => {
->     const timer = setInterval(() => {
->       console.log('timer執行中...')
->     }, 1000)
+>     useEffect(() => {
+>        const timer = setInterval(() => {
+>          console.log('timer執行中...')
+>        }, 1000)
 > 
->     // 清除副作用
->     return () => {
->       clearInterval(timer)
->     }
->   })
->   return (
->     <div>this is son</div>
->   )
+>        // 清除副作用
+>        return () => {
+>          clearInterval(timer)
+>        }
+>     })
+>     return (
+>        <div>this is son</div>
+>     )
 > }
 > 
-> function App () {
->   const [show, setShow] = useState(true)
->   return (
->     <div className="App">
->       {show && <Son/>}
->       <button onClick={() => setShow(false)}>清理組件</button>
->     </div>
->   )
+> function App() {
+>     const [show, setShow] = useState(true)
+>     return (
+>        <div className="App">
+>          {show && <Son />}
+>          <button onClick={() => setShow(false)}>清理組件</button>
+>        </div>
+>     )
 > }
 > export default App;
 > ```
@@ -1374,6 +1374,269 @@ useEffect副作用函數的執行時機存在多種情況，根據**傳入依賴
 
 
 *[<kbd>![](icon/logo.svg) bilibili需求優化  ![](icon/icon-more.svg?fill=text)</kbd>](#bilibili需求優化)*
+
+# Redux狀態管理工具
+
+**Redux** 是一個用於 JavaScript 應用程式的**狀態管理庫**，最常與 React 搭配使用，但也可以用於其他框架或純 JavaScript
+
+![ClShot 2025-10-25 at 22.27.42@2x](web_React.assets/ClShot 2025-10-25 at 22.27.42@2x.png)
+
+使用步驟：
+
+1. 定義一個 reducer 函數 （根據當前想要做的修改返回一個新的狀態）
+2. 使用createStore方法傳入 reducer函數 生成一個store實例對象
+3. 使用store實例的 **subscribe方法** 訂閱資料的變化（資料一旦變化，可以得到通知）
+4. 使用store實例的 **dispatch方法** 提交action對象 觸發資料變化（告訴reducer你想怎麼改資料）
+5. 使用store實例的 **getState方法** 獲取最新的狀態資料更新到視圖中
+
+![ClShot 2025-10-25 at 22.37.10@2x](web_React.assets/ClShot 2025-10-25 at 22.37.10@2x.png)
+
+> [!note]
+>
+> 為了職責清晰，資料流向明確，Redux把整個資料修改的流程分成了**三個核心概念**，分別是：**state、action和reducer**
+> 1. state - 一個對象 存放著我們管理的資料狀態
+> 2. action - 一個對象 用來描述你想怎麼改資料
+> 3. reducer - 一個函數 根據action的描述生成一個新的state
+
+> **使用Redux完成記數器**
+>
+> ```html
+> <!DOCTYPE html>
+> <html lang="en">
+> 
+> <head>
+>   <meta charset="UTF-8">
+>   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>   <title>Redux</title>
+> </head>
+> 
+> <body>
+>   <button class="decrement">-</button>
+>   <span class="count">0</span>
+>   <button class="increment">+</button>
+> 
+>   <script src="https://unpkg.com/redux@4.2.1/dist/redux.js"></script>
+> 
+>   <script>
+>     // 1. 定義reducer函數
+>     // 根據不同的action對象 返回不同的state
+>     function reducer(state = { count: 0 }, action) {
+>       // 資料是不可變的，只能基於原始狀態生成新的狀態
+>       if (action.type === 'INCREMENT') {
+>         return { count: state.count + 1 }
+>       }
+>       if (action.type === 'DECREMENT') {
+>         return { count: state.count - 1 }
+>       }
+>       return state
+>     }
+> 
+>     // 2. 使用reducer函數生成store實例
+>     const store = Redux.createStore(reducer)
+> 
+>     // 3. 通過store實例訂閱資料變化
+>     // 回調函數可以在每次state發生變化的時候自動執行
+>     store.subscribe(() => {
+>       console.log('state變化了', store.getState());
+> 
+>       // 5. 使用store實例的getState()獲取最新的狀態資料更新到視圖中
+>       document.querySelector('.count').innerText = store.getState().count
+>     })
+> 
+>     // 4. 通過store實例的dispatch函數提交action更改狀態
+>     const inBtn = document.querySelector('.increment')
+>     inBtn.addEventListener('click', () => {
+>       store.dispatch({
+>         type: 'INCREMENT'
+>       })
+>     })
+> 
+>     const deBtn = document.querySelector('.decrement')
+>     deBtn.addEventListener('click', () => {
+>       store.dispatch({
+>         type: 'DECREMENT'
+>       })
+>     })
+>   </script>
+> </body>
+> 
+> </html>
+> ```
+
+## Redux與React環境準備
+
+在React中使用redux，官方要求安裝兩個套件：
+
+* **Redux Toolkit** ：官方推薦編寫Redux的邏輯，來**簡化書寫方式**
+* **react-redux**：用來**連結 Redux 和 React元件**的橋樑
+
+1. 使用 CRA 快速建立 React 項目 `npx create-react-app react-redux`
+
+   > [!TIP]
+   >
+   > 要使用命令 `cd react-redux` 進入工作目錄
+
+2. 安装配套工具 `npm i @reduxjs/toolkit  react-redux`
+
+   > [!TIP]
+   >
+   > ![package.json](web_React.assets/ClShot 2025-10-25 at 23.33.18@2x-1406522.png)
+
+3. 啟動項目 `npm run start`
+
+**store目錄結構設計**
+
+![ClShot 2025-10-25 at 23.36.23@2x](web_React.assets/ClShot 2025-10-25 at 23.36.23@2x.png)
+
+* 通常集中狀態管理的部分都會單獨建立一個單獨的 store 目錄
+* 應用通常會有很多個store子模組，所以建立一個 modules 目錄，在內部編寫業務分類的子store
+* store中的入口檔案 index.js 的作用是組合modules中所有的子模組，並匯出store
+
+## 實現Redux架構
+
+```mermaid
+graph LR
+  subgraph A["Redux store配置"]
+    A1["配置counterStore模塊"]
+    A2["配置根store並組合<br/>counterStore模塊"]
+  end
+  
+  B["store"]
+  
+  subgraph C["React組件"]
+    C1["注入store (react-redux)"]
+    C2["使用store中的數據"]
+    C3["修改store中的數據"]
+  end
+  
+  A1 --> B
+  A2 --> B
+  B --> C1
+  C1 --> C2
+  C1 --> C3
+  
+  style A fill:#e8edc4
+  style C fill:#d4e3f3
+  style B fill:#9bb4d4,color:#fff
+  style A1 fill:#d4e3f3
+  style A2 fill:#d4e3f3
+  style C1 fill:#e8edc4
+  style C2 fill:#e8edc4
+  style C3 fill:#e8edc4
+```
+
+---
+
+> **建立counterStore模塊**
+>
+> *==counterStore.js==*
+>
+> ```javascript
+> import { createSlice } from "@reduxjs/toolkit";
+> 
+> const conterStore = createSlice({
+>   name: 'counter',
+>   // 初始狀態
+>   initialState: {
+>     count: 0
+>   },
+>   // 修改函數
+>   reducers: {
+>     increment(state) {
+>       state.count++
+>     },
+>     decrement(state) {
+>       state.count--
+>     }
+>   }
+> })
+> 
+> // 解構出創建action對象的函數 actionCreator
+> const { increment, decrement } = conterStore.actions
+> // 獲取reducer函數
+> const conterReducer = conterStore.reducer
+> // 導出創建action對象的函數和reducer對象的函數
+> export { increment, decrement }
+> export default conterReducer
+> ```
+
+> **組合子模塊**
+>
+> *==store/index.js==*
+>
+> ```javascript
+> import { configureStore } from "@reduxjs/toolkit"
+> 
+> // 導入子模塊reducer
+> import conterReducer from "./modules/counterStore"
+> 
+> // 建立根store 組合子模塊
+> const store = configureStore({
+>   reducer: {
+>     counter: conterReducer
+>   }
+> })
+> 
+> export default store
+> ```
+
+> **為React注入store**
+>
+> react-redux負責把Redux和React 連結起來，內建 **Provider元件** 通過**store 參數把建立好的store實例注入到應用中**，連結正式建立
+>
+> ![src/index.js](web_React.assets/ClShot 2025-10-26 at 19.40.45@2x.png)
+
+>**React元件使用store中的資料**
+>
+>在React元件中使用store中的資料，需要用到一個**hook函數 - useSelector**，它的作用是把store中的資料對應到元件中
+>
+>![App.js](web_React.assets/ClShot 2025-10-26 at 19.48.50@2x.png)
+>
+>React元件中修改store中的資料需要借助另外一個**hook函數 - useDispatch**，它的作用是生成提交action對象的dispatch函數
+>
+>![App.js](web_React.assets/ClShot 2025-10-26 at 20.04.46@2x.png)
+
+> [!tip]
+>
+> |      需求       |      Hook       |           用途           |
+> | :-------------: | :-------------: | :----------------------: |
+> |  **讀取**數據   |  `useSelector`  |  從 store **選擇**數據   |
+> |  **修改**數據   |  `useDispatch`  |  獲取 **dispatch** 函數  |
+> | **創建** action | `actionCreator` | 執行函數得到 action 對象 |
+>
+> **完整流程**：`useSelector` 讀 → `actionCreator` 創建 action → `useDispatch` 發送 → Reducer 處理 → Store 更新 → 組件重新渲染
+
+## 提交action傳入參數
+
+![ClShot 2025-10-26 at 20.20.10@2x](web_React.assets/ClShot 2025-10-26 at 20.20.10@2x.png)
+
+元件中有倆個按鈕 **add to 10** 和 **add to 20** 可以直接把count值修改到對應的數字，目標count值是在元件中傳遞過去的，需要在提交action的時候傳遞參數
+
+> [!important]
+>
+> 在reducers的修改方法中**新增action對象參數**，在**呼叫actionCreater的時候傳遞參數**，參數會被**傳遞到action對象payload屬性**上
+
+![ClShot 2025-10-26 at 20.25.56@2x](web_React.assets/ClShot 2025-10-26 at 20.25.56@2x.png)
+
+## Redux 異步請求操作
+
+1. 建立store的寫法保持不變，並配置同步修改狀態的方法
+2. 單獨封裝一個函數，在函數內部return一個新函數，在新函數中
+   1. 封裝非同步請求獲取資料
+   2. 呼叫同步actionCreater傳入異步資料生成一個action對象，並使用dispatch提交
+3. 元件中dispatch的寫法保持不變
+
+![ClShot 2025-10-26 at 21.34.50@2x](web_React.assets/ClShot 2025-10-26 at 21.34.50@2x.png)
+
+![ClShot 2025-10-26 at 21.39.06@2x](web_React.assets/ClShot 2025-10-26 at 21.39.06@2x.png)
+
+## chrome調試工具
+
+Redux官方提供了針對於Redux的調試工具，支援即時state資訊展示，action提交資訊查看等
+
+*[<kbd>![](icon/logo.svg) Redux DevTools  ![](icon/icon-more.svg?fill=text)</kbd>](https://chromewebstore.google.com/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=zh-TW)*
+
+![ClShot 2025-10-26 at 21.46.47@2x](web_React.assets/ClShot 2025-10-26 at 21.46.47@2x.png)
 
 
 
