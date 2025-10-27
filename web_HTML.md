@@ -449,21 +449,6 @@ ___
 > <video src="./media/vue.mp4" controls loop muted autoplay></video>
 > ```
 
-# 練習-自我介紹
-
-> **想法**
->
-> **從上到下，先整體再局部**，逐步分析製作
-> 分析內容 → 寫程式碼 → 保存 → 刷新瀏覽器，看效果
-
-![ClShot 2025-06-11 at 17.46.27@2x](web_HTML.assets/ClShot 2025-06-11 at 17.46.27@2x.png)
-
-> [!note]
->
-> 在vscode裡面，可以使用 `lorem` 填充字數
-
-*[<kbd>![](icon/logo.svg) self-introduction.html ![](icon/icon-download.svg?fill=text)</kbd>](web_HTML.assets/code/self-introduction.html)*
-
 # 列表、表格、表單
 
 ## 無序列表
@@ -911,6 +896,21 @@ input 標籤 type 屬性值不同，則功能不同，通常**會搭配label標�
 | article |  網頁文章  |
 
 # 練習
+
+## 自我介紹
+
+> **想法**
+>
+> **從上到下，先整體再局部**，逐步分析製作
+> 分析內容 → 寫程式碼 → 保存 → 刷新瀏覽器，看效果
+
+![ClShot 2025-06-11 at 17.46.27@2x](web_HTML.assets/ClShot 2025-06-11 at 17.46.27@2x.png)
+
+> [!note]
+>
+> 在vscode裡面，可以使用 `lorem` 填充字數
+
+*[<kbd>![](icon/logo.svg) self-introduction.html ![](icon/icon-download.svg?fill=text)</kbd>](web_HTML.assets/code/self-introduction.html)*
 
 ## 體育新聞列表
 
