@@ -8,6 +8,7 @@ vlook-doc-lib:
 - [前端開發學習筆記★WebAPI](web_WebAPI.html?target=_self "網頁開發學習筆記★JS")
 - [前端開發學習筆記★AJAX](web_AJAX.html?target=_self "網頁開發學習筆記★JS")
 - [前端開發學習筆記★React](web_React.html?target=_self "網頁開發學習筆記★React")
+- [前端開發學習筆記★TypeScript](web_TypeScript.html?target=_self "網頁開發學習筆記★TypeScript")
 ---
 
 
