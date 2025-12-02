@@ -5,6 +5,7 @@ vlook-doc-lib:
 - [快速的筆記網站跳轉](index.html?target=_self "可以快速挑轉到想要的網頁")
 - [Python★基礎](Python基礎.html?target=_self "Python★基礎")
 - [Python★爬蟲](Python爬蟲.html?target=_self "Python★爬蟲")
+- [Python★逆向爬蟲](Python逆向爬蟲.html?target=_self "Python★逆向爬蟲")
 ---
 
 [TOC]

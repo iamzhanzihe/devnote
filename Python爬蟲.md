@@ -1,10 +1,11 @@
 ---
-title: Python基礎
+title: Python爬蟲
 vlook-header-dup: 增;查;改;刪;練習資料
 vlook-doc-lib:
 - [快速的筆記網站跳轉](index.html?target=_self "可以快速挑轉到想要的網頁")
 - [Python★基礎](Python基礎.html?target=_self "Python★基礎")
 - [Python★爬蟲](Python爬蟲.html?target=_self "Python★爬蟲")
+- [Python★逆向爬蟲](Python逆向爬蟲.html?target=_self "Python★逆向爬蟲")
 ---
 
 [TOC]
@@ -1886,20 +1887,20 @@ if __name__ == '__main__':
 >            url = "https://coinmarketcap.com/zh-tw/?lang=zh-tw&page={}"
 >            for page in range(1, 3):
 >                yield scrapy.Request(url=url.format(page), callback=self.parse)
->        
+>                
 >        def parse(self, response: HtmlResponse, **kwargs):
 >            table_list = response.xpath("//table//tr[position()>1]")
 >            for tr in table_list:
 >                rank = tr.xpath("./td[2]//p/text()").get()
 >                coin = tr.xpath("./td[3]//p/text()").get()
 >                price = tr.xpath("./td[4]//text()").get()
->        
+>                
 >                dict_tr = {
 >                    "rank": rank,
 >                    "coin": coin,
 >                    "price": price,
 >                }
->        
+>                
 >                yield dict_tr
 >    
 >    if __name__ == '__main__':
@@ -1954,7 +1955,7 @@ if __name__ == '__main__':
 >               'sec-ch-ua-mobile': '?0',
 >               'sec-ch-ua-platform': '"macOS"',
 >           }
->       
+>               
 >           def process_request(self, request, spider):
 >               for key, value in self.headers.items():
 >                   request.headers[key] = value
@@ -1963,12 +1964,12 @@ if __name__ == '__main__':
 >               # 取得當前檔案所在目錄的絕對路徑
 >               current_dir = os.path.dirname(os.path.abspath(__file__))
 >               js_file_path = os.path.join(current_dir, 'utils', 'endata.js')
->       
+>               
 >               with open(js_file_path, 'r', encoding='utf-8') as f:
 >                   js_code = f.read()
 >                   ctx = execjs.compile(js_code)
 >                   decrypted_text = ctx.call('decrypt_data', response.text)
->       
+>               
 >                   # 建立新的 Response 物件,因為 response.text 是唯讀的
 >                   new_response = TextResponse(
 >                       url=response.url,
@@ -1991,7 +1992,7 @@ if __name__ == '__main__':
 >       
 >       class EndataSpiderSpider(scrapy.Spider):
 >           name = "endata_spider"
->       
+>               
 >           def start_requests(self):
 >               url = 'https://www.endata.com.cn/API/GetData.ashx'
 >               data = {
@@ -2002,12 +2003,12 @@ if __name__ == '__main__':
 >                   'MethodName': 'Data_ReportListNew',
 >               }
 >               yield scrapy.FormRequest(url=url, formdata=data)
->       
+>               
 >           def parse(self, response: HtmlResponse, **kwargs):
 >               yield {
 >                   "decrypted_response": response.text
 >               }
->       
+>               
 >       if __name__ == '__main__':
 >           execute("scrapy crawl endata_spider --nolog".split())
 >       ```

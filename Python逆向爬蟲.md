@@ -1,3 +1,13 @@
+---
+title: Python逆向爬蟲
+vlook-header-dup: 增;查;改;刪;練習資料
+vlook-doc-lib:
+- [快速的筆記網站跳轉](index.html?target=_self "可以快速挑轉到想要的網頁")
+- [Python★基礎](Python基礎.html?target=_self "Python★基礎")
+- [Python★爬蟲](Python爬蟲.html?target=_self "Python★爬蟲")
+- [Python★逆向爬蟲](Python逆向爬蟲.html?target=_self "Python★逆向爬蟲")
+---
+
 [TOC]
 
 # HOOK技術
@@ -239,13 +249,13 @@ graph LR
 >
 >    ```javascript
 >    var CryptoJS = require('crypto-js') // 在Node.js導入套件
->             
+>                
 >    function MD5test() {
 >        return CryptoJS.MD5('1').toString()
 >    }
->             
+>                
 >    console.log(MD5test());
->             
+>                
 >    // c4ca4238a0b923820dcc509a6f75849b
 >    ```
 
@@ -1094,7 +1104,7 @@ graph TD
 >        console.log("json_stringify params:",params);
 >        return my_stringify(params);
 >    };
->       
+>          
 >    var my_parse = JSON.parse;
 >    JSON.parse = function (params) {
 >        debugger;
