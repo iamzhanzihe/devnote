@@ -267,7 +267,7 @@ JSX優勢：
 >   import React from 'react';
 >   import ReactDOM from 'react-dom/client';
 >   import App from './App';
->                                       
+>                                         
 >   const root = ReactDOM.createRoot(document.getElementById('root'));
 >   root.render(<App />);
 >   ```
@@ -382,10 +382,10 @@ react中的組件分為兩⼤類：
 >
 >   ```jsx
 >   return <h1>我是⼀个类组件</h1>//正確
->     
+>       
 >   return
 >   <h1>我是⼀個類元件</h1> //錯誤寫法，此時必須加括號
->     
+>       
 >   return (
 >   <h1>我是⼀個類元件</h1>
 >   ) //正確
@@ -1334,6 +1334,168 @@ export default App;
   export default App;
   ```
   
+
+## 表單渲染
+
+在 React 中，表單的渲染與處理方式主要分為 **受控組件 (Controlled Components)** 與 **非受控組件 (Uncontrolled Components)** 兩大類
+
+---
+
+> **受控組件**
+>
+> 這是 React 官方推薦的處理方式。在受控組件中，表單元素（如 `<input>`、`<textarea>`、`<select>`）的值由 React 的 `state` 來驅動。每當用戶輸入內容時，會觸發 `onChange` 事件，進而更新 state，React 再根據新的 state 重新渲染表單
+>
+> 這樣做的好處是 React 狀態與 DOM 元素始終保持同步，這讓驗證、即時回饋或連動式表單的實作變得非常直觀。
+>
+> 受控組件的特點：
+>
+> - **數據來源唯一**：React 的 state 是真實資料的唯一來源 (Single Source of Truth)
+> - **即時攔截**：你可以在用戶輸入的當下就對資料進行格式化或過濾（例如自動轉大寫）
+> - **易於除錯**：因為所有的變化都經過 React 處理，你可以輕鬆追蹤數據流
+
+> **非受控組件**
+>
+> 在這種模式下，表單數據由 **DOM 節點本身** 處理，而不是由 React 組件處理。使用 `ref` 來從 DOM 節點中抓取表單的值，而不是為每個狀態更新編寫事件處理程序
+>
+> 這在處理像是 `<input type="file">` 這種只能由用戶選擇、無法由程式碼控制其 value 的元素時非常有用
+>
+> 非受控組件的特點：
+>
+> - **使用 Ref 存取**：透過 `useRef` 直接從 DOM 讀取值
+> - **初始值設定**：通常使用 `defaultValue` 而非 `value` 來設定預設值，以免 React 誤以為它是受控組件而鎖死輸入內容
+> - **效能考量**：在極少數情況下，如果表單極其龐大且頻繁觸發 re-render 導致效能問題，非受控組件可以減少 React 的處理負擔
+
+### input 輸入框
+
+```jsx
+const root = document.querySelector('#root');
+const reactRoot = ReactDOM.createRoot(root);
+class Demo extends React.Component {
+  state = {
+    text: ''
+  }
+
+  change = (e) => {
+    this.setState({
+      text: e.target.value
+    })
+  }
+
+  render() {
+    return (
+      <>
+        <input value={this.state.text} onChange={this.change}/>
+        <h1>{this.state.text}</h1>
+      </>
+    )
+  }
+}
+
+reactRoot.render(
+  <Demo />  
+);
+```
+
+### select 選項
+
+```jsx
+const root = document.querySelector('#root');
+const reactRoot = ReactDOM.createRoot(root);
+class Demo extends React.Component {
+  state = {
+    text: 'chinese'
+  }
+
+  change = (e) => {
+    this.setState({
+      text: e.target.value
+    })
+  }
+
+  render() {
+    return (
+      <>
+        <select value={this.state.text} onChange={this.change}>
+          <option value="math">數學</option>  
+          <option value="english">英文</option>  
+          <option value="chinese">國文</option>  
+        </select>
+      </>
+    )
+  }
+}
+
+reactRoot.render(
+  <Demo />  
+);
+```
+
+### checkbox 和 radiobox
+
+```jsx
+// checkbox 操作 checked屬性
+
+const root = document.querySelector('#root');
+const reactRoot = ReactDOM.createRoot(root);
+class Demo extends React.Component {
+  state = {
+    checked: true,
+  }
+
+  change = (e) => {
+    this.setState({
+      checked: e.target.checked
+    })
+  }
+
+  render() {
+    return (
+      <>
+        <input type="checkbox" value="math" checked={this.state.checked} onChange={this.change}/> 數學
+      </>
+    )
+  }
+}
+
+reactRoot.render(
+  <Demo />  
+);
+```
+
+```jsx
+// radiobox 操作 通過更改value來操作 
+
+const root = document.querySelector('#root');
+const reactRoot = ReactDOM.createRoot(root);
+class Demo extends React.Component {
+  state = {
+    value: "math",
+  }
+
+  change = (e) => {
+    this.setState({
+      value: e.target.value
+    })
+  }
+
+  render() {
+    return (
+      <>
+        <input type="radio" name="subject" value="math" checked={this.state.value=="math"} onChange={this.change}/> 數學
+        <input type="radio" name="subject" value="english" checked={this.state.value=="english"} onChange={this.change}/> 英文
+      </>
+    )
+  }
+}
+
+reactRoot.render(
+  <Demo />  
+);
+```
+
+
+
+
 
 # React事件綁定
 
